@@ -2,11 +2,10 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
 
-
 export const Discussions = new Mongo.Collection('discussions');
 
 Meteor.startup(() => {
-    console.log('startup discus');
+
 });
 
 
@@ -26,8 +25,6 @@ if (Meteor.isServer) {
               description: String
             });
 
-            console.log('header: ' + data.header);
-            console.log('description: ' + data.description);
             // Make sure the user is logged in before inserting a task
             if (! Meteor.userId()) {
               throw new Meteor.Error('not-authorized');
