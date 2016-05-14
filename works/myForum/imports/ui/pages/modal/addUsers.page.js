@@ -30,7 +30,7 @@ Template.CreateNewUserTemplate.events({
       event.target.password.value = '';
       event.target.passwordAgain.value = '';
       $('.create-new-user-form-validation-feedback').text('');
-      // close layer 2
+      // close modal
       Session.set('modalLoad', '');
     }else{
       $('.create-new-user-form-validation-feedback').text(validationError);

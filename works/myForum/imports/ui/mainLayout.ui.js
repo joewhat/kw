@@ -12,6 +12,7 @@ import './pages/main.page.html';
 import './pages/users.page.html';
 import './pages/modal/addUsers.page.html';
 import './pages/modal/editUser.page.html';
+import './pages/modal/newDis.page.html';
 
 // Controllers
 import './pages/login.page.js';
@@ -19,6 +20,7 @@ import './pages/main.page.js';
 import './pages/users.page.js';
 import './pages/modal/addUsers.page.js';
 import './pages/modal/editUser.page.js';
+import './pages/modal/newDis.page.js';
 import './components/globalNavigation.component.js'
 
 // Settings

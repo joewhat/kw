@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import '../imports/startup/accounts.config.js';
 import '../imports/api/users.api.js';
+import '../imports/api/discus.api.js';
 
 
 Meteor.startup(() => {
@@ -15,6 +16,6 @@ Meteor.startup(() => {
 
   if( !Meteor.users.findOne({username: 'Admin'}) ){
     const newUserId = Accounts.createUser(adminUserData);
-    Roles.addUsersToRoles(newUserId, ['Admin'], 'users');
+    Roles.addUsersToRoles(newUserId, ['admin'], 'users');
   }
 });

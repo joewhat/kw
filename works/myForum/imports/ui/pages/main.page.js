@@ -1,13 +1,15 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
+import { Discussions } from '../../api/discus.api.js';
 
+import '../../api/discus.api.js';
 import './main.page.html';
 
+Meteor.subscribe('discussions.list', function() {});
 
 Template.mainPageTemplate.events({
-    'click .add-project-button'(event) {
-        console.log('add project');
-
+    'click .new-discussion-button'(event) {
+        Session.set('modalLoad', 'newDisTemplate');
     },
     // search main page
     'click .global-main-search-button'(event) {
@@ -38,7 +40,18 @@ Template.mainPageTemplate.events({
 });
 
 Template.mainPageTemplate.helpers({
-  what : function(){
+  allDiscussions : function(){
+      // search
+      const searchVal = Session.get('globalSearchValue');
+      if(!searchVal){
+          // default return
+          return Discussions.find({}, {sort: {createdAt: -1}});
+      }else{
+          // search result
+          const regex = new RegExp(searchVal, 'i');
+          return Discussions.find({header: regex}, {sort: {header: +1} });
+      }
+
 
   },
 });
