@@ -1,0 +1,286 @@
+html, html a {
+      text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+ }
+
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size: $font-size-reg;
+   -webkit-font-smoothing: antialiased;
+}
+
+input {
+  border: 1px solid $black;
+  font-size: $font-size-reg;
+  padding: 10px;
+}
+
+input:focus {
+  outline: 0;
+  // border-color: inherit;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+
+}
+textarea {
+    padding: 10px;
+    font-size: $font-size-reg;
+}
+
+textarea:focus {
+    outline: 0;
+    // border-color: inherit;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+input[type=submit] {
+  background-color: $white;
+  cursor: pointer;
+  font-size: $font-size-big;
+  font-weight: 700;
+  padding: 5px 20px 6px 20px;
+}
+
+input[type=submit]:hover {
+  background-color: $green;
+  cursor: pointer;
+}
+
+.main-content-wrapper {
+  position: relative;
+  padding: 0px 60px 0px 20px;
+  // background-color: red;
+
+  .loading {
+    $loading-width: 40px;
+    $loading-pos-offset: $loading-width / 2;
+    width: $loading-width;
+    margin-left: calc(50vw - 20px);
+    margin-top: calc(50vh - 20px);
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.main-content {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: calc(100% - 40px);
+}
+
+.global-page-content {
+  display: inline-block;
+  height: calc(100vh - 40px);
+  width: calc(100% - 40px);
+  padding: 20px;
+  overflow-y: scroll;
+
+
+}
+
+.tab-button {
+  font-weight: 700;
+  cursor: pointer;
+  float: left;
+  padding: 10px 20px 10px 20px;
+  background-color: $white;
+
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer */
+  -khtml-user-select: none; /* KHTML browsers (e.g. Konqueror) */
+  -webkit-user-select: none; /* Chrome, Safari, and Opera */
+  -webkit-touch-callout: none; /* Disable Android and iOS callouts*/
+
+  .tab-label {
+    float: left;
+    margin-top: 4px;
+  }
+
+  .img-wrapper {
+    float: left;
+    margin-right: 10px;
+    height: $icon-size-reg;
+    width: $icon-size-reg;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.tab-button:hover {
+  background-color: $blue;
+}
+
+.tab-button-active:hover {
+  background-color: $white;
+}
+
+.tab-button-active {
+  border: 1px solid $black;
+  border-bottom: 0px;
+  padding: 10px 19px 10px 19px;
+}
+
+.button {
+  display: block;
+  float: left;
+  cursor: pointer;
+  border: 1px solid $black;
+  padding: 9px 19px;
+  margin-right: 20px;
+  font-weight: 700;
+
+
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer */
+  -khtml-user-select: none; /* KHTML browsers (e.g. Konqueror) */
+  -webkit-user-select: none; /* Chrome, Safari, and Opera */
+  -webkit-touch-callout: none; /* Disable Android and iOS callouts*/
+
+  div {
+    float: left;
+  }
+
+  .button-label {
+    margin-left: 10px;
+    margin-top: 3px;
+    font-weight: 700;
+  }
+
+
+}
+
+.button-big {
+    display: block;
+    float: left;
+    cursor: pointer;
+    border: 1px solid $black;
+    padding: 9px 19px;
+    font-size: $font-size-big;
+    font-weight: 700;
+
+
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer */
+    -khtml-user-select: none; /* KHTML browsers (e.g. Konqueror) */
+    -webkit-user-select: none; /* Chrome, Safari, and Opera */
+    -webkit-touch-callout: none; /* Disable Android and iOS callouts*/
+
+}
+
+// user login
+#login-buttons {
+  position: absolute;
+  right: 0px;
+  top: 14px;
+  padding:0px 0px 0px 0px;
+}
+.login-link-text {
+  float: right;
+}
+
+
+
+#login-dropdown-list {
+  display: inline-block;
+  z-index: 8000;
+  background-color: $white;
+  position: absolute;
+  top: 20px;
+  right: 0px;
+  border: 1px solid $black;
+  width: 240px;
+  padding: 20px;
+
+  .login-close-text {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    text-decoration: underline;
+  }
+
+  .error-message {
+    color: red;
+  }
+
+  // change password
+  #login-buttons-open-change-password {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    border: 1px solid $black;
+    padding: 9px 19px 9px 19px;
+    text-align: center;
+    font-size: $font-size-big;
+    font-weight: 700;
+  }
+
+  #login-buttons-open-change-password:hover {
+    background-color: $blue;
+  }
+
+  $change-password-submit-width: calc(100% - 40px);
+  $change-password-input-width: calc(100% - 20px);
+  #login-buttons-do-change-password {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 1px solid $black;
+    padding: 9px 19px 9px 19px;
+    width: $change-password-submit-width;
+    text-align: center;
+    font-size: $font-size-big;
+    font-weight: 700;
+  }
+
+  #login-buttons-do-change-password:hover {
+    background-color: $green;
+  }
+
+  #login-old-password-label {
+    margin-top: 40px;
+  }
+
+  #login-old-password-label, #login-password-label, #login-password-again-label {
+    display: inline-block;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+
+  // inputs
+  #login-old-password, #login-password, #login-password-again {
+    margin-bottom: 20px;
+    width: $change-password-input-width;
+  }
+
+  // logout
+  #login-buttons-logout {
+    // margin-bottom: 40px;
+    font-size: $font-size-big;
+    font-weight: 700;
+    border: 1px solid $black;
+    padding: 9px 19px 9px 19px;
+    text-align: center;
+  }
+
+  #login-buttons-logout:hover {
+    background-color: $red;
+  }
+
+  a {
+
+  }
+
+}
+#login-buttons a, .login-button {
+  cursor: pointer;
+  color: $black;
+
+}
+
+#login-sign-in-link, #login-name-link {
+
+}

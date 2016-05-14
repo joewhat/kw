@@ -1,0 +1,19 @@
+<template name="mainLayout">
+  <div class="main-content-wrapper">
+  {{#if authInProcess}}
+    <div class="loading"><img src="loading.gif" alt=""></div>
+  {{else}}
+    {{#if currentUser}}
+      <main class="main-content">
+        {{> globalNavigation}}
+        <div class="layer1">
+          {{>Template.dynamic template=layer1}}
+        </div>
+        {{>Template.dynamic template=modal}}
+      </main>
+    {{else}}
+      {{> loginTemplate clientName=clientName}}
+    {{/if}}
+  {{/if}}
+  </div>
+</template>
