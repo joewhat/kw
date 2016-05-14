@@ -1,0 +1,20 @@
+.global-page-approvals-wrapper {
+
+  .global-page-content-approvals {
+    display: inline-block;
+    height: calc(100vh - 353px);
+    width: calc(100% - 40px);
+    padding: 20px;
+  }
+
+  .global-approvals-submit-button {
+    float: right;
+    font-weight: 700;
+    font-size: $font-size-big;
+    margin-right: 0px !important;
+  }
+
+  .global-approvals-submit-button:hover {
+    background-color: $green;
+  }
+}

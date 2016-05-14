@@ -1,0 +1,52 @@
+.custom-login-form-wrapper {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+
+
+
+  .custom-login-form {
+    position: relative;
+    padding: 40px 20px 20px 20px;
+    margin: 0px;
+    margin-top: calc(50vh - 170px);
+    display: inline-block;
+    width: 480px;
+    border: 1px solid $black;
+
+    .logo {
+      position: absolute;
+      top: 0px;
+      left: 20px;
+      background-color:grey;
+      width: 70px;
+      height: 70px;
+    }
+
+    .client-name {
+      display: inline-block;
+      margin-bottom: 27px;
+      font-weight: bold;
+      font-size: $font-size-big;
+      width: 300px;
+      text-align: left;
+
+    }
+
+    input {
+      width: 280px;
+      margin-bottom: 20px;
+    }
+
+    input[type=submit] {
+      width: auto;
+      margin: 0px 50px 20px 50px;
+    }
+
+    .custom-login-form-error {
+      color: red;
+      height: 13px;
+      margin-bottom: 20px;
+    }
+  }
+}

@@ -1,0 +1,52 @@
+
+.addUsers-content-wrapper {
+    border-top: 1px solid $black;
+    width: 100%;
+    height: calc(100vh - 252px);
+
+    .create-new-user-form {
+        position: relative;
+        width: 100%;
+        height: 100%;
+
+        .input-username, .input-email, .input-password, .input-password-again {
+            display: block;
+            float: left;
+            margin-left: 20px;
+            margin-top: 20px;
+        }
+
+        .userType-wrapper {
+            float: left;
+            margin-left: 20px;
+            margin-top: 20px;
+            
+
+            .userType-label {
+                float: left;
+                margin-right: 20px;
+            }
+
+            select {
+                float: left;
+            }
+        }
+
+        .create-new-user-form-validation-feedback {
+            position: absolute;
+            bottom: 82px;
+            left: 0px;
+            width: calc(100% - 40px);
+            padding: 0px 20px 20px 20px;
+            height: 40px;
+            border-bottom: 1px solid $black;
+            color: red;
+        }
+
+        .create-new-user-submit {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+        }
+    }
+}

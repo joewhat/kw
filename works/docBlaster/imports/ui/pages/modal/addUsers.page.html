@@ -1,0 +1,37 @@
+<template name="addUsersTemplate">
+    <div class="modal-wrapper">
+        <div class="modal">
+            <div class="toolbar">
+                <div class="header-img-wrapper"><img src="icons/addUser.svg" alt=""></div>
+                <h1>Add User</h1>
+                <div class="close-button close-addUser-button"><div class="img-wrapper"><img src="icons/close.svg" alt=""></div></div>
+            </div>
+            <div class="modal-content-wrapper addUsers-content-wrapper">
+                {{#if currentUser}}
+                  {{#if isInRole 'admin' 'users'}}
+                    {{> CreateNewUserTemplate}}
+                  {{/if}}
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="CreateNewUserTemplate">
+  <form class="create-new-user-form">
+    <input class="{{validUsername}} input-username" type="text" name="username" placeholder="Username" required="required"/>
+    <input class="{{validEmail}} required input-email" type="email" name="email" placeholder="Email" required="required"/>
+    <input class="{{validPassword1}} input-password" type="password" name="password" placeholder="Password" required/>
+    <input class="{{validPassword2}} input-password-again" type="password" name="passwordAgain" placeholder="Confirm Password" required/>
+    <div class="userType-wrapper">
+        <div class="userType-label">User Type</div>
+        <select name="userType">
+            <option value="admin">Admin</option>
+            <option value="standard" selected>Standard</option>
+        </select>
+    </div>
+    <!-- disabled="disabled"  -->
+    <input type="submit" class="create-new-user-submit" value="Create User" />
+    <div class="create-new-user-form-validation-feedback"></div>
+  </form>
+</template>

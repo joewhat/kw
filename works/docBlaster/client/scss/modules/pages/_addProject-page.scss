@@ -1,0 +1,72 @@
+.addProject-wrapper {
+
+
+    .addProject-content-wrapper {
+        position: relative;
+        border-top: 1px solid $black;
+        background-color: red;
+        height: calc(100% - 120px);
+
+        .addProject-form {
+            margin-top: 20px;
+            margin-left: 20px;
+
+            width: calc(100% - 40px);
+            height: calc(100% - 100px);
+
+            .project-title {
+                float: left;
+            }
+
+            .project-categori-wrapper {
+                float:left;
+            }
+
+            .project-description {
+                margin-top: 20px;
+                border: 1px solid $black;
+                width: calc(100% - 22px);
+                height: calc(100% - 82px);
+            }
+        }
+
+        .step {
+            width: 100%;
+            height: 100%;
+            background-color: blue;
+        }
+
+        .step-1 {
+
+        }
+
+        .step-2 {
+            display: none;
+        }
+
+        .step-3 {
+            display: none;
+        }
+
+        .add-project-next {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+        }
+        .add-project-next:hover {
+            background-color: $green;
+        }
+
+        .add-project-prev {
+            display: none;
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+        }
+
+        .add-project-prev:hover {
+            background-color: $red;
+        }
+    }
+
+}
