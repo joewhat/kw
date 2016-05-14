@@ -1,0 +1,36 @@
+<template name="adminTemplate">
+  adminTemplate
+  {{#if currentUser}}
+    {{#if isInRole 'admin' 'users'}}
+      {{> CreateNewUserTemplate}}
+      {{> AllUsersTemplate}}
+    {{/if}}
+  {{/if}}
+</template>
+
+<template name="AllUsersTemplate">
+  <h3>All users</h3>
+  <ul>
+    {{#each AllUsers}}
+      <li class="label {{labelClass}}">{{@index}} username: <strong>{{this.username}}</strong> email: <strong>{{this.emails.[0].address}}</strong>  role: <strong>{{this.roles.users}}</strong> status-online: <strong>{{#if this.status.online}}true{{else}}false{{/if}}</strong> {{#if ShowDelete}}<button id="{{this._id}}" class="user-delete">delete</button>{{/if}}</li>
+    {{/each}}
+  </ul>
+</template>
+
+<template name="CreateNewUserTemplate">
+  <h3>Create new user</h3>
+  <form class="create-new-user-form">
+    <input class="{{validUsername}}" type="text" name="username" placeholder="Username" required="required"/>
+    <input class="{{validEmail}} required" type="email" name="email" placeholder="Email" required="required"/>
+    <input class="{{validPassword1}}" type="password" name="password" placeholder="Password" required/>
+    <input class="{{validPassword2}}" type="password" name="passwordAgain" placeholder="Confirm Password" required/>
+    <select name="userType">
+      <option value="admin">Admin</option>
+      <option value="standard" selected>Standard</option>
+      <option value="client">Client</option>
+    </select>
+    <!-- disabled="disabled"  -->
+    <input type="submit" class="create-new-user-submit" value="create user" />
+    <div class="create-new-user-form-validation-feedback"></div>
+  </form>
+</template>

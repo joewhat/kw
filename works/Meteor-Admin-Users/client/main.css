@@ -1,0 +1,53 @@
+/* CSS declarations go here */
+.label {
+  margin-bottom: 2px;
+  padding:5px;
+}
+.label-online {
+  background-color: green;
+}
+.label-offline {
+  background-color: red;
+}
+.label-idle {
+  background-color: orange;
+}
+
+
+/* form validation */
+.input-okay {
+  border-color: lime;
+}
+
+.input-not-okay {
+  border-color: red;
+}
+
+header{
+  position: relative;
+}
+
+
+/* login */
+#login-buttons {
+  /*position: absolute;
+  right: 0px;
+  top: 0px;*/
+  float:right;
+  background-color: tomato;
+  padding:0px 0px 0px 0px;
+}
+
+.login-close-text {
+
+}
+
+#login-buttons a, .login-button {
+  cursor: pointer;
+  color: white;
+  background-color: black;
+}
+
+#login-sign-in-link, #login-name-link {
+
+}

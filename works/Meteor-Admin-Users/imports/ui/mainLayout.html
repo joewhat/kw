@@ -1,0 +1,15 @@
+<template name="mainLayout">
+
+
+  {{#if currentUser}}
+    <h3>Welcome {{currentUser.username}}</h3>
+    {{> loginButtons}}
+    <main>
+      {{> userNavigation}}
+      {{>Template.dynamic template=content}}
+    </main>
+  {{else}}
+    {{> loginTemplate}}
+  {{/if}}
+
+</template>
