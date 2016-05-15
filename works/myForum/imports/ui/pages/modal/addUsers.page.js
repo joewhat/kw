@@ -1,7 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
-import '../../../api/helpers.api.js';
-import stringMatch from '../../../api/helpers.api.js';
+// import '../../../api/helpers.api.js';
+// import { stringMatch } from '../../../api/helpers.api.js';
+const helpers = require('../../../api/helpers.api.js');
 
 import './addUsers.page.html';
 
@@ -77,7 +78,7 @@ Template.CreateNewUserTemplate.events({
   },
   // check if passwords match
   'keyup .create-new-user-form input[name=passwordAgain]' (event){
-    if(stringMatch($('.create-new-user-form input[name=password]').val(), event.target.value) && Session.get('create-new-user-passwordIsOkay')){
+    if(helpers.stringMatch($('.create-new-user-form input[name=password]').val(), event.target.value) && Session.get('create-new-user-passwordIsOkay')){
       Session.set('create-new-user-passwordsMatch', true);
     }else{
       Session.set('create-new-user-passwordsMatch', false);

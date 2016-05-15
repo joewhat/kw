@@ -1,9 +1,10 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { Discussions } from '../../api/discus.api.js';
-
-import '../../api/discus.api.js';
+// import '../../api/discus.api.js';
 import './main.page.html';
+
+const helpers = require('../../api/helpers.api.js');
 
 Meteor.subscribe('discussions.list', function() {});
 
@@ -48,7 +49,7 @@ Template.mainPageTemplate.helpers({
           return Discussions.find({}, {sort: {createdAt: -1}});
       }else{
           // search result
-          const regex = new RegExp(searchVal, 'i');
+          const regex = new RegExp(helpers.regexMultiWordsSearch(searchVal), 'i');
           return Discussions.find({header: regex}, {sort: {header: +1} });
       }
 

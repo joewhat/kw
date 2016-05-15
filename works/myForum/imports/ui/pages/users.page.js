@@ -2,8 +2,9 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
 import '../../api/users.api.js';
-import '../../api/helpers.api.js';
-import stringMatch from '../../api/helpers.api.js';
+// import '../../api/helpers.api.js';
+// import stringMatch from '../../api/helpers.api.js';
+const helpers = require('../../api/helpers.api.js');
 
 import './users.page.html';
 
@@ -99,7 +100,7 @@ Template.AllUsersTemplate.helpers({
           return Meteor.users.find({}, {sort: {username: +1} });
       }else{
           // search result
-          const regex = new RegExp(searchVal, 'i');
+          const regex = new RegExp(helpers.regexMultiWordsSearch(searchVal), 'i');
           return Meteor.users.find({username: regex}, {sort: {username: +1} });
       }
      console.log('session search val: ' + Session.get('globalSearchValue'));
