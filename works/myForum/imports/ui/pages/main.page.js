@@ -13,6 +13,12 @@ Template.mainPageTemplate.events({
     'click .new-discussion-button'(event) {
         Session.set('modalLoad', 'newDisTemplate');
     },
+    // enter a discussion
+    'click .discussion'(event) {
+        const id = $(event.target).attr('data-id');
+        Session.set('activeDiscussionId', $(event.target).attr('data-id'));
+        BlazeLayout.render('mainLayout', {layer1: 'discussionPageTemplate'});
+    },
     // search main page
     'click .global-main-search-button'(event) {
         const _this = $(event.target).closest('.global-main-search-button');

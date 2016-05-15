@@ -1,0 +1,11 @@
+.main-page-content {
+    .discussion-list {
+        li {
+            cursor: pointer;
+            padding: 9px 19px;
+        }
+        li:hover {
+            background-color: $blue;
+        }
+    }
+}

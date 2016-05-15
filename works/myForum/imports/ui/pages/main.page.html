@@ -12,10 +12,10 @@
     </div>
   </div>
   <div class="toolbar-bottom-split"><div class="small-header">Discussions</div></div>
-  <div class="global-page-content">
-      <ul>
+  <div class="global-page-content main-page-content">
+      <ul class="discussion-list">
           {{#each allDiscussions}}
-              <li>{{this.header}} - {{this.username}} - {{convertedDate}}</li>
+              <li class="discussion" data-id="{{this._id}}">{{this.header}} - {{this.username}} - {{convertedDate}}</li>
           {{/each}}
       </ul>
   </div>
