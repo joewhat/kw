@@ -26,6 +26,8 @@ if (Meteor.isServer) {
             // Make sure the user is logged in before inserting a task
             if (! Meteor.userId()) {
               throw new Meteor.Error('not-authorized');
+            }else{
+
             }
 
             Discussions.insert({
@@ -33,7 +35,10 @@ if (Meteor.isServer) {
               owner: Meteor.userId(),
               username: Meteor.user().username,
               header: data.header,
-              description: data.description
+              description: data.description,
+              views: 0,
+              comments: 0,
+              latestComment: new Date()
             });
 
         },

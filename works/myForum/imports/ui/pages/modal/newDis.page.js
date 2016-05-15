@@ -18,7 +18,7 @@ Template.newDisTemplate.events({
             console.log('wtf: ' + error);
           } else {
             // Handle our return value.
-            console.log('created new discus');
+            //console.log('created new discus');
           }
         });
 

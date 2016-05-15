@@ -4,7 +4,8 @@ import { Discussions } from '../../api/discus.api.js';
 // import '../../api/discus.api.js';
 import './main.page.html';
 
-const helpers = require('../../api/helpers.api.js');
+// const helpers = require('../../api/helpers.api.js');
+import helpers from '../../api/helpers.api.js';
 
 Meteor.subscribe('discussions.list', function() {});
 
@@ -45,14 +46,15 @@ Template.mainPageTemplate.helpers({
       // search
       const searchVal = Session.get('globalSearchValue');
       if(!searchVal){
-          // default return
-          return Discussions.find({}, {sort: {createdAt: -1}});
+          // default return (sort after createdAt)
+          return Discussions.find({}, {sort: {latestComment: -1}});
       }else{
           // search result
           const regex = new RegExp(helpers.regexMultiWordsSearch(searchVal), 'i');
           return Discussions.find({header: regex}, {sort: {header: +1} });
       }
-
-
   },
+  convertedDate : function(){
+    return helpers.convertDate(this.createdAt);
+  }
 });
