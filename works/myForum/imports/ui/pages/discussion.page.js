@@ -8,16 +8,16 @@ import helpers from '../../api/helpers.api.js';
 Meteor.subscribe('discussions.list', function() {});
 Meteor.subscribe('comments.list', function() {});
 
-Template.discussionPageTemplate.onCreated(function () {
+
+Template.discussionPageTemplate.onRendered(function () {
+    // Session.set('discussionIsRendered', true);
     this.autorun(function(){
         Comments.find({discussionId : Session.get('activeDiscussionId')}).observeChanges({
             added: function(id, fields) {
                 // console.log('doc inserted');
-                if(Session.get('discussionIsRendered')){
                     Tracker.afterFlush(function () {
                       $('.discussion-page-content').animate({ scrollTop: $('.discussion-page-content').get(0).scrollHeight}, 400);
                     });
-                }
             },
             changed: function(id, fields) {
                 // console.log('doc updated');
@@ -27,10 +27,6 @@ Template.discussionPageTemplate.onCreated(function () {
             }
         });
     });
-});
-
-Template.discussionPageTemplate.onRendered(function () {
-    Session.set('discussionIsRendered', true);
     $('.discussion-page-content').scrollTop( $('.discussion-page-content').get(0).scrollHeight );
 });
 

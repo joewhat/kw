@@ -29,7 +29,6 @@ import './components/globalNavigation.component.js'
 Session.setDefault('modalLoad', '');
 Session.setDefault('globalSearchValue', '');
 Session.setDefault('activeDiscussionId', '');
-Session.setDefault('discussionIsRendered', false);
 
 
 Template.mainLayout.helpers({
