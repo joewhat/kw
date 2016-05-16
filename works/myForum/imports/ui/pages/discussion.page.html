@@ -1,13 +1,31 @@
 <template name="discussionPageTemplate">
   <div class="toolbar">
     <div class="toolbar-button back-to-discussion-button"><div class="toolbar-button-label">back</div></div>
+    <h1>{{disMeta.header}}</h1>
   </div>
-  <div class="toolbar-bottom-split"><div class="small-header">wtf</div></div>
-  <div class="global-page-content discussion-page-content">
+  <div class="discussion-page-content">
       <ul class="discussion-msg-list">
-          {{disMeta.header}}
-          {{disMeta.description}}
-        discus what ever
+          <li class="description comment">
+              <div class="info">
+                  <div class="owner">{{disMeta.username}}</div><div class="time">{{disMeta.createdAt}}</div>
+              </div>
+              <div class="msg">{{disMeta.description}}</div>
+          </li>
+
+          {{#each allComments}}
+              <li class="description comment">
+                  <div class="info">
+                      <div class="owner">{{this.username}}</div><div class="time">{{this.createdAt}}</div>
+                  </div>
+                  <div class="msg"><pre>{{this.comment}}</pre></div>
+              </li>
+          {{/each}}
       </ul>
+  </div>
+  <div class="add-comment">
+      <form action="" class="add-comment-form" data-id="{{disMeta._id}}">
+          <textarea name="comment" class="the-comment" placeholder="Comment" autofocus></textarea>
+          <input type="submit" name="submit" id="" class="add-comment-button" value="Add comment">
+      </form>
   </div>
 </template>

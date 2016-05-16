@@ -1,0 +1,3 @@
+nice to have:
+    - set flag on when to auto scroll to bottom in discussion
+        eg. flag true, when user scroll to bottom, flag false when user scroll up

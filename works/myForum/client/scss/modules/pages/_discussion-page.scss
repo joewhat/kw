@@ -1,0 +1,39 @@
+.discussion-page-content {
+    display: inline-block;
+    height: calc(100vh - 340px);
+    width: calc(100% - 40px);
+    padding: 20px;
+    overflow-y: scroll;
+    background-color: red;
+    margin-bottom: -3px;
+
+    .comment {
+        padding: 20px;
+        margin-bottom: 20px;
+        border: 1px solid $black;
+        .info {
+            display: inline-block;
+            width: 100%;
+            div {
+                float: left;
+            }
+
+            .owner {
+                margin-bottom: 20px;
+                margin-right: 20px;
+            }
+        }
+    }
+}
+.add-comment-form {
+    height: 130px;
+    width: 100%;
+    background-color: green;
+    textarea {
+        float: left;
+        width: 50%;
+    }
+    input {
+        float: left;
+    }
+}
