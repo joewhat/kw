@@ -13,9 +13,10 @@
   </div>
   <div class="toolbar-bottom-split"><div class="small-header">Discussions</div></div>
   <div class="global-page-content main-page-content">
+      {{userUnread}}
       <ul class="discussion-list">
           {{#each allDiscussions}}
-              <li class="discussion" data-id="{{this._id}}">{{this.header}} - {{this.username}} - {{convertedDate}}</li>
+              <li class="discussion" data-id="{{this._id}}"> <div class="header">{{this.header}}</div>  - {{this.username}} - {{convertedDate}} <div class="unread"></div> </li>
           {{/each}}
       </ul>
   </div>

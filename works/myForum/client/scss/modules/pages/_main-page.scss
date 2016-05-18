@@ -3,6 +3,9 @@
         li {
             cursor: pointer;
             padding: 9px 19px;
+            div {
+                float: left;
+            }
         }
         li:hover {
             background-color: $blue;

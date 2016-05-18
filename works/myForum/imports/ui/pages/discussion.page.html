@@ -13,7 +13,7 @@
           </li>
 
           {{#each allComments}}
-              <li class="description comment">
+              <li class="description comment" id="{{this._id}}">
                   <div class="info">
                       <div class="owner">{{this.username}}</div><div class="time">{{this.createdAt}}</div>
                   </div>

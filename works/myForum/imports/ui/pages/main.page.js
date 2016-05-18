@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { Discussions } from '../../api/discus.api.js';
+import { UserUnread } from '../../api/discus.api.js';
 // import '../../api/discus.api.js';
 import './main.page.html';
 
@@ -8,6 +9,7 @@ import './main.page.html';
 import helpers from '../../api/helpers.api.js';
 
 Meteor.subscribe('discussions.list', function() {});
+Meteor.subscribe('userUnread.list', function() {});
 
 Template.mainPageTemplate.events({
     'click .new-discussion-button'(event) {
@@ -62,5 +64,14 @@ Template.mainPageTemplate.helpers({
   },
   convertedDate : function(){
     return helpers.convertDate(this.createdAt);
-  }
+    },
+    userUnread : function(){
+        const allUnread = UserUnread.find( { username: Meteor.user().username } ).fetch();
+        allUnread.forEach(function(value){
+                console.log('allUnread: ' + value.discussionName);
+        });
+
+        return UserUnread.find( { username: Meteor.user().username } ).count();
+    }
+
 });
