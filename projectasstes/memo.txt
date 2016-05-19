@@ -1,24 +1,16 @@
+todo:
+    - update unreadUserCollection when comment added
+    - display unread comments in main.page.js for user
+    - delete unread comments in unreadUserCollection for user in discussion.page.js
+    - add subcomment tree for each comment, and add them in the unreadUserCollection loop
+    - add link stuff on comments from shit.chat
+    - add upload file stuff(maybe)
+
 nice to have:
     - set flag on when to auto scroll to bottom in discussion
         eg. flag true, when user scroll to bottom, flag false when user scroll up
 
 
-feature:
-    - add unread for user
-         - when new msg add'ed, add it to the users object in userUnread collection
-
-         each user name in meteor user {
-
-         }
-
-
-         userUnread collection {
-
-                id : string
-                username : string
-                discussionName : string
-                commentId : string
-            }
 - - - - -
 
 unreadUserCollection
