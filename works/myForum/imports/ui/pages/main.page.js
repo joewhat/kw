@@ -66,12 +66,29 @@ Template.mainPageTemplate.helpers({
     return helpers.convertDate(this.createdAt);
     },
     userUnread : function(){
-        const allUnread = UserUnread.find( { username: Meteor.user().username } ).fetch();
-        allUnread.forEach(function(value){
-                console.log('allUnread: ' + value.discussionName);
-        });
-
-        return UserUnread.find( { username: Meteor.user().username } ).count();
+        // const allUnread = UserUnread.find( { username: Meteor.user().username } ).fetch();
+        // allUnread.forEach(function(value){
+        //         console.log('allUnread: ' + value.discussionName);
+        // });
+        //
+        //
+        // const joe = allUnread.aggregate(
+        //   [{$group: {
+        //       _id: "$discussionName",
+        //       count: { $sum : 1 }
+        //     }}, {
+        //     $group: {
+        //       _id: "$_id",
+        //       count: { $sum : "$count" }
+        //     }},{
+        //       $out: "distinctCount"
+        //     }],
+        //  {allowDiskUse:true}
+        // );
+        // console.log('joe: ', joe);
+        //
+        //
+        // return UserUnread.find( { username: Meteor.user().username } ).count();
     }
 
 });

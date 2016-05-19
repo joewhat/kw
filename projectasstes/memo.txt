@@ -19,3 +19,32 @@ feature:
                 discussionName : string
                 commentId : string
             }
+- - - - -
+
+unreadUserCollection
+    {
+        id : string
+        username : string
+        unread : [
+            {
+                discussionId : String
+                discussionName : String
+                unReadCount : int
+                comments : [
+                    {id : string},
+                    {id : string},
+                    {id : string},
+                ]
+            },
+            {
+                discussionName : String
+                unReadCount : int
+                comments : {
+                    {id : string},
+                    {id : string},
+                    {id : string},
+                }
+            }
+        ]
+
+    }

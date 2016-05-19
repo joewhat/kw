@@ -17,5 +17,15 @@ Meteor.startup(() => {
   if( !Meteor.users.findOne({username: 'Admin'}) ){
     const newUserId = Accounts.createUser(adminUserData);
     Roles.addUsersToRoles(newUserId, ['admin'], 'users');
+    const data = {username:'Admin'};
+    Meteor.call('create-user-in-unreadUserCollection', data, function( error, response ) {
+      if ( error ) {
+        // Handle our error.
+        console.log('wtf: ' + error);
+        } else {
+
+        }
+    });
+    console.log('Created Admin User - Remeber to change pwd');
   }
 });

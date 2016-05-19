@@ -69,15 +69,15 @@ Template.discussionPageTemplate.events({
 
             // console.log(userUnreadData);
 
-            Meteor.call('userUnread-insert', userUnreadData, function( error, response ) {
-              if ( error ) {
-                // Handle our error.
-                console.log('wtf: ' + error);
-              } else {
-                // Handle our return value.
-                // console.log('allusernames', response);
-              }
-            });
+            // Meteor.call('userUnread-insert', userUnreadData, function( error, response ) {
+            //   if ( error ) {
+            //     // Handle our error.
+            //     console.log('wtf: ' + error);
+            //   } else {
+            //     // Handle our return value.
+            //     // console.log('allusernames', response);
+            //   }
+            // });
           }
         });
 

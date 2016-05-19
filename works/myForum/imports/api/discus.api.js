@@ -4,7 +4,7 @@ import { check } from 'meteor/check';
 
 export const Discussions = new Mongo.Collection('discussions');
 export const Comments = new Mongo.Collection('comments');
-export const UserUnread = new Mongo.Collection('userUnread');
+export const UnreadUserCollection = new Mongo.Collection('unreadUserCollection');
 
 Meteor.startup(() => {
 
@@ -27,7 +27,7 @@ if (Meteor.isServer) {
   Meteor.publish('userUnread.list', function () {
     // check user is loggedin
     if(!this.userId) return null;
-    return UserUnread.find({});
+    return UnreadUserCollection.find({});
   });
 
     Meteor.methods({
@@ -53,7 +53,25 @@ if (Meteor.isServer) {
               views: 0,
               comments: 0,
               latestComment: new Date()
-            });
+          }, function(error, _id){
+              // insert unread to all users
+              const Allusernames = Meteor.users.find({}, {fields: {username: 1}}).fetch();
+              const headerObj = {
+                  discussionId : _id,
+                  discussionName : data.header,
+                  unReadCount : 1,
+                  comments : [],
+                  new : true
+              };
+               Allusernames.forEach(function(value){
+                   if(Meteor.user().username != value.username){
+                       UnreadUserCollection.update(
+                           { username : value.username },
+                           { $push: { unread: headerObj } }
+                       );
+                   }
+              });
+          });
 
         },
         'comments-insert'(data) {
@@ -106,18 +124,45 @@ if (Meteor.isServer) {
             }
 
             let Allusernames = Meteor.users.find({}, {fields: {username: 1}}).fetch();
-             Allusernames.forEach(function(value){
-                 if(Meteor.user().username != value.username){
-                     UserUnread.insert({
-                         username: value.username,
-                         discussionName: data.discussionName,
-                         commentId: data.commentId,
-                         createdAt: new Date()
-                     });
-                 }
+            //  Allusernames.forEach(function(value){
+            //      if(Meteor.user().username != value.username){
+            //          UserUnread.insert({
+            //              username: value.username,
+            //              discussionName: data.discussionName,
+            //              commentId: data.commentId,
+            //              createdAt: new Date()
+            //          });
+            //      }
+            // });
+
+
+        },
+        'create-user-in-unreadUserCollection'(data) {
+            check( data, {
+                    username : String
             });
-
-
+            console.log( 'create-user-in-unreadUserCollection: ' + data.username );
+            return UnreadUserCollection.insert({
+              username: data.username,
+              unread : []
+            }, function(error, _id){
+              // create all discussions in user record
+              const headers = Discussions.find( {}, { fields: { header:1 } } ).fetch();
+              headers.forEach(function(value){
+                  const headerObj = {
+                      discussionId : value._id,
+                      discussionName : value.header,
+                      unReadCount : 0,
+                      comments : [],
+                      new : false
+                  };
+                  UnreadUserCollection.update(
+                      { username : data.username },
+                      { $push: { unread: headerObj } }
+                  );
+                      console.log('headers: ' + value.header);
+              });
+          });
         },
     });
 }

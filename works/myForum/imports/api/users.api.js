@@ -2,6 +2,8 @@ import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import { check } from 'meteor/check';
 
+import './discus.api.js';
+
 if (Meteor.isServer) {
   Meteor.publish('user.list', function (){
     // check if user is logged in
@@ -31,6 +33,17 @@ if (Meteor.isServer) {
         // Create the user with role
         const newUserId = Accounts.createUser(userData);
         Roles.addUsersToRoles(newUserId, [userType], 'users');
+
+        // Create user in unreadUserCollection
+        const data = { username : userData.username };
+        Meteor.call('create-user-in-unreadUserCollection', data, function( error, response ) {
+          if ( error ) {
+            // Handle our error.
+            console.log('wtf: ' + error);
+            } else {
+
+            }
+        });
     },
     'delete-user'(userId) {
       check(userId, String);
