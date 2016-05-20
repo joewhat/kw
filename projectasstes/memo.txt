@@ -1,5 +1,5 @@
 todo:
-    - update unreadUserCollection when comment added
+    - update unreadUserCollection when comment added (document int)
     - display unread comments in main.page.js for user
     - delete unread comments in unreadUserCollection for user in discussion.page.js
     - add subcomment tree for each comment, and add them in the unreadUserCollection loop
@@ -13,30 +13,37 @@ nice to have:
 
 - - - - -
 
+$pull  = delete
+$push = add
 unreadUserCollection
     {
         id : string
         username : string
-        unread : [
+        unreadDiscussionMeta : [
             {
                 discussionId : String
                 discussionName : String
                 unReadCount : int
-                comments : [
-                    {id : string},
-                    {id : string},
-                    {id : string},
-                ]
+                new : bool
             },
             {
+                discussionId : String
                 discussionName : String
                 unReadCount : int
-                comments : {
-                    {id : string},
-                    {id : string},
-                    {id : string},
-                }
+                new : bool
+
             }
+        ],
+        unreadComments : [
+
+            {
+                commentId : string
+                discussionId : String
+                discussionName : String
+                createdAt : new Date()
+            },
+
+
         ]
 
     }

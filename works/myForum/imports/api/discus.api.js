@@ -60,14 +60,13 @@ if (Meteor.isServer) {
                   discussionId : _id,
                   discussionName : data.header,
                   unReadCount : 1,
-                  comments : [],
                   new : true
               };
                Allusernames.forEach(function(value){
                    if(Meteor.user().username != value.username){
                        UnreadUserCollection.update(
                            { username : value.username },
-                           { $push: { unread: headerObj } }
+                           { $push: { unreadDiscussionMeta: headerObj } }
                        );
                    }
               });
@@ -93,9 +92,25 @@ if (Meteor.isServer) {
               username: Meteor.user().username,
               discussionId: data.discussionId,
               comment: data.comment,
+            }, function(error, _id){
+                // insert unread to all users
+                const Allusernames = Meteor.users.find({}, {fields: {username: 1}}).fetch();
+                const commentObj = {
+                    commentId : _id,
+                };
+                 Allusernames.forEach(function(value){
+                     if(Meteor.user().username != value.username){
+                         UnreadUserCollection.update(
+                             { username : value.username, "unread.discussionId" : data.discussionId,  },
+                            //  { unread : [{}value.username] },
+                             { $push: { comments: commentObj } }
+                         );
+                         console.log('updading unread comments, ');
+                     }
+                });
             });
         },
-        'delete-from-userUnread'(data) {
+        'delete-from-unreadUserCollection'(data) {
             check( data, {
               comment: String,
               discussionId: String
@@ -110,33 +125,6 @@ if (Meteor.isServer) {
 
             // UserUnread.remove();
         },
-        'userUnread-insert'(data) {
-            check( data, {
-              commentId: String,
-              discussionName: String
-            });
-
-            // Make sure the user is logged in before inserting a task
-            if (! Meteor.userId()) {
-              throw new Meteor.Error('not-authorized');
-            }else{
-
-            }
-
-            let Allusernames = Meteor.users.find({}, {fields: {username: 1}}).fetch();
-            //  Allusernames.forEach(function(value){
-            //      if(Meteor.user().username != value.username){
-            //          UserUnread.insert({
-            //              username: value.username,
-            //              discussionName: data.discussionName,
-            //              commentId: data.commentId,
-            //              createdAt: new Date()
-            //          });
-            //      }
-            // });
-
-
-        },
         'create-user-in-unreadUserCollection'(data) {
             check( data, {
                     username : String
@@ -144,7 +132,7 @@ if (Meteor.isServer) {
             console.log( 'create-user-in-unreadUserCollection: ' + data.username );
             return UnreadUserCollection.insert({
               username: data.username,
-              unread : []
+              unreadDiscussionMeta : []
             }, function(error, _id){
               // create all discussions in user record
               const headers = Discussions.find( {}, { fields: { header:1 } } ).fetch();
@@ -153,14 +141,12 @@ if (Meteor.isServer) {
                       discussionId : value._id,
                       discussionName : value.header,
                       unReadCount : 0,
-                      comments : [],
                       new : false
                   };
                   UnreadUserCollection.update(
                       { username : data.username },
-                      { $push: { unread: headerObj } }
+                      { $push: { unreadDiscussionMeta: headerObj } }
                   );
-                      console.log('headers: ' + value.header);
               });
           });
         },
