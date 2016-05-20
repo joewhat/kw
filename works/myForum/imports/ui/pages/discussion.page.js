@@ -14,7 +14,8 @@ Template.discussionPageTemplate.onCreated(function () {
     const _thisData = {
         username : Meteor.user().username,
         discussionId : Session.get('activeDiscussionId')
-    }
+    };
+    console.log('add-user-to-discussion: ', _thisData);
     Meteor.call('add-user-to-discussion', _thisData, function( error, response ) {
       if ( error ) {
         // Handle our error.
@@ -35,6 +36,7 @@ Template.discussionPageTemplate.onDestroyed(function () {
             // Handle our error.
             console.log('wtf: ' + error);
           } else {
+              console.log('remove user from dis');
           }
         });
         // reset active session id

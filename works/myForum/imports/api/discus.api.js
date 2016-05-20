@@ -31,6 +31,20 @@ if (Meteor.isServer) {
   });
 
     Meteor.methods({
+        'get-unread-comment-for-discussionId'(data){
+            check( data, {
+              username: String,
+              discussionId: String
+            });
+
+            // const unreadComments = UnreadUserCollection.find( { username : data.username, "unreadDiscussionMeta.discussionId" : "vzu8nZZ8E7sZ4iT3d"} ).fetch();
+            //  const unreadComments = UnreadUserCollection.find( { username : data.username},  {unreadDiscussionMeta: {$elemMatch:{discussionId: "vzu8nZZ8E7sZ4iT3d"}}}).fetch();
+            const unreadComments = UnreadUserCollection.find( { username : data.username, "unreadDiscussionMeta.discussionId" : data.discussionId}, {fields: { "unreadDiscussionMeta.$": 1}}).fetch();
+
+            return unreadComments[0].unreadDiscussionMeta[0].unReadCount;
+            // console.log('fuckyou', unreadComments[0].unreadDiscussionMeta);
+            console.log('fuckyou', unreadComments[0].unreadDiscussionMeta[0].unReadCount);
+        },
         'discussions-insert'(data) {
             check( data, {
               header: String,
@@ -63,11 +77,23 @@ if (Meteor.isServer) {
                   unReadCount : 1,
                   new : true
               };
+              const headerObjOwner = {
+                  discussionId : _id,
+                  discussionName : data.header,
+                  unReadCount : 0,
+                  new : false
+              };
                Allusernames.forEach(function(value){
                    if(Meteor.user().username != value.username){
                        UnreadUserCollection.update(
                            { username : value.username },
                            { $push: { unreadDiscussionMeta: headerObj } }
+                       );
+                   }else{
+                       // owner
+                       UnreadUserCollection.update(
+                           { username : value.username },
+                           { $push: { unreadDiscussionMeta: headerObjOwner } }
                        );
                    }
               });
@@ -122,20 +148,18 @@ if (Meteor.isServer) {
                     commentId : _id,
                 };
                 const usersInDis = Discussions.find( { _id : data.discussionId }, { fields : { usersInDis : 1 } } ).fetch();
-                console.log('usersInDis', usersInDis[0].usersInDis);
-                const usernames = usersInDis[0].usersInDis.map(function(item) {
+                const userInDiscussion = usersInDis[0].usersInDis.map(function(item) {
                     return item['username'];
                 });
-                console.log('usernames: ', usernames);
+
                  Allusernames.forEach(function(value){
                      if(Meteor.user().username != value.username){
-                         UnreadUserCollection.update(
-                             { username : value.username, "unreadDiscussionMeta.discussionId" : data.discussionId,  },
-                            //  { unread : [{}value.username] },
-                            //  { $push: { unreadDiscussionMeta: commentObj } }
-                            {$inc:{"unreadDiscussionMeta.$.unReadCount":1}}
-                         );
-                         console.log('updading unread comments, ');
+                         if (userInDiscussion.indexOf(value.username) == -1) {
+                             UnreadUserCollection.update(
+                                 { username : value.username, "unreadDiscussionMeta.discussionId" : data.discussionId,  },
+                                 {$inc:{"unreadDiscussionMeta.$.unReadCount":1}}
+                             );
+                         }
                      }
                 });
             });
