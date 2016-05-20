@@ -29,3 +29,18 @@ Meteor.startup(() => {
     console.log('Created Admin User - Remeber to change pwd');
   }
 });
+
+UserStatus.events.on("connectionLogout", function(fields) {
+    // remove user from Discussions collection userInDis
+    const user = Meteor.users.findOne(fields.userId);
+    const data = {
+        username : user.username,
+    }
+    Meteor.call('remove-user-from-discussion', data, function( error, response ) {
+      if ( error ) {
+        // Handle our error.
+        console.log('wtf: ' + error);
+      } else {
+      }
+    });
+});

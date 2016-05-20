@@ -52,7 +52,8 @@ if (Meteor.isServer) {
               description: data.description,
               views: 0,
               comments: 0,
-              latestComment: new Date()
+              latestComment: new Date(),
+              usersInDis: []
           }, function(error, _id){
               // insert unread to all users
               const Allusernames = Meteor.users.find({}, {fields: {username: 1}}).fetch();
@@ -72,6 +73,28 @@ if (Meteor.isServer) {
               });
           });
 
+        },
+        'add-user-to-discussion'(data){
+            check( data, {
+              username: String,
+              discussionId: String
+            });
+            Discussions.update(
+                { _id : data.discussionId },
+               { $push: { usersInDis: {username: data.username} } }
+            );
+
+        },
+        'remove-user-from-discussion'(data){
+            check( data, {
+              username: String,
+            });
+            Discussions.update(
+                { },
+                { $pull: { usersInDis: { username: data.username } } },
+                false,
+                true
+            );
         },
         'comments-insert'(data) {
             check( data, {
@@ -98,12 +121,19 @@ if (Meteor.isServer) {
                 const commentObj = {
                     commentId : _id,
                 };
+                const usersInDis = Discussions.find( { _id : data.discussionId }, { fields : { usersInDis : 1 } } ).fetch();
+                console.log('usersInDis', usersInDis[0].usersInDis);
+                const usernames = usersInDis[0].usersInDis.map(function(item) {
+                    return item['username'];
+                });
+                console.log('usernames: ', usernames);
                  Allusernames.forEach(function(value){
                      if(Meteor.user().username != value.username){
                          UnreadUserCollection.update(
-                             { username : value.username, "unread.discussionId" : data.discussionId,  },
+                             { username : value.username, "unreadDiscussionMeta.discussionId" : data.discussionId,  },
                             //  { unread : [{}value.username] },
-                             { $push: { comments: commentObj } }
+                            //  { $push: { unreadDiscussionMeta: commentObj } }
+                            {$inc:{"unreadDiscussionMeta.$.unReadCount":1}}
                          );
                          console.log('updading unread comments, ');
                      }

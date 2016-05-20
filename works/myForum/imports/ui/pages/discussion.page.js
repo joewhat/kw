@@ -9,6 +9,39 @@ Meteor.subscribe('discussions.list', function() {});
 Meteor.subscribe('comments.list', function() {});
 
 
+Template.discussionPageTemplate.onCreated(function () {
+
+    const _thisData = {
+        username : Meteor.user().username,
+        discussionId : Session.get('activeDiscussionId')
+    }
+    Meteor.call('add-user-to-discussion', _thisData, function( error, response ) {
+      if ( error ) {
+        // Handle our error.
+        console.log('wtf: ' + error);
+      } else {
+      }
+    });
+});
+
+Template.discussionPageTemplate.onDestroyed(function () {
+    // remove user from Discussions collection userInDis
+    if(Meteor.user()){
+        const _thisData = {
+            username : Meteor.user().username,
+        }
+        Meteor.call('remove-user-from-discussion', _thisData, function( error, response ) {
+          if ( error ) {
+            // Handle our error.
+            console.log('wtf: ' + error);
+          } else {
+          }
+        });
+        // reset active session id
+        Session.set('activeDiscussionId', '');
+    }
+});
+
 
 
 Template.discussionPageTemplate.onRendered(function () {

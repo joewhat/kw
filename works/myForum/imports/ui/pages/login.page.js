@@ -9,9 +9,11 @@ Template.loginTemplate.events({
         const loginUsername = event.target.loginUsername.value;
         const loginPassword = event.target.loginPassword.value;
         Meteor.loginWithPassword(loginUsername, loginPassword, function(err){
-          if(err){
-            $('.custom-login-form-error').text('Invalid Username or Password');
-          }
+            if(err){
+                $('.custom-login-form-error').text('Invalid Username or Password');
+            }else {
+                Session.set('activeDiscussionId', '');    
+            }
         });
     }
 });

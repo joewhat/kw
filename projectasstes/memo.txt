@@ -1,5 +1,5 @@
 todo:
-    - update unreadUserCollection when comment added (document int)
+    - check if user is in discussion b4 adding unread in discus.api.js method comment-insert
     - display unread comments in main.page.js for user
     - delete unread comments in unreadUserCollection for user in discussion.page.js
     - add subcomment tree for each comment, and add them in the unreadUserCollection loop
