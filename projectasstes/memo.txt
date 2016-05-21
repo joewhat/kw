@@ -1,5 +1,6 @@
 todo:
     -'remove-user-from-discussion' virker ikke ordenligt - den skal på en eller anden måde have discussionId med fra kill window og logout
+         - put en last activeDiscussionId ind i unreadUserCollection
 
     - add subcomment tree for each comment, and add them in the unreadUserCollection loop
     - add link stuff on comments from shit.chat

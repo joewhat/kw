@@ -31,6 +31,16 @@ if (Meteor.isServer) {
   });
 
     Meteor.methods({
+        'update-active-discussionId'(data){
+            check( data, {
+              username: String,
+              discussionId: String
+            });
+            UnreadUserCollection.update(
+                { username : data.username, "unreadDiscussionMeta.discussionId" : data.discussionId,  },
+                {$set:{"activeDiscussionId": data.discussionId}}
+            );
+        },
         'clear-unread-comment-for-discussionId'(data){
             check( data, {
               username: String,
@@ -120,9 +130,12 @@ if (Meteor.isServer) {
         'remove-user-from-discussion'(data){
             check( data, {
               username: String,
+              discussionId: String
             });
+            console.log('removing user data: ', data);
+
             Discussions.update(
-                { },
+                { _id : data.discussionId },
                 { $pull: { usersInDis: { username: data.username } } },
                 false,
                 true
@@ -192,6 +205,7 @@ if (Meteor.isServer) {
             console.log( 'create-user-in-unreadUserCollection: ' + data.username );
             return UnreadUserCollection.insert({
               username: data.username,
+              activeDiscussionId : '',
               unreadDiscussionMeta : []
             }, function(error, _id){
               // create all discussions in user record
@@ -202,6 +216,7 @@ if (Meteor.isServer) {
                       discussionName : value.header,
                       unReadCount : 0,
                       new : false
+
                   };
                   UnreadUserCollection.update(
                       { username : data.username },

@@ -58,7 +58,11 @@ function updateUnreadHtml(dims){
             // Handle our error.
             console.log('wtf: ' + error);
           } else {
-             $('#' + data.discussionId).children('.unread').html('-unread:' + response);
+              if(response == 0){
+                  $('#' + data.discussionId).children('.unread').html();
+              }else{
+                    $('#' + data.discussionId).children('.unread').html(response);
+              }
           }
         });
     });
@@ -71,7 +75,17 @@ Template.mainPageTemplate.events({
     // enter a discussion
     'click .discussion'(event) {
         const id = $(event.target).attr('data-id');
-        Session.set('activeDiscussionId', $(event.target).closest('.discussion').attr('data-id'));
+        const discussionId =  $(event.target).closest('.discussion').attr('data-id');
+        Session.set('activeDiscussionId', discussionId);
+        const data = { username: Meteor.user().username, discussionId: discussionId };
+        Meteor.call('update-active-discussionId', data, function( error, response ) {
+          if ( error ) {
+            // Handle our error.
+            console.log('wtf: ' + error);
+          } else {
+
+          }
+        });
         console.log('set activeDiscussionId');
         BlazeLayout.render('mainLayout', {layer1: 'discussionPageTemplate'});
     },
