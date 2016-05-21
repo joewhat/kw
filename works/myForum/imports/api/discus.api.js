@@ -31,19 +31,25 @@ if (Meteor.isServer) {
   });
 
     Meteor.methods({
+        'clear-unread-comment-for-discussionId'(data){
+            check( data, {
+              username: String,
+              discussionId: String
+            });
+
+            UnreadUserCollection.update(
+                { username : data.username, "unreadDiscussionMeta.discussionId" : data.discussionId,  },
+                {$set:{"unreadDiscussionMeta.$.unReadCount":0}}
+            );
+        },
         'get-unread-comment-for-discussionId'(data){
             check( data, {
               username: String,
               discussionId: String
             });
 
-            // const unreadComments = UnreadUserCollection.find( { username : data.username, "unreadDiscussionMeta.discussionId" : "vzu8nZZ8E7sZ4iT3d"} ).fetch();
-            //  const unreadComments = UnreadUserCollection.find( { username : data.username},  {unreadDiscussionMeta: {$elemMatch:{discussionId: "vzu8nZZ8E7sZ4iT3d"}}}).fetch();
             const unreadComments = UnreadUserCollection.find( { username : data.username, "unreadDiscussionMeta.discussionId" : data.discussionId}, {fields: { "unreadDiscussionMeta.$": 1}}).fetch();
-
             return unreadComments[0].unreadDiscussionMeta[0].unReadCount;
-            // console.log('fuckyou', unreadComments[0].unreadDiscussionMeta);
-            console.log('fuckyou', unreadComments[0].unreadDiscussionMeta[0].unReadCount);
         },
         'discussions-insert'(data) {
             check( data, {

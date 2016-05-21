@@ -23,6 +23,15 @@ Template.discussionPageTemplate.onCreated(function () {
       } else {
       }
     });
+
+
+    Meteor.call('clear-unread-comment-for-discussionId', _thisData, function( error, response ) {
+      if ( error ) {
+        // Handle our error.
+        console.log('wtf: ' + error);
+      } else {
+      }
+    });
 });
 
 Template.discussionPageTemplate.onDestroyed(function () {

@@ -1,7 +1,6 @@
 todo:
-    - check if user is in discussion b4 adding unread in discus.api.js method comment-insert
-    - display unread comments in main.page.js for user
-    - delete unread comments in unreadUserCollection for user in discussion.page.js
+    -'remove-user-from-discussion' virker ikke ordenligt - den skal på en eller anden måde have discussionId med fra kill window og logout
+
     - add subcomment tree for each comment, and add them in the unreadUserCollection loop
     - add link stuff on comments from shit.chat
     - add upload file stuff(maybe)

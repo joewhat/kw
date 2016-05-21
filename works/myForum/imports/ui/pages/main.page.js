@@ -9,31 +9,23 @@ Meteor.subscribe('discussions.list', function() {});
 Meteor.subscribe('userUnread.list', function() {});
 
 Template.mainPageTemplate.onCreated(function(){
-    // let unreadComments = UnreadUserCollection.find( { username : Meteor.user().username} );
-    // let unreadComments = UnreadUserCollection.find( { username : Meteor.user().username} ).unreadDiscussionMeta;
-    //  { fields : { unreadDiscussionMeta : 1 } }
-
-
-
-
-
 
 });
 
 Template.mainPageTemplate.onRendered(function () {
-
-
-
     this.autorun(function(){
         UnreadUserCollection.find({username : Meteor.user().username}).observeChanges({
             added: function(id, fields) {
-                    console.log('doc added', id , fields);
+                    console.log('doc added',fields);
+                    updateUnread();
             },
             changed: function(id, fields) {
-                console.log('doc updated', id , fields);
+                console.log('doc updated',fields);
+                updateUnread();
             },
             removed: function() {
-                console.log('doc removed', id , fields);
+                console.log('doc removed',fields);
+                updateUnread();
             }
         });
     });
@@ -41,21 +33,35 @@ Template.mainPageTemplate.onRendered(function () {
 });
 
 function updateUnread(){
-    const data = {
-        username : Meteor.user().username,
-        discussionId : this._id
-    };
-    const header = this.header;
-    Meteor.call('get-unread-comment-for-discussionId', data, function( error, response ) {
-      if ( error ) {
-        // Handle our error.
-        console.log('wtf: ' + error);
-      } else {
-          console.log('response: ' + response + ' header: ' + header);
+    const searchVal = Session.get('globalSearchValue');
+    if(!searchVal){
+        // default return (sort after createdAt)
+        const allDis = Discussions.find({}, {sort: {latestComment: -1}}).fetch();
+        updateUnreadHtml(allDis);
+    }else{
+        // search result
+        const regex = new RegExp(helpers.regexMultiWordsSearch(searchVal), 'i');
+        const allDis = Discussions.find({header: regex}, {sort: {header: +1} }).fetch();
+        updateUnreadHtml(allDis);
+    }
+}
 
-      }
+function updateUnreadHtml(dims){
+    dims.forEach(function(value){
+        const data = {
+            username : Meteor.user().username,
+            discussionId : value._id
+        };
+        const header = value.header;
+        Meteor.call('get-unread-comment-for-discussionId', data, function( error, response ) {
+          if ( error ) {
+            // Handle our error.
+            console.log('wtf: ' + error);
+          } else {
+             $('#' + data.discussionId).children('.unread').html('-unread:' + response);
+          }
+        });
     });
-
 }
 
 Template.mainPageTemplate.events({
@@ -113,58 +119,4 @@ Template.mainPageTemplate.helpers({
   convertedDate : function(){
     return helpers.convertDate(this.createdAt);
     },
-    userUnread : function(){
-        if(this._id != undefined){
-            console.log('this._id: ' + this._id);
-            // , 'unreadDiscussionMeta.discussionId' : this._id
-
-            const data = {
-                username : Meteor.user().username,
-                discussionId : this._id
-            };
-            const header = this.header;
-            Meteor.call('get-unread-comment-for-discussionId', data, function( error, response ) {
-              if ( error ) {
-                // Handle our error.
-                console.log('wtf: ' + error);
-              } else {
-                  console.log('response: ' + response + ' header: ' + header);
-
-              }
-            });
-
-
-            // , {fields: { "unreadDiscussionMeta.$": 1}}
-            // const unreadComments = UnreadUserCollection.find( { username : Meteor.user().username, "unreadDiscussionMeta.discussionId" : this._id}).fetch();
-            // if(unreadComments[0].unreadDiscussionMeta != undefined){
-            //
-            //     console.log('fuckyou TOOO', unreadComments[0].unreadDiscussionMeta);
-            // }
-            //console.log('fuckyou', unreadComments[0].unreadDiscussionMeta[0].unReadCount);
-        }
-        // const allUnread = UserUnread.find( { username: Meteor.user().username } ).fetch();
-        // allUnread.forEach(function(value){
-        //         console.log('allUnread: ' + value.discussionName);
-        // });
-        //
-        //
-        // const joe = allUnread.aggregate(
-        //   [{$group: {
-        //       _id: "$discussionName",
-        //       count: { $sum : 1 }
-        //     }}, {
-        //     $group: {
-        //       _id: "$_id",
-        //       count: { $sum : "$count" }
-        //     }},{
-        //       $out: "distinctCount"
-        //     }],
-        //  {allowDiskUse:true}
-        // );
-        // console.log('joe: ', joe);
-        //
-        //
-        // return UserUnread.find( { username: Meteor.user().username } ).count();
-    }
-
 });
