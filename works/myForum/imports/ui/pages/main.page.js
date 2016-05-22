@@ -46,8 +46,8 @@ function updateUnread(){
     }
 }
 
-function updateUnreadHtml(dims){
-    dims.forEach(function(value){
+function updateUnreadHtml(allDis){
+    allDis.forEach(function(value){
         const data = {
             username : Meteor.user().username,
             discussionId : value._id
@@ -133,4 +133,8 @@ Template.mainPageTemplate.helpers({
   convertedDate : function(){
     return helpers.convertDate(this.createdAt);
     },
+
+    isNew : function(){
+        console.log('the id: ' + this._id);
+    }
 });
