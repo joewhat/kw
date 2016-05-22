@@ -34,9 +34,9 @@ if (Meteor.isServer) {
         const newUserId = Accounts.createUser(userData);
         Roles.addUsersToRoles(newUserId, [userType], 'users');
 
-        // Create user in unreadUserCollection
+        // Create user in discussionUserMeta
         const data = { username : userData.username };
-        Meteor.call('create-user-in-unreadUserCollection', data, function( error, response ) {
+        Meteor.call('create-user-in-discussionUserMeta', data, function( error, response ) {
           if ( error ) {
             // Handle our error.
             console.log('wtf: ' + error);

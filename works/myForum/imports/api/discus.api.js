@@ -4,7 +4,7 @@ import { check } from 'meteor/check';
 
 export const Discussions = new Mongo.Collection('discussions');
 export const Comments = new Mongo.Collection('comments');
-export const UnreadUserCollection = new Mongo.Collection('unreadUserCollection');
+export const DiscussionUserMeta = new Mongo.Collection('discussionUserMeta');
 
 Meteor.startup(() => {
 
@@ -12,22 +12,22 @@ Meteor.startup(() => {
 
 
 if (Meteor.isServer) {
-  Meteor.publish('discussions.list', function () {
+  Meteor.publish('discussions.collection', function () {
     // check user is loggedin
     if(!this.userId) return null;
     return Discussions.find({});
   });
 
-  Meteor.publish('comments.list', function () {
+  Meteor.publish('comments.collection', function () {
     // check user is loggedin
     if(!this.userId) return null;
     return Comments.find({});
   });
 
-  Meteor.publish('userUnread.list', function () {
+  Meteor.publish('discussionUserMeta.collection', function () {
     // check user is loggedin
     if(!this.userId) return null;
-    return UnreadUserCollection.find({});
+    return DiscussionUserMeta.find({});
   });
 
     Meteor.methods({
@@ -37,7 +37,7 @@ if (Meteor.isServer) {
               discussionId: String
             });
 
-            UnreadUserCollection.update(
+            DiscussionUserMeta.update(
                 { username : data.username, "unreadDiscussionMeta.discussionId" : data.discussionId,  },
                 {$set:{"unreadDiscussionMeta.$.new":false}}
             );
@@ -49,7 +49,7 @@ if (Meteor.isServer) {
               discussionId: String
             });
 
-            const unreadComments = UnreadUserCollection.find( { username : data.username, "unreadDiscussionMeta.discussionId" : data.discussionId}, {fields: { "unreadDiscussionMeta.$": 1}}).fetch();
+            const unreadComments = DiscussionUserMeta.find( { username : data.username, "unreadDiscussionMeta.discussionId" : data.discussionId}, {fields: { "unreadDiscussionMeta.$": 1}}).fetch();
             return unreadComments[0].unreadDiscussionMeta[0].new;
         },
         'update-active-discussionId'(data){
@@ -57,7 +57,7 @@ if (Meteor.isServer) {
               username: String,
               discussionId: String
             });
-            UnreadUserCollection.update(
+            DiscussionUserMeta.update(
                 { username : data.username, "unreadDiscussionMeta.discussionId" : data.discussionId,  },
                 {$set:{"activeDiscussionId": data.discussionId}}
             );
@@ -68,7 +68,7 @@ if (Meteor.isServer) {
               discussionId: String
             });
 
-            UnreadUserCollection.update(
+            DiscussionUserMeta.update(
                 { username : data.username, "unreadDiscussionMeta.discussionId" : data.discussionId,  },
                 {$set:{"unreadDiscussionMeta.$.unReadCount":0}}
             );
@@ -79,7 +79,7 @@ if (Meteor.isServer) {
               discussionId: String
             });
 
-            const unreadComments = UnreadUserCollection.find( { username : data.username, "unreadDiscussionMeta.discussionId" : data.discussionId}, {fields: { "unreadDiscussionMeta.$": 1}}).fetch();
+            const unreadComments = DiscussionUserMeta.find( { username : data.username, "unreadDiscussionMeta.discussionId" : data.discussionId}, {fields: { "unreadDiscussionMeta.$": 1}}).fetch();
             return unreadComments[0].unreadDiscussionMeta[0].unReadCount;
         },
         'discussions-insert'(data) {
@@ -122,13 +122,13 @@ if (Meteor.isServer) {
               };
                Allusernames.forEach(function(value){
                    if(Meteor.user().username != value.username){
-                       UnreadUserCollection.update(
+                       DiscussionUserMeta.update(
                            { username : value.username },
                            { $push: { unreadDiscussionMeta: headerObj } }
                        );
                    }else{
                        // owner
-                       UnreadUserCollection.update(
+                       DiscussionUserMeta.update(
                            { username : value.username },
                            { $push: { unreadDiscussionMeta: headerObjOwner } }
                        );
@@ -145,6 +145,12 @@ if (Meteor.isServer) {
             Discussions.update(
                 { _id : data.discussionId },
                { $push: { usersInDis: {username: data.username} } }
+            );
+
+            // update discussion views
+            Discussions.update(
+                { _id : data.discussionId },
+                {$inc:{"views":1}}
             );
 
         },
@@ -181,6 +187,12 @@ if (Meteor.isServer) {
               discussionId: data.discussionId,
               comment: data.comment,
             }, function(error, _id){
+                // update discussion comments
+                Discussions.update(
+                    { _id : data.discussionId },
+                    {$inc:{"comments":1}}
+                );
+
                 // insert unread to all users
                 const Allusernames = Meteor.users.find({}, {fields: {username: 1}}).fetch();
                 const commentObj = {
@@ -194,7 +206,7 @@ if (Meteor.isServer) {
                  Allusernames.forEach(function(value){
                      if(Meteor.user().username != value.username){
                          if (userInDiscussion.indexOf(value.username) == -1) {
-                             UnreadUserCollection.update(
+                             DiscussionUserMeta.update(
                                  { username : value.username, "unreadDiscussionMeta.discussionId" : data.discussionId,  },
                                  {$inc:{"unreadDiscussionMeta.$.unReadCount":1}}
                              );
@@ -203,7 +215,7 @@ if (Meteor.isServer) {
                 });
             });
         },
-        'delete-from-unreadUserCollection'(data) {
+        'delete-from-discussionUserMeta'(data) {
             check( data, {
               comment: String,
               discussionId: String
@@ -218,12 +230,12 @@ if (Meteor.isServer) {
 
             // UserUnread.remove();
         },
-        'create-user-in-unreadUserCollection'(data) {
+        'create-user-in-discussionUserMeta'(data) {
             check( data, {
                     username : String
             });
-            console.log( 'create-user-in-unreadUserCollection: ' + data.username );
-            return UnreadUserCollection.insert({
+            console.log( 'create-user-in-discussionUserMeta: ' + data.username );
+            return DiscussionUserMeta.insert({
               username: data.username,
               activeDiscussionId : '',
               unreadDiscussionMeta : []
@@ -238,7 +250,7 @@ if (Meteor.isServer) {
                       new : false
 
                   };
-                  UnreadUserCollection.update(
+                  DiscussionUserMeta.update(
                       { username : data.username },
                       { $push: { unreadDiscussionMeta: headerObj } }
                   );

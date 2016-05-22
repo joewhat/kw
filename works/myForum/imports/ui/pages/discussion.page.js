@@ -2,13 +2,13 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { Discussions } from '../../api/discus.api.js';
 import { Comments } from '../../api/discus.api.js';
-import { UnreadUserCollection } from '../../api/discus.api.js';
+import { DiscussionUserMeta } from '../../api/discus.api.js';
 import './discussion.page.html';
 import helpers from '../../api/helpers.api.js';
 
-Meteor.subscribe('discussions.list', function() {});
-Meteor.subscribe('comments.list', function() {});
-Meteor.subscribe('userUnread.list', function() {});
+Meteor.subscribe('discussions.collection', function() {});
+Meteor.subscribe('comments.collection', function() {});
+Meteor.subscribe('discussionUserMeta.collection', function() {});
 
 
 Template.discussionPageTemplate.onCreated(function () {
@@ -48,10 +48,10 @@ Template.discussionPageTemplate.onDestroyed(function () {
     if(Meteor.user()){
         const _thisData = {
             username : Meteor.user().username,
-            discussionId : UnreadUserCollection.find({username:Meteor.user().username}).fetch()[0].activeDiscussionId
+            discussionId : DiscussionUserMeta.find({username:Meteor.user().username}).fetch()[0].activeDiscussionId
         }
 
-        console.log('remove-user:', UnreadUserCollection.find({username:Meteor.user().username}).fetch()[0].activeDiscussionId);
+        console.log('remove-user:', DiscussionUserMeta.find({username:Meteor.user().username}).fetch()[0].activeDiscussionId);
 
         Meteor.call('remove-user-from-discussion', _thisData, function( error, response ) {
           if ( error ) {

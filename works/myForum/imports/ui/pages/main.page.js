@@ -1,12 +1,12 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { Discussions } from '../../api/discus.api.js';
-import { UnreadUserCollection } from '../../api/discus.api.js';
+import { DiscussionUserMeta } from '../../api/discus.api.js';
 import './main.page.html';
 import helpers from '../../api/helpers.api.js';
 
-Meteor.subscribe('discussions.list', function() {});
-Meteor.subscribe('userUnread.list', function() {});
+Meteor.subscribe('discussions.collection', function() {});
+Meteor.subscribe('discussionUserMeta.collection', function() {});
 
 Template.mainPageTemplate.onCreated(function(){
 
@@ -14,7 +14,7 @@ Template.mainPageTemplate.onCreated(function(){
 
 Template.mainPageTemplate.onRendered(function () {
     this.autorun(function(){
-        UnreadUserCollection.find({username : Meteor.user().username}).observeChanges({
+        DiscussionUserMeta.find({username : Meteor.user().username}).observeChanges({
             added: function(id, fields) {
                     // console.log('doc added',fields);
                     updateUnread();
