@@ -31,6 +31,27 @@ if (Meteor.isServer) {
   });
 
     Meteor.methods({
+        'clear-is-discussion-new'(data){
+            check( data, {
+              username: String,
+              discussionId: String
+            });
+
+            UnreadUserCollection.update(
+                { username : data.username, "unreadDiscussionMeta.discussionId" : data.discussionId,  },
+                {$set:{"unreadDiscussionMeta.$.new":false}}
+            );
+        },
+
+        'is-discussion-new' : function(data){
+            check( data, {
+              username: String,
+              discussionId: String
+            });
+
+            const unreadComments = UnreadUserCollection.find( { username : data.username, "unreadDiscussionMeta.discussionId" : data.discussionId}, {fields: { "unreadDiscussionMeta.$": 1}}).fetch();
+            return unreadComments[0].unreadDiscussionMeta[0].new;
+        },
         'update-active-discussionId'(data){
             check( data, {
               username: String,
@@ -132,7 +153,6 @@ if (Meteor.isServer) {
               username: String,
               discussionId: String
             });
-            console.log('removing user data: ', data);
 
             Discussions.update(
                 { _id : data.discussionId },

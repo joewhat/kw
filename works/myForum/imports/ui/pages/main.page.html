@@ -16,8 +16,7 @@
 
       <ul class="discussion-list">
           {{#each allDiscussions}}
-          {{isNew}}
-              <li class="discussion" id="{{this._id}}" data-id="{{this._id}}"> <div class="header">{{this.header}}</div>  - {{this.username}} - {{convertedDate}} <div class="unread"> </div> </li>
+              <li class="discussion" id="{{this._id}}" data-id="{{this._id}}"> <div class="header">{{this.header}}</div>  - {{this.username}} - {{convertedDate}} <div class="unread"></div><div class="isNew"></div> </li>
           {{/each}}
       </ul>
   </div>

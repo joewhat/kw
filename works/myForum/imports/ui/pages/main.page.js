@@ -16,20 +16,41 @@ Template.mainPageTemplate.onRendered(function () {
     this.autorun(function(){
         UnreadUserCollection.find({username : Meteor.user().username}).observeChanges({
             added: function(id, fields) {
-                    console.log('doc added',fields);
+                    // console.log('doc added',fields);
                     updateUnread();
             },
             changed: function(id, fields) {
-                console.log('doc updated',fields);
+                // console.log('doc updated',fields);
                 updateUnread();
             },
             removed: function() {
-                console.log('doc removed',fields);
+                // console.log('doc removed',fields);
                 updateUnread();
             }
         });
-    });
 
+        Meteor.defer(function(){
+            const allDisOnPage = $('.discussion');
+            $.each(allDisOnPage, function( index, value ) {
+                const discussionId = $(value).attr('id');
+              const data = {
+                  username : Meteor.user().username,
+                  discussionId : discussionId
+              };
+              Meteor.call('is-discussion-new', data, function( error, response ) {
+                if ( error ) {
+                  // Handle our error.
+                  console.log('wtf: ' + error);
+                } else {
+                    if(response){
+                        $('#' + discussionId).children('.isNew').html('new');
+                    }
+
+                }
+              });
+            });
+        });
+    });
 });
 
 function updateUnread(){
@@ -133,8 +154,4 @@ Template.mainPageTemplate.helpers({
   convertedDate : function(){
     return helpers.convertDate(this.createdAt);
     },
-
-    isNew : function(){
-        console.log('the id: ' + this._id);
-    }
 });
