@@ -9,6 +9,7 @@ body {
 }
 
 input {
+font-family: 'Roboto Mono', sans-serif;
   border: 1px solid $black;
   font-size: $font-size-reg;
   padding: 10px;
@@ -22,7 +23,7 @@ input:focus {
 
 }
 textarea {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto Mono', sans-serif;
     padding: 10px;
     font-size: $font-size-reg;
 }
