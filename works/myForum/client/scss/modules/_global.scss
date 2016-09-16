@@ -6,6 +6,7 @@ body {
   font-family: 'Roboto Mono', sans-serif;
   font-size: $font-size-reg;
    -webkit-font-smoothing: antialiased;
+   background-color: $grey;
 }
 
 input {
@@ -50,7 +51,7 @@ input[type=submit]:hover {
 
 .main-content-wrapper {
   position: relative;
-  padding: 0px 60px 0px 20px;
+  padding: 0px 0px 0px 0px;
   // background-color: red;
 
   .loading {
@@ -74,57 +75,16 @@ input[type=submit]:hover {
 }
 
 .global-page-content {
+
   display: inline-block;
-  height: calc(100vh - 202px);
-  width: calc(100% - 40px);
+  margin-left: $global-content-left-margin;
+  // height: calc(100vh - 202px);
+  width: calc(100% - 340px);
   padding: 20px;
-  overflow-y: scroll;
+  background-color: red;
 }
 
-.tab-button {
-  font-weight: 700;
-  cursor: pointer;
-  float: left;
-  padding: 10px 20px 10px 20px;
-  background-color: $white;
 
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* Internet Explorer */
-  -khtml-user-select: none; /* KHTML browsers (e.g. Konqueror) */
-  -webkit-user-select: none; /* Chrome, Safari, and Opera */
-  -webkit-touch-callout: none; /* Disable Android and iOS callouts*/
-
-  .tab-label {
-    float: left;
-    margin-top: 4px;
-  }
-
-  .img-wrapper {
-    float: left;
-    margin-right: 10px;
-    height: $icon-size-reg;
-    width: $icon-size-reg;
-  }
-
-  img {
-    width: 100%;
-    height: 100%;
-  }
-}
-
-.tab-button:hover {
-  background-color: $blue;
-}
-
-.tab-button-active:hover {
-  background-color: $white;
-}
-
-.tab-button-active {
-  border: 1px solid $black;
-  border-bottom: 0px;
-  padding: 10px 19px 10px 19px;
-}
 
 .button {
   display: block;

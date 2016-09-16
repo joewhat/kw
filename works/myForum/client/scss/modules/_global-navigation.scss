@@ -1,27 +1,64 @@
 .global-navigation {
+  position: fixed;
+  top: 0px;
+  left: 0px;
   display: inline-block;
-  width: 100%;
-  height: 39px;
-  // background-color: blue;
-  border-bottom: 1px solid $black;
+  background-color: $red;
+  width: 200px;
 
-  .projects-tab {
+  .user-info {
+    display: inline-block;
+    background-color: blue;
+    height: 40px;
+    width: 200px;
 
+    .logo {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      height: 40px;
+      width: 40px;
+      background-color: $black;
+    }
   }
 
-  .templates-tab {
-
+  .menu-wrapper {
+    position: absolute;
+    top: 40px;
+    left: 40px;
   }
 
-  .revisionLog-tab {
-      .img-wrapper {
-        // height: 25px !important;
-        
-      }
+
+  .tab-button {
+    display: inline-block;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 10px 10px 10px 10px;
+    background-color: $black;
+    color: $grey;
+    width: 160px;
+    height: 20px;
+
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer */
+    -khtml-user-select: none; /* KHTML browsers (e.g. Konqueror) */
+    -webkit-user-select: none; /* Chrome, Safari, and Opera */
+    -webkit-touch-callout: none; /* Disable Android and iOS callouts*/
+  }
+  
+
+  .tab-button:hover {
+    background-color: $blue;
   }
 
-  .users-tab {
+  .tab-button-active:hover {
+    background-color: $white;
+  }
 
+  .tab-button-active {
+    border-bottom: 0px;
+    // padding: 10px 19px 10px 19px;
+    background-color: red;
   }
 
 }

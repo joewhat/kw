@@ -14,10 +14,12 @@
 
 
 // pages
-@import 'modules/pages/global-pages.scss';
 @import 'modules/pages/login-page.scss';
 @import 'modules/pages/users-page.scss';
 @import 'modules/pages/addUsers-page.scss';
 @import 'modules/pages/editUser-page.scss';
 @import 'modules/pages/main-page.scss';
 @import 'modules/pages/discussion-page.scss';
+
+// components
+@import 'modules/components/menu.scss';

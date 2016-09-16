@@ -57,4 +57,7 @@ Template.mainLayout.events({
     console.log('.close-modal');
     Session.set('modalLoad', '');
   },
+  'click .new-discussion-button'(event) {
+      Session.set('modalLoad', 'newDisTemplate');
+  },
 });
