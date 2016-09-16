@@ -1,17 +1,19 @@
 .discussion-page-wrapper {
-  display: inline-block;
-  width: calc(100% - 300px);
-  margin-left: $global-content-left-margin;
+  // display: inline-block;
+  // width: calc(100% - 300px);
+  // max-width: $global-content-max-width;
+  // margin-left: $global-content-left-margin;
 }
 
 .discussion-page-header {
-  display: inline-block;
-  position: relative;
-  height: 30px;
-  width: calc(100% - 10px);
-  background-color: blue;
-  margin-top: 3px;
-  padding: 10px 0px 0px 10px;
+  // display: inline-block;
+  // position: relative;
+  // height: 30px;
+  // width: calc(100% - 10px);
+  //
+  // background-color: blue;
+  // margin-top: 3px;
+  // padding: 10px 0px 0px 10px;
 }
 
 .discussion-page-content {

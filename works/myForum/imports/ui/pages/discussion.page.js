@@ -71,6 +71,8 @@ Template.discussionPageTemplate.onDestroyed(function () {
 Template.discussionPageTemplate.onRendered(function () {
     let addedUpdateCount = 0;
     const commentCount = Comments.find({discussionId : Session.get('activeDiscussionId')}).count();
+    Session.set('discussionScrollPosition', 'bottom');
+    Session.set('discussionScrollIsAnimating', false);
     // Session.set('discussionIsRendered', true);
     this.autorun(function(){
         Comments.find({discussionId : Session.get('activeDiscussionId')}).observeChanges({
@@ -78,8 +80,11 @@ Template.discussionPageTemplate.onRendered(function () {
                 addedUpdateCount++;
                 if(addedUpdateCount > commentCount){
                     // console.log('what thefuck: ' + addedUpdateCount + ' ' + commentCount);
+                    // scroll to bottom after new msg
                     Tracker.afterFlush(function () {
-                        $('.discussion-page-content').animate({ scrollTop: $('.discussion-page-content').get(0).scrollHeight}, 400);
+                        if (Session.get('discussionScrollPosition') == 'bottom') {
+                          scrollDisListToBottom(true);
+                        }
                     });
                 }
             },
@@ -90,15 +95,46 @@ Template.discussionPageTemplate.onRendered(function () {
                 // console.log('doc removed');
             }
         });
+
+        // scroll to bottom on rendered
+        scrollDisListToBottom();
+
+      Meteor.defer(function() {
+          const $wrapper = $('.discussion-page-content');
+          const $content = $wrapper.find('.discussion-msg-list');
+          const topOffset = 100;
+          const bottomOffset = 50;
+
+          $wrapper.on('scroll', function(e) {
+            const wrapperHeight = $wrapper.height();
+            const contentHeight = $content.height();
+            let calculation = $wrapper.scrollTop() + wrapperHeight;
+
+            if (calculation > (contentHeight - bottomOffset)) {
+              // At the bottom
+              console.log('is at the bottom! cal: ', calculation, ' cHight: ', contentHeight);
+              Session.set('discussionScrollPosition', 'bottom');
+            } else if ($wrapper.scrollTop() < topOffset) {
+              // At the top
+              Session.set('discussionScrollPosition', 'top');
+              console.log('at the top! $wrapper.scrollTop: ', $wrapper.scrollTop(), ' cHight: ', contentHeight);
+            } else {
+              // in the middle
+              Session.set('discussionScrollPosition', 'middle');
+              console.log('$wrapper.scrollTop: ', $wrapper.scrollTop(), ' cHight: ', contentHeight);
+            }
+          });
+      });
     });
-    $('.discussion-page-content').scrollTop( $('.discussion-page-content').get(0).scrollHeight );
+
+
 });
 
 
 Template.discussionPageTemplate.events({
-    'scroll .discussion-page-content'(event){
-        console.log('scolling');
-    },
+    // 'scroll .discussion-page-content'(event){
+    //     console.log('scolling');
+    // },
 
     'click .back-to-discussion-button'(event) {
         Session.set('discussionIsRendered', false);
@@ -140,6 +176,7 @@ Template.discussionPageTemplate.events({
 
         $('.the-comment').val('');
         $('.the-comment').focus();
+        scrollDisListToBottom(true);
     },
 });
 
@@ -156,3 +193,19 @@ Template.discussionPageTemplate.helpers({
         return Comments.find({discussionId : Session.get('activeDiscussionId')}, {sort: {createdAt: +1}});
     }
 });
+
+const scrollDisListToBottom = function(animate = false) {
+  if (animate && !Session.get('discussionScrollIsAnimating')) {
+    Session.set('discussionScrollIsAnimating', true);
+    $('.discussion-page-content').animate(
+      { scrollTop:
+        $('.discussion-page-content').get(0).scrollHeight
+      }, 400, function() {
+        // Animation complete.
+        Session.set('discussionScrollIsAnimating', false);
+      });
+  } else {
+    $('.discussion-page-content').scrollTop(
+      $('.discussion-page-content').get(0).scrollHeight);
+  }
+}

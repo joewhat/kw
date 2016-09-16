@@ -33,7 +33,7 @@ Meteor.startup(() => {
 
 UserStatus.events.on("connectionLogout", function(fields) {
     // remove user from Discussions collection userInDis
-    console.log(fields.userId);
+    // console.log(fields.userId);
     const user = Meteor.users.findOne(fields.userId);
     const data = {
         username : user.username,
