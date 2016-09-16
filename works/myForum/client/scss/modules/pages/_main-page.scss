@@ -1,5 +1,5 @@
 .main-page-wrapper {
-  background-color: red;
+  // background-color: red;
 
   .main-page-header {
 
@@ -10,16 +10,28 @@
 
 .main-page-content {
   width: 100%;
+
     .discussion-list {
+      display: inline-block;
+      height: calc(100vh - 45px);
+      width: 100%;
+      overflow-y: auto;
+
         li {
             cursor: pointer;
-            padding: 10px 20px;
+            padding: 10px 10px;
+            height: 20px;
+            // border-top: 1px solid $grey-bg;
+            text-transform: uppercase;
+            background-color: $black;
+            color: $grey;
             div {
                 float: left;
             }
         }
         li:hover {
-            background-color: $blue;
+            background-color: $grey;
+            color: $black;
         }
     }
 }

@@ -61,7 +61,7 @@ input[type=submit]:hover {
     position: relative;
     height: 30px;
     width: calc(100% - 10px);
-
+    border-bottom: 1px solid $grey-bg;
     background-color: $black;
     color: $grey;
     font-weight: 700;
@@ -77,28 +77,35 @@ input[type=submit]:hover {
       position: absolute;
       top: 0px;
       right: 0px;
+      border-left: 1px solid $grey-bg;
 
       input {
         float: left;
         border: 0px !important;
         height: 20px;
-        background-color: $grey;
-        color: $black;
+        background-color: $black;
+        color: $grey;
+        font-weight: 700;
+        text-transform: uppercase;
       }
       ::-webkit-input-placeholder {
-         color: $black;
+         color: $grey;
+         font-weight: 700;
       }
 
       :-moz-placeholder { /* Firefox 18- */
-         color: $black;
+         color: $grey;
+         font-weight: 700;
       }
 
       ::-moz-placeholder {  /* Firefox 19+ */
-         color: $black;
+         color: $grey;
+         font-weight: 700;
       }
 
       :-ms-input-placeholder {
-         color: $black;
+         color: $grey;
+         font-weight: 700;
       }
 
       .search-button {
@@ -107,9 +114,9 @@ input[type=submit]:hover {
         // cursor: pointer;
 
         border: 0px;
-        padding: 10px 11px 0px 11px;
-        height: 30px;
-        background-color: $grey;
+        padding: 12px 11px 0px 11px;
+        height: 25px;
+        background-color: $black;
 
         -moz-user-select: none; /* Firefox */
         -ms-user-select: none; /* Internet Explorer */
@@ -137,7 +144,7 @@ input[type=submit]:hover {
       }
 
       .search-activated {
-          background-color: $grey;
+          background-color: $black;
 
           .search-icon {
               display: none;
@@ -259,8 +266,8 @@ input[type=submit]:hover {
   top: 20px;
   right: 0px;
   border: 1px solid $black;
-  width: 240px;
-  padding: 20px;
+  width: 178px;
+  // padding: 20px;
 
   .login-close-text {
     position: absolute;
@@ -280,7 +287,7 @@ input[type=submit]:hover {
     border: 1px solid $black;
     padding: 9px 19px 9px 19px;
     text-align: center;
-    font-size: $font-size-big;
+    font-size: $font-size-reg;
     font-weight: 700;
   }
 
@@ -297,7 +304,7 @@ input[type=submit]:hover {
     padding: 9px 19px 9px 19px;
     width: $change-password-submit-width;
     text-align: center;
-    font-size: $font-size-big;
+    font-size: $font-size-reg;
     font-weight: 700;
   }
 
@@ -324,7 +331,7 @@ input[type=submit]:hover {
   // logout
   #login-buttons-logout {
     // margin-bottom: 40px;
-    font-size: $font-size-big;
+    font-size: $font-size-reg;
     font-weight: 700;
     border: 1px solid $black;
     padding: 9px 19px 9px 19px;

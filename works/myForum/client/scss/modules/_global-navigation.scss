@@ -3,14 +3,15 @@
   top: 0px;
   left: 0px;
   display: inline-block;
-  background-color: $red;
+  // background-color: $red;
   width: 200px;
 
   .user-info {
+    position: relative;
     display: inline-block;
-    background-color: blue;
+    // background-color: blue;
     height: 40px;
-    width: 200px;
+    width: 220px;
 
     .logo {
       position: absolute;
@@ -19,6 +20,8 @@
       height: 40px;
       width: 40px;
       background-color: $black;
+      color: $grey;
+      font-weight: 700;
     }
   }
 
@@ -45,10 +48,11 @@
     -webkit-user-select: none; /* Chrome, Safari, and Opera */
     -webkit-touch-callout: none; /* Disable Android and iOS callouts*/
   }
-  
+
 
   .tab-button:hover {
-    background-color: $blue;
+    background-color: $grey;
+    color: $black;
   }
 
   .tab-button-active:hover {
