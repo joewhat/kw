@@ -5,13 +5,12 @@
       {{> loginButtons}}
     </div>
     <div class="menu-wrapper">
-
-      <div class="tab-button new-discussion-button">
-        <div class="tab-label">NEW DISCUSSION</div>
-      </div>
       <div class="global-navigation-button tab-button main-tab"
         data-templateToLoad="mainPageTemplate" data-routerPath="/">
         <div class="tab-label">DISCUSSIONS</div>
+      </div>
+      <div class="tab-button new-discussion-button">
+        <div class="tab-label">NEW DISCUSSION</div>
       </div>
       {{#if currentUser}}
         {{#if isInRole 'admin' 'users'}}

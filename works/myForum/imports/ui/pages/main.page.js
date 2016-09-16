@@ -90,11 +90,12 @@ function updateUnreadHtml(allDis){
 }
 
 Template.mainPageTemplate.events({
-    'click .new-discussion-button'(event) {
-        Session.set('modalLoad', 'newDisTemplate');
-    },
+    // 'click .new-discussion-button'(event) {
+    //     Session.set('modalLoad', 'newDisTemplate');
+    // },
     // enter a discussion
     'click .discussion'(event) {
+        $('.tab-button-active').removeClass('tab-button-active');
         const id = $(event.target).attr('data-id');
         const discussionId =  $(event.target).closest('.discussion').attr('data-id');
         Session.set('activeDiscussionId', discussionId);
