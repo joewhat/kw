@@ -19,42 +19,83 @@
 .discussion-page-content {
     display: inline-block;
     height: calc(100vh - 200px);
-    width: calc(100% - 40px);
-    padding: 20px;
+    width: calc(100%);
+    // padding: 20px;
     padding-bottom: 0px;
     overflow-y: scroll;
-    background-color: red;
+    // background-color: red;
     margin-bottom: -3px;
 
 
 
     .comment {
-        padding: 20px;
-        margin-bottom: 20px;
-        border: 1px solid $black;
+
+        // background-color: $black;
+        color: $grey;
         .info {
             display: inline-block;
-            width: 100%;
+            width: calc(100% - 60px);
+            background-color: $black;
+            font-weight: 700;
+            padding: 10px 10px 10px 50px;
+            height: 20px;
+
             div {
                 float: left;
             }
 
             .owner {
-                margin-bottom: 20px;
-                margin-right: 20px;
+             margin-right: 20px;
             }
+        }
+        .msg {
+          margin-left: 40px;
+          padding: 10px;
+          width: calc(100% - 60px);
+          word-wrap: break-word;
+          word-break: break-all;
+          background-color: $grey;
+          color: $black;
+          min-height: 80px;
+          pre {
+            width: calc(100%);
+            white-space: pre-wrap;       /* css-3 */
+            white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;
+          }
         }
     }
 }
+
 .add-comment-form {
-    height: 130px;
+    height: 131px;
     width: 100%;
-    background-color: green;
+    background-color: $black;
+    border-top: 1px solid $grey-bg;
+
+    .add-comment-button {
+      font-size: $font-size-reg;
+      border: 0px;
+      float: right;
+      background-color: $grey;
+      color: $black;
+    }
+
+    .add-comment-button:hover {
+      background-color: $white;
+    }
+
     textarea {
-        float: left;
-        width: 50%;
+        border: 0px;
+        width: calc(100% - 60px);
+        margin-bottom: -1px;
+        margin-top: 1px;
+        margin-left: 40px;
+        height: 77px;
     }
     input {
-        float: left;
+        // float: left;
     }
 }
