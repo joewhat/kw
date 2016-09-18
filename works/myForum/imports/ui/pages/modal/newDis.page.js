@@ -37,13 +37,34 @@ Template.newDisTemplate.events({
                 // Clear form
                 event.target.header.value = '';
                 event.target.description.value = '';
+                const discussionId = response;
+                console.log('createnew res: ', response);
+
+                Session.set('activeDiscussionId', discussionId);
+                const data = { username: Meteor.user().username, discussionId: discussionId };
+                Meteor.call('update-active-discussionId', data, function( error, response ) {
+                  if ( error ) {
+                    // Handle our error.
+                    console.log('wtf: ' + error);
+                  } else {
+
+                  }
+                });
+                console.log('set activeDiscussionId');
+                BlazeLayout.render('mainLayout', {layer1: 'discussionPageTemplate'});
+
                 // close modal
                 Session.set('modalLoad', '');
               }
             });
-        
-        } else {
 
+        } else {
+          if (!Session.get('newDisValidate-description')) {
+            $('.create-new-discussion-body-input').addClass('error-input');
+          }
+          if (!Session.get('newDisValidate-header')) {
+            $('.create-new-discussion-header-input').addClass('error-input');
+          }
         }
     },
 
@@ -62,15 +83,14 @@ Template.newDisTemplate.events({
           } else {
             // Handle our return value.
             //console.log('created new discus');
-          }
-
-          if (!response) {
-            Session.set('newDisValidate-header', true);
-            $target.removeClass('error-input');
-          } else {
-            Session.set('newDisValidate-header', false);
-            $target.addClass('error-input');
-            $('.create-new-discussion-error').text(' Discussion already exitst!');
+            if (!response) {
+              Session.set('newDisValidate-header', true);
+              $target.removeClass('error-input');
+            } else {
+              Session.set('newDisValidate-header', false);
+              $target.addClass('error-input');
+              $('.create-new-discussion-error').text(' Discussion already exitst!');
+            }
           }
           // console.log('discussionExists: ', response);
         });

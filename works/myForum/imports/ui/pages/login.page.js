@@ -3,6 +3,14 @@ import { Template } from 'meteor/templating';
 
 import './login.page.html';
 
+Template.loginTemplate.onRendered(function() {
+  this.autorun(function() {
+    Meteor.defer(function() {
+      $('.username').focus();
+    });
+  });
+});
+
 Template.loginTemplate.events({
     'submit .custom-login-form'(event) {
         event.preventDefault();
@@ -12,7 +20,7 @@ Template.loginTemplate.events({
             if(err){
                 $('.custom-login-form-error').text('Invalid Username or Password');
             }else {
-                Session.set('activeDiscussionId', '');    
+                Session.set('activeDiscussionId', '');
             }
         });
     }

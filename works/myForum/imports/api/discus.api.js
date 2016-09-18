@@ -82,6 +82,8 @@ if (Meteor.isServer) {
             const unreadComments = DiscussionUserMeta.find( { username : data.username, "unreadDiscussionMeta.discussionId" : data.discussionId}, {fields: { "unreadDiscussionMeta.$": 1}}).fetch();
             return unreadComments[0].unreadDiscussionMeta[0].unReadCount;
         },
+
+        // create new dicsussion
         'discussions-insert'(data) {
             check( data, {
               header: String,
@@ -99,7 +101,7 @@ if (Meteor.isServer) {
               { header: data.header }, { fields: { header:1 } });
 
             if (!disExist) {
-              Discussions.insert({
+            return Discussions.insert({
                 createdAt: new Date(),
                 owner: Meteor.userId(),
                 username: Meteor.user().username,
