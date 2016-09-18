@@ -38,8 +38,8 @@ Template.newDisTemplate.events({
                 event.target.header.value = '';
                 event.target.description.value = '';
                 const discussionId = response;
-                console.log('createnew res: ', response);
 
+                $('.tab-button-active').removeClass('tab-button-active');
                 Session.set('activeDiscussionId', discussionId);
                 const data = { username: Meteor.user().username, discussionId: discussionId };
                 Meteor.call('update-active-discussionId', data, function( error, response ) {
@@ -50,7 +50,7 @@ Template.newDisTemplate.events({
 
                   }
                 });
-                console.log('set activeDiscussionId');
+
                 BlazeLayout.render('mainLayout', {layer1: 'discussionPageTemplate'});
 
                 // close modal
