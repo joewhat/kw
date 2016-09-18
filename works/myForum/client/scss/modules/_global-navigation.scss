@@ -62,7 +62,8 @@
   .tab-button-active {
     border-bottom: 0px;
     // padding: 10px 19px 10px 19px;
-    background-color: red;
+    background-color: $white;
+    color: $black;
   }
 
 }

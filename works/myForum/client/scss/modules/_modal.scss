@@ -45,6 +45,10 @@
           font-weight: 700;
           margin-top: 9px;
           text-transform: uppercase;
+
+          div {
+            float: left;
+          }
       }
 
       .header-img-wrapper {
@@ -183,5 +187,17 @@
         right: 22px;
         font-size: $font-size-reg;
       }
+
+
+    }
+
+    .create-new-discussion-error {
+      // position: absolute;
+      // bottom: 40px;
+      // left: 20px;
+      color: $red;
+      font-weight: 700;
+      margin-left: 10px;
+      font-size: $font-size-reg;
     }
 }

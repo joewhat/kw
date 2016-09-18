@@ -88,54 +88,58 @@ if (Meteor.isServer) {
               description: String
             });
 
-            // Make sure the user is logged in before inserting a task
+            // Make sure the user is logged in before inserting a dis
             if (! Meteor.userId()) {
               throw new Meteor.Error('not-authorized');
             }else{
 
             }
+            // check if discussion exitst
+            const disExist = Discussions.findOne(
+              { header: data.header }, { fields: { header:1 } });
 
-            Discussions.insert({
-              createdAt: new Date(),
-              owner: Meteor.userId(),
-              username: Meteor.user().username,
-              header: data.header,
-              description: data.description,
-              views: 0,
-              comments: 0,
-              latestComment: new Date(),
-              usersInDis: []
-          }, function(error, _id){
-              // insert unread to all users
-              const Allusernames = Meteor.users.find({}, {fields: {username: 1}}).fetch();
-              const headerObj = {
+            if (!disExist) {
+              Discussions.insert({
+                createdAt: new Date(),
+                owner: Meteor.userId(),
+                username: Meteor.user().username,
+                header: data.header,
+                description: data.description,
+                views: 0,
+                comments: 0,
+                latestComment: new Date(),
+                usersInDis: []
+              }, function(error, _id){
+                // insert unread to all users
+                const Allusernames = Meteor.users.find({}, {fields: {username: 1}}).fetch();
+                const headerObj = {
                   discussionId : _id,
                   discussionName : data.header,
                   unReadCount : 1,
                   new : true
-              };
-              const headerObjOwner = {
+                };
+                const headerObjOwner = {
                   discussionId : _id,
                   discussionName : data.header,
                   unReadCount : 0,
                   new : false
-              };
-               Allusernames.forEach(function(value){
-                   if(Meteor.user().username != value.username){
-                       DiscussionUserMeta.update(
-                           { username : value.username },
-                           { $push: { unreadDiscussionMeta: headerObj } }
-                       );
-                   }else{
-                       // owner
-                       DiscussionUserMeta.update(
-                           { username : value.username },
-                           { $push: { unreadDiscussionMeta: headerObjOwner } }
-                       );
-                   }
+                };
+                Allusernames.forEach(function(value){
+                  if(Meteor.user().username != value.username){
+                    DiscussionUserMeta.update(
+                      { username : value.username },
+                      { $push: { unreadDiscussionMeta: headerObj } }
+                    );
+                  }else{
+                    // owner
+                    DiscussionUserMeta.update(
+                      { username : value.username },
+                      { $push: { unreadDiscussionMeta: headerObjOwner } }
+                    );
+                  }
+                });
               });
-          });
-
+            }
         },
         'add-user-to-discussion'(data){
             check( data, {
@@ -257,5 +261,11 @@ if (Meteor.isServer) {
               });
           });
         },
+
+        'discussionExists'(val) {
+          check(val, String);
+          return Discussions.findOne({ header: val }, { fields: { header:1 } });
+        }
+
     });
 }

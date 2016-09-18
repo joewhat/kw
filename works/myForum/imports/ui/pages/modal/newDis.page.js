@@ -5,14 +5,57 @@ import { Discussions } from '../../../api/discus.api.js';
 import '../../../api/discus.api.js';
 import './newDis.page.html';
 
+
+
+Template.newDisTemplate.onRendered(function () {
+  this.autorun(function() {
+    Meteor.defer(function() {
+      Session.set('newDisValidate-header', false);
+      Session.set('newDisValidate-description', false);
+      $('.create-new-discussion-header-input').focus();
+    });
+  });
+});
+
 Template.newDisTemplate.events({
     'click .close-newDis-button'(event) {
       Session.set('modalLoad', '');
     },
+
     'submit .create-new-discussion-form'(event){
         event.preventDefault();
         const data = $('.create-new-discussion-form').serializeJSON();
-        Meteor.call('discussions-insert', data, function( error, response ) {
+
+        if (Session.get('newDisValidate-description') && Session.get('newDisValidate-header')) {
+            Meteor.call('discussions-insert', data, function( error, response ) {
+              if ( error ) {
+                // Handle our error.
+                console.log('wtf: ' + error);
+              } else {
+                // Handle our return value.
+                //console.log('created new discus');
+                // Clear form
+                event.target.header.value = '';
+                event.target.description.value = '';
+                // close modal
+                Session.set('modalLoad', '');
+              }
+            });
+        
+        } else {
+
+        }
+    },
+
+    'keyup .create-new-discussion-header-input'(event) {
+      const ptn = /^[a-zA-Z0-9åøæ_.-\s]+$/;
+      const val = event.target.value;
+      const $target = $('.create-new-discussion-header-input');
+      $('.create-new-discussion-error').text('');
+
+      if (ptn.test(val)) {
+
+        Meteor.call('discussionExists', val, function( error, response ) {
           if ( error ) {
             // Handle our error.
             console.log('wtf: ' + error);
@@ -20,12 +63,34 @@ Template.newDisTemplate.events({
             // Handle our return value.
             //console.log('created new discus');
           }
-        });
 
-        // Clear form
-        event.target.header.value = '';
-        event.target.description.value = '';
-        // close modal
-        Session.set('modalLoad', '');
+          if (!response) {
+            Session.set('newDisValidate-header', true);
+            $target.removeClass('error-input');
+          } else {
+            Session.set('newDisValidate-header', false);
+            $target.addClass('error-input');
+            $('.create-new-discussion-error').text(' Discussion already exitst!');
+          }
+          // console.log('discussionExists: ', response);
+        });
+      } else {
+        Session.set('newDisValidate-header', false);
+        $target.addClass('error-input');
+
+      }
+    },
+
+    'keyup .create-new-discussion-body-input'(event) {
+      const val = event.target.value;
+      const $target = $('.create-new-discussion-body-input');
+
+      if (val.search(/[^\n\s]/) != -1) {
+        Session.set('newDisValidate-description', true);
+        $target.removeClass('error-input');
+      } else {
+        Session.set('newDisValidate-description', false);
+        $target.addClass('error-input');
+      }
     }
 });

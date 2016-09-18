@@ -245,6 +245,37 @@ input[type=submit]:hover {
 
 }
 
+.error-input {
+  border: 1px solid $red !important;
+  background-color: $red !important;
+  color: $white;
+  font-weight: 700;
+
+  div {
+
+  }
+}
+
+.error-input::-webkit-input-placeholder {
+  color: $white !important;
+  font-weight: 700;
+}
+
+.error-input:-moz-placeholder { /* Firefox 18- */
+  color: $white !important;
+  font-weight: 700;
+}
+
+.error-input::-moz-placeholder {  /* Firefox 19+ */
+  color: $white !important;
+  font-weight: 700;
+}
+
+.error-input:-ms-input-placeholder {
+  color: $white !important;
+  font-weight: 700;
+}
+
 // user login
 #login-buttons {
   position: absolute;

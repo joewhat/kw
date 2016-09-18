@@ -124,6 +124,7 @@ Template.discussionPageTemplate.onRendered(function () {
               console.log('$wrapper.scrollTop: ', $wrapper.scrollTop(), ' cHight: ', contentHeight);
             }
           });
+          $('.the-comment').focus();
       });
     });
 
@@ -140,43 +141,52 @@ Template.discussionPageTemplate.events({
         Session.set('discussionIsRendered', false);
         BlazeLayout.render('mainLayout', {layer1: 'mainPageTemplate'});
     },
+
     'click .add-comment-button'(event) {
         event.preventDefault();
-
         const data = $('.add-comment-form').serializeJSON();
         data.discussionId = Session.get('activeDiscussionId');
-        Meteor.call('comments-insert', data, function( error, response ) {
-          if ( error ) {
-            // Handle our error.
-            console.log('wtf: ' + error);
-          } else {
-            // Handle our return value.
-            // console.log('comment response: ', response);
 
-            const discussionHeader = Discussions.findOne({_id : Session.get('activeDiscussionId')}).header;
-            //  console.log('discussionHeader: ', discussionHeader);
-            const userUnreadData = {
+        // validate input
+        if (data.comment.search(/[^\n\s]/) != -1) {
+          Meteor.call('comments-insert', data, function( error, response ) {
+            if ( error ) {
+              // Handle our error.
+              console.log('wtf: ' + error);
+            } else {
+              // Handle our return value.
+              // console.log('comment response: ', response);
+
+              const discussionHeader = Discussions.findOne({_id : Session.get('activeDiscussionId')}).header;
+              //  console.log('discussionHeader: ', discussionHeader);
+              const userUnreadData = {
                 commentId: response,
                 discussionName: discussionHeader
-            };
+              };
 
-            // console.log(userUnreadData);
+              // console.log(userUnreadData);
 
-            // Meteor.call('userUnread-insert', userUnreadData, function( error, response ) {
-            //   if ( error ) {
-            //     // Handle our error.
-            //     console.log('wtf: ' + error);
-            //   } else {
-            //     // Handle our return value.
-            //     // console.log('allusernames', response);
-            //   }
-            // });
-          }
-        });
+              // Meteor.call('userUnread-insert', userUnreadData, function( error, response ) {
+              //   if ( error ) {
+              //     // Handle our error.
+              //     console.log('wtf: ' + error);
+              //   } else {
+              //     // Handle our return value.
+              //     // console.log('allusernames', response);
+              //   }
+              // });
+            }
+          });
 
-        $('.the-comment').val('');
-        $('.the-comment').focus();
-        scrollDisListToBottom(true);
+          $('.the-comment').val('');
+          $('.the-comment').focus();
+          scrollDisListToBottom(true);
+
+        } else {
+console.log('not cool');
+        }
+
+
     },
 });
 

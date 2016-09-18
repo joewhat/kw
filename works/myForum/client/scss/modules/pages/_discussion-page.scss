@@ -20,10 +20,9 @@
     display: inline-block;
     height: calc(100vh - 200px);
     width: calc(100%);
-    // padding: 20px;
     padding-bottom: 0px;
     overflow-y: scroll;
-    // background-color: red;
+    // background-color: $black;
     margin-bottom: -3px;
 
 
@@ -70,10 +69,10 @@
 }
 
 .add-comment-form {
-    height: 131px;
+    height: 130px;
     width: 100%;
     background-color: $black;
-    border-top: 1px solid $grey-bg;
+    border-top: 2px solid $grey-bg;
 
     .add-comment-button {
       font-size: $font-size-reg;
@@ -91,7 +90,7 @@
         border: 0px;
         width: calc(100% - 60px);
         margin-bottom: -1px;
-        margin-top: 1px;
+        // margin-top: 1px;
         margin-left: 40px;
         height: 77px;
     }
