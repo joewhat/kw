@@ -30,6 +30,7 @@ Template.mainPageTemplate.onRendered(function () {
         });
 
         Meteor.defer(function(){
+            Session.set('globalSearchValue', '');
             $('.global-main-search').focus();
             const allDisOnPage = $('.discussion');
             $.each(allDisOnPage, function( index, value ) {
