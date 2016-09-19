@@ -30,6 +30,7 @@ Template.mainPageTemplate.onRendered(function () {
         });
 
         Meteor.defer(function(){
+            $('.global-main-search').focus();
             const allDisOnPage = $('.discussion');
             $.each(allDisOnPage, function( index, value ) {
                 const discussionId = $(value).attr('id');
