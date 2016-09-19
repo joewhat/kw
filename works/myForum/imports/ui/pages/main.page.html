@@ -26,10 +26,31 @@
     </div>
   </div> -->
   <div class="main-page-content">
-
       <ul class="discussion-list">
           {{#each allDiscussions}}
-              <li class="discussion" id="{{this._id}}" data-id="{{this._id}}"> <div class="header">{{this.header}}</div>  - {{this.username}} - {{convertedDate}} <div class="unread"></div><div class="isNew"></div> </li>
+              <li class="discussion" id="{{this._id}}" data-id="{{this._id}}">
+                <div class="top">
+                  <div class="wrapper-left">
+                    <div class="header">{{this.header}}</div>
+                    <div class="isNew"></div>
+                  </div>
+                  <div class="wrapper-right">
+
+                    <!-- <div class="created-user">{{this.username}}</div> -->
+                    <div class="created-date">{{convertedDate}}</div>
+                  </div>
+                </div>
+                <div class="bottom">
+                  <div class="wrapper-left">
+                    <div class="views">Views {{views}}</div>
+                    <div class="comments">Comments {{comments}}</div>
+                    <div class="unread"></div>
+                  </div>
+                  <div class="wrapper-right">
+                    <!-- <div class="header">latest comment</div> -->
+                  </div>
+                </div>
+              </li>
           {{/each}}
       </ul>
   </div>

@@ -20,14 +20,48 @@
         li {
             cursor: pointer;
             padding: 10px 10px;
-            height: 20px;
-            // border-top: 1px solid $grey-bg;
+            height: 35px;
+            border-bottom: 1px solid $grey-bg;
             text-transform: uppercase;
             background-color: $black;
             color: $grey;
-            div {
-                float: left;
+            font-weight: 700;
+            font-size: $font-size-reg;
+
+            .top {
+              width: 100%;
+              // background-color: red;
+              display: inline-block;
+              margin-bottom: 2px;
             }
+            .bottom {
+              width: 100%;
+              // background-color: yellow;
+              display: inline-block;
+              margin-bottom: -3px;
+              // font-size: $font-size-small;
+            }
+            .wrapper-left {
+              float: left;
+              div {
+                float: left;
+                margin-right: 10px;
+              }
+            }
+            .wrapper-right {
+              float: right;
+              div {
+                float: left;
+                margin-left: 10px;
+              }
+            }
+
+            .unread {
+
+            }
+        }
+        li:nth-child(even) {
+          // background-color: rgba(40, 80, 80, 1.0);
         }
         li:hover {
             background-color: $grey;

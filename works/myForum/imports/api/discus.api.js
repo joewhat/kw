@@ -196,7 +196,10 @@ if (Meteor.isServer) {
                 // update discussion comments
                 Discussions.update(
                     { _id : data.discussionId },
-                    {$inc:{"comments":1}}
+                    {
+                      $inc: {"comments":1},
+                      $set: {latestComment: new Date()}
+                    }
                 );
 
                 // insert unread to all users

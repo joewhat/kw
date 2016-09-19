@@ -44,7 +44,7 @@ Template.mainPageTemplate.onRendered(function () {
                   console.log('wtf: ' + error);
                 } else {
                     if(response){
-                        $('#' + discussionId).children('.isNew').html('new');
+                        $('#' + discussionId).find('.isNew').html('new');
                     }
 
                 }
@@ -81,9 +81,9 @@ function updateUnreadHtml(allDis){
             console.log('wtf: ' + error);
           } else {
               if(response == 0){
-                  $('#' + data.discussionId).children('.unread').html();
+                  $('#' + data.discussionId).find('.unread').html();
               }else{
-                    $('#' + data.discussionId).children('.unread').html(response);
+                  $('#' + data.discussionId).find('.unread').html('Unread '+response);
               }
           }
         });
