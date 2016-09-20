@@ -27,6 +27,7 @@
   </div> -->
   <div class="main-page-content">
       <ul class="discussion-list">
+        {{paginate}}
           {{#each allDiscussions}}
               <li class="discussion" id="{{this._id}}" data-id="{{this._id}}">
                 <div class="top">
@@ -37,13 +38,13 @@
                   <div class="wrapper-right">
 
                     <!-- <div class="created-user">{{this.username}}</div> -->
-                    <div class="created-date">{{convertedDate}}</div>
+                    <!-- <div class="created-date">{{convertedDate}}</div> -->
                   </div>
                 </div>
                 <div class="bottom">
                   <div class="wrapper-left">
-                    <div class="views">Views {{views}}</div>
-                    <div class="comments">Comments {{comments}}</div>
+                    <div class="views">Views {{this.views}}</div>
+                    <div class="comments">Comments {{this.comments}}</div>
                     <div class="unread"></div>
                   </div>
                   <div class="wrapper-right">

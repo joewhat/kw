@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { Discussions } from '../../api/discus.api.js';
 import { DiscussionUserMeta } from '../../api/discus.api.js';
+import { Session } from '../../api/session.api.js';
 import './main.page.html';
 import helpers from '../../api/helpers.api.js';
 
@@ -9,51 +10,56 @@ Meteor.subscribe('discussions.collection', function() {});
 Meteor.subscribe('discussionUserMeta.collection', function() {});
 
 Template.mainPageTemplate.onCreated(function(){
-
+  Session.set('mainDis:searchQuery', null);
+  Session.set('mainDis:pageNum', 1);
+  Session.set('mainDis:numberOfPages', 1);
+  Session.set('mainDis:disList', { ids: [], list: [] });
 });
 
-Template.mainPageTemplate.onRendered(function () {
-    this.autorun(function(){
-        DiscussionUserMeta.find({username : Meteor.user().username}).observeChanges({
-            added: function(id, fields) {
-                    // console.log('doc added',fields);
-                    updateUnread();
-            },
-            changed: function(id, fields) {
-                // console.log('doc updated',fields);
-                updateUnread();
-            },
-            removed: function() {
-                // console.log('doc removed',fields);
-                updateUnread();
-            }
-        });
-
-        Meteor.defer(function(){
-            Session.set('globalSearchValue', '');
-            $('.global-main-search').focus();
-            const allDisOnPage = $('.discussion');
-            $.each(allDisOnPage, function( index, value ) {
-                const discussionId = $(value).attr('id');
-              const data = {
-                  username : Meteor.user().username,
-                  discussionId : discussionId
-              };
-              Meteor.call('is-discussion-new', data, function( error, response ) {
-                if ( error ) {
-                  // Handle our error.
-                  console.log('wtf: ' + error);
-                } else {
-                    if(response){
-                        $('#' + discussionId).find('.isNew').html('new');
-                    }
-
-                }
-              });
-            });
-        });
-    });
-});
+// Template.mainPageTemplate.onRendered(function () {
+//     this.autorun(function(){
+//         DiscussionUserMeta.find({username : Meteor.user().username}).observeChanges({
+//             added: function(id, fields) {
+//                     // console.log('doc added',fields);
+//                     updateUnread();
+//             },
+//             changed: function(id, fields) {
+//                 // console.log('doc updated',fields);
+//                 updateUnread();
+//             },
+//             removed: function() {
+//                 // console.log('doc removed',fields);
+//                 updateUnread();
+//             }
+//         });
+//
+//         Meteor.defer(function(){
+//             Session.setNonReactive('globalSearchValue', '');
+//             $('.global-main-search').focus();
+//
+//             // Check for new dis
+//             const allDisOnPage = $('.discussion');
+//             $.each(allDisOnPage, function( index, value ) {
+//                 const discussionId = $(value).attr('id');
+//               const data = {
+//                   username : Meteor.user().username,
+//                   discussionId : discussionId
+//               };
+//               Meteor.call('is-discussion-new', data, function( error, response ) {
+//                 if ( error ) {
+//                   // Handle our error.
+//                   console.log('wtf: ' + error);
+//                 } else {
+//                     if(response){
+//                         $('#' + discussionId).find('.isNew').html('new');
+//                     }
+//
+//                 }
+//               });
+//             });
+//         });
+//     });
+// });
 
 function updateUnread(){
     const searchVal = Session.get('globalSearchValue');
@@ -143,18 +149,61 @@ Template.mainPageTemplate.events({
 
 Template.mainPageTemplate.helpers({
   allDiscussions : function(){
-      // search
-      const searchVal = Session.get('globalSearchValue');
-      if(!searchVal){
-          // default return (sort after createdAt)
-          return Discussions.find({}, {sort: {latestComment: -1}});
-      }else{
-          // search result
-          const regex = new RegExp(helpers.regexMultiWordsSearch(searchVal), 'i');
-          return Discussions.find({header: regex}, {sort: {header: +1} });
-      }
+      // // search
+      // const searchVal = Session.get('globalSearchValue');
+      // if(!searchVal){
+      //     // default return (sort after createdAt)
+      //     return Discussions.find({}, {sort: {latestComment: -1}});
+      // }else{
+      //     // search result
+      //     const regex = new RegExp(helpers.regexMultiWordsSearch(searchVal), 'i');
+      //     return Discussions.find({header: regex}, {sort: {header: +1} });
+      // }
+
+
+      // console.log('this is wtf');
+      return Session.get('mainDis:disList').list;
+
   },
-  convertedDate : function(){
+
+  paginate : function() {
+    const pageLimit = 10;
+    const mainDisList = Session.get('mainDis:disList');
+    const searchQuery = Session.get('globalSearchValue');
+    let query = {};
+
+    if (searchQuery) {
+      query.header = new RegExp(helpers.regexMultiWordsSearch(searchQuery), 'i');
+    }
+
+    const count = Discussions.find(query).count();
+    const numberOfPages = Math.ceil(count / pageLimit);
+    const pageNum = Session.get('mainDis:pageNum');
+
+    if (numberOfPages > 1) {
+      Session.set('mainDis:numberOfPages', numberOfPages);
+    } else {
+      Session.set('mainDis:numberOfPages', 1);
+    }
+
+    const pageList = Discussions.find(query, {
+      sort: {latestComment: -1},
+      skip: (pageNum - 1) * pageLimit,
+      limit: pageLimit
+    }).fetch();
+
+    pageList.forEach((item) => {
+      if (mainDisList.ids.indexOf(item._id) == -1) {
+        mainDisList.ids.push(item._id);
+        mainDisList.list.push(item);
+      }
+    });
+    console.log('wtf');
+    Session.set('mainDis:disList', mainDisList);
+
+  },
+
+  convertedDate : function() {
     return helpers.convertDate(this.createdAt);
     },
 });
