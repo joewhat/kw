@@ -26,13 +26,14 @@
     </div>
   </div> -->
   <div class="main-page-content">
+    {{#if disListNotEmpty}}
       <ul class="discussion-list">
         {{paginate}}
           {{#each allDiscussions}}
               <li class="discussion" id="{{this._id}}" data-id="{{this._id}}">
                 <div class="top">
                   <div class="wrapper-left">
-                    <div class="header">{{this.header}}</div>
+                    <div class="header">{{@index}} {{this.header}}</div>
                     <div class="isNew"></div>
                   </div>
                   <div class="wrapper-right">
@@ -54,6 +55,9 @@
               </li>
           {{/each}}
       </ul>
+      {{else}}
+      <div>nothing to show</div>
+      {{/if}}
   </div>
   </div>
 </template>
