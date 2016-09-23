@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
+import helpers from './helpers.api.js';
 
 export const Discussions = new Mongo.Collection('discussions');
 export const Comments = new Mongo.Collection('comments');
@@ -12,10 +13,32 @@ Meteor.startup(() => {
 
 
 if (Meteor.isServer) {
-  Meteor.publish('discussions.collection', function () {
-    // check user is loggedin
-    if(!this.userId) return null;
-    return Discussions.find({});
+  Meteor.publish('discussions.collection',
+    function (inputLimit = 15, searchQuery) {
+      console.log('inputLimit: ', inputLimit);
+      console.log('searchQuery: ', searchQuery);
+      check(inputLimit, Number);
+      check(searchQuery, Match.OneOf( String, null, undefined ));
+
+      let query = {};
+
+      // check user is loggedin
+      if(!this.userId) return null;
+
+      if (searchQuery) {
+        let regex = new RegExp(searchQuery, 'i');
+        // query.header = new RegExp(helpers.regexMultiWordsSearch(searchQuery), 'i');
+        query = {
+          header : regex
+        }
+      }
+
+
+      console.log('query', query);
+      console.log('find', Discussions.find(query, {limit: inputLimit}).count());
+
+      return Discussions.find(query, {limit: inputLimit});
+      // return Discussions.find(query);
   });
 
   Meteor.publish('comments.collection', function () {
@@ -41,6 +64,10 @@ if (Meteor.isServer) {
                 { username : data.username, "unreadDiscussionMeta.discussionId" : data.discussionId,  },
                 {$set:{"unreadDiscussionMeta.$.new":false}}
             );
+        },
+
+        'dicsussion-total-count'(data){
+          return Discussions.find({}).count();
         },
 
         'is-discussion-new' : function(data){

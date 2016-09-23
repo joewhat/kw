@@ -6,15 +6,35 @@ import { Session } from '../../api/session.api.js';
 import './main.page.html';
 import helpers from '../../api/helpers.api.js';
 
-Meteor.subscribe('discussions.collection', function() {});
 Meteor.subscribe('discussionUserMeta.collection', function() {});
+const PAGE_INC = 20;
+Session.setDefault('mainDis:pageLimit', PAGE_INC);
+Session.setDefault('mainDis:searchQuery', '');
+// https://themeteorchef.com/snippets/simple-search/
+// http://meteorpedia.com/read/Infinite_Scrolling
+
+// Deps.autorun(function () {
+//   Meteor.subscribe('discussions.collection',
+//     Session.get('mainDis:pageLimit'),
+//     Session.get('mainDis:searchQuery'),
+//    function(){
+//
+//      console.log('autorun: ', Discussions.find({}).count());
+//    });
+//
+// });
 
 Template.mainPageTemplate.onCreated(function(){
-  Session.set('mainDis:pageNum', 1);
-  Session.set('mainDis:numberOfPages', 1);
-  Session.set('mainDis:searchQuery', null);
-  Session.set('mainDis:disList.ids', []);
-  Session.set('mainDis:disList.list', []);
+  let template = Template.instance();
+
+  template.autorun( () => {
+    console.log('autorun');
+    template.subscribe( 'discussions.collection', Session.get('mainDis:pageLimit'), Session.get('mainDis:searchQuery'), () => {
+      setTimeout( () => {
+        // Session.set('mainDis:searchQuery', false);
+      }, 300 );
+    });
+  });
 });
 
 Template.mainPageTemplate.onRendered(function () {
@@ -35,7 +55,7 @@ Template.mainPageTemplate.onRendered(function () {
         // });
 
         Meteor.defer(function(){
-            Session.setNonReactive('globalSearchValue', '');
+
             $('.global-main-search').focus();
 
             // Check for new dis
@@ -61,32 +81,44 @@ Template.mainPageTemplate.onRendered(function () {
 
             // pagination scroll
             // const $wrapper = $('.main-page-wrapper');
-            const $content = $('.discussion-list');
-            const topOffset = 100;
-            const bottomOffset = 50;
-
-            $content.on('scroll', function(e) {
-              const wrapperHeight = $content.height();
-              const contentHeight = $content[0].scrollHeight;
-              let numberOfPages = Session.getNonReactive('mainDis:numberOfPages');
-              const page = Session.getNonReactive('mainDis:pageNum');
-              let calculation = $content.scrollTop() + wrapperHeight;
-
-              numberOfPages = numberOfPages > 1 && page < numberOfPages;
-
-              if (calculation > (contentHeight - bottomOffset)) {
-                // At the bottom
-                console.log('is at the bottom! cal: ', calculation, ' cHight: ', contentHeight);
-                Session.set('mainDis:pageNum', page + 1);
-
-              } else if ($content.scrollTop() < topOffset) {
-                // At the top
-                // console.log('at the top! $wrapper.scrollTop: ', $content.scrollTop(), ' cHight: ', contentHeight);
-              } else {
-                // in the middle
-                // console.log('$wrapper.scrollTop: ', $content.scrollTop(), ' cHight: ', contentHeight);
-              }
-            });
+            // const $content = $('.discussion-list');
+            // const topOffset = 100;
+            // const bottomOffset = 50;
+            // console.log('this.autorun', $content);
+            //
+            // $content.on('scroll', function(e) {
+            //   const wrapperHeight = $content.height();
+            //   const contentHeight = $content[0].scrollHeight;
+            //   let numberOfPages = Session.getNonReactive('mainDis:numberOfPages');
+            //   const page = Session.getNonReactive('mainDis:pageNum');
+            //   let calculation = $content.scrollTop() + wrapperHeight;
+            //
+            //   numberOfPages = numberOfPages > 1 && page < numberOfPages;
+            //
+            //   if (calculation > (contentHeight - bottomOffset)) {
+            //     // At the bottom
+            //     console.log('is at the bottom! cal: ', calculation, ' cHight: ', contentHeight);
+            //
+            //     Meteor.call('dicsussion-total-count', function( error, response ) {
+            //       if ( error ) {
+            //         // Handle our error.
+            //         console.log('wtf: ' + error);
+            //         } else {
+            //           console.log('response: ', response);
+            //           if (response > Session.get('mainDis:pageLimit')) {
+            //             Session.set('mainDis:pageLimit', Session.get('mainDis:pageLimit') + PAGE_INC);
+            //           }
+            //         }
+            //     });
+            //
+            //   } else if ($content.scrollTop() < topOffset) {
+            //     // At the top
+            //     console.log('at the top! $wrapper.scrollTop: ', $content.scrollTop(), ' cHight: ', contentHeight);
+            //   } else {
+            //     // in the middle
+            //     console.log('$wrapper.scrollTop: ', $content.scrollTop(), ' cHight: ', contentHeight);
+            //   }
+            // });
         });
     });
 });
@@ -131,6 +163,41 @@ Template.mainPageTemplate.events({
     // 'click .new-discussion-button'(event) {
     //     Session.set('modalLoad', 'newDisTemplate');
     // },
+
+    'scroll .discussion-list'(event) {
+      const $content = $(event.target);
+      const topOffset = 100;
+      const bottomOffset = 50;
+      const wrapperHeight = $content.height();
+      const contentHeight = $content[0].scrollHeight;
+      let calculation = $content.scrollTop() + wrapperHeight;
+
+      if (calculation > (contentHeight - bottomOffset)) {
+        // At the bottom
+        console.log('is at the bottom! cal: ', calculation, ' cHight: ', contentHeight);
+
+        Meteor.call('dicsussion-total-count', function( error, response ) {
+          if ( error ) {
+            // Handle our error.
+            console.log('wtf: ' + error);
+            } else {
+              console.log('response: ', response);
+              if (response > Session.get('mainDis:pageLimit')) {
+                Session.set('mainDis:pageLimit', Session.get('mainDis:pageLimit') + PAGE_INC);
+              }
+            }
+        });
+
+      } else if ($content.scrollTop() < topOffset) {
+        // At the top
+        // console.log('at the top! $wrapper.scrollTop: ', $content.scrollTop(), ' cHight: ', contentHeight);
+      } else {
+        // in the middle
+        // console.log('$wrapper.scrollTop: ', $content.scrollTop(), ' cHight: ', contentHeight);
+      }
+      // console.log('scrolling: ', wrapperHeight, ' ', contentHeight, ' ', calculation);
+    },
+
     // enter a discussion
     'click .discussion'(event) {
         $('.tab-button-active').removeClass('tab-button-active');
@@ -157,9 +224,7 @@ Template.mainPageTemplate.events({
             _this.removeClass('search-activated');
             $('.global-main-search').val('');
             $('.global-main-search').focus();
-            Session.set('mainDis:disList.ids', []);
-            Session.set('mainDis:disList.list', []);
-            Session.set('mainDis:searchQuery', null);
+            Session.set('mainDis:searchQuery', '');
         }
     },
     'keyup .global-main-search' (event){
@@ -169,8 +234,7 @@ Template.mainPageTemplate.events({
 
         if (!!searchQuery) {
           // cancel list
-          Session.set('mainDis:disList.ids', []);
-          Session.set('mainDis:disList.list', []);
+
         }
 
         // activate search
@@ -182,7 +246,7 @@ Template.mainPageTemplate.events({
             _searchButton.removeClass('search-activated');
             $(event.target).val('');
 
-            Session.set('mainDis:searchQuery', null);
+            Session.set('mainDis:searchQuery', '');
             // Session.set('globalSearchValue', '');
             $('.global-main-search').focus();
         }else{
@@ -217,24 +281,29 @@ Template.mainPageTemplate.helpers({
       //     return Discussions.find({header: regex}, {sort: {header: +1} });
       // }
 
+      // const searchQuery = Session.getNonReactive('mainDis:searchQuery');
 
       // console.log('this is wtf');
-      return Session.get('mainDis:disList.list');
-
-
+      // if (searchQuery.length > 1) {
+      //   return Discussions.find({});
+      // } else {
+      //   return Discussions.find({}, {
+      //     sort: {latestComment: -1}
+      //   });
+      // }
+      console.log('allDis');
+      return Discussions.find({});
   },
 
   paginate : function() {
     const pageLimit = 20;
-    const mainDisList = Session.get('mainDis:disList');
     const searchQuery = Session.get('mainDis:searchQuery');
-    const rList = Session.getNonReactive('mainDis:disList.list');
-    const rIds = Session.getNonReactive('mainDis:disList.ids');
     let query = {};
 
     console.log('searchQuery:', searchQuery);
     if (searchQuery) {
-      query.header = new RegExp(helpers.regexMultiWordsSearch(searchQuery), 'i');
+      // query.header = new RegExp(helpers.regexMultiWordsSearch(searchQuery), 'i');
+      query.header = new RegExp(searchQuery, 'i');
     }
     console.log('query: ', query);
 
