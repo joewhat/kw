@@ -15,6 +15,7 @@ Session.setDefault('mainDis:searchQuery', '');
 //doing this and check out the api file and fix seardh  $OR or look at indexin the collection and fix or remove
 
 // http://meteorpedia.com/read/Infinite_Scrolling
+//https://github.com/peerlibrary/meteor-subscription-data
 
 // Deps.autorun(function () {
 //   Meteor.subscribe('discussions.collection',
@@ -33,12 +34,22 @@ Template.mainPageTemplate.onCreated(function(){
   template.searchQuery = new ReactiveVar();
   template.searching   = new ReactiveVar( false );
 
+  console.log('onCreated');
+
   template.autorun( () => {
-    template.subscribe( 'discussions.collection', template.searchQuery.get(), () => {
+    let fu = template.subscribe( 'discussions.collection', template.searchQuery.get(), () => {
+
+      if (this.subscriptionsReady()) {
+        console.log('wow');
+      }
+
       setTimeout( () => {
         template.searching.set( false );
       }, 300 );
+      console.log('onCreated - timeout1: ', Discussions.find({}).fetch().length);
     });
+
+
   });
 
   // template.autorun( () => {
@@ -276,15 +287,14 @@ Template.mainPageTemplate.events({
     // }
     let value = event.target.value.trim();
 
-    console.log('wtf');
     template.searchQuery.set( value );
     template.searching.set( true );
 
-    if ( value !== '' && event.keyCode === 13 ) {
-      template.searchQuery.set( value );
-      console.log('value: ', value);
-      template.searching.set( true );
-    }
+    // if ( value !== '' && event.keyCode === 13 ) {
+    //   template.searchQuery.set( value );
+    //   console.log('value: ', value);
+    //   template.searching.set( true );
+    // }
 
     if ( value === '' ) {
       template.searchQuery.set( value );
@@ -302,16 +312,16 @@ Template.mainPageTemplate.helpers({
     return Template.instance().searchQuery.get();
   },
 
-  disListNotEmpty : function() {
-    const searchQuery = Session.get('mainDis:searchQuery');
-    let query = {};
-
-    if (searchQuery) {
-      query.header = new RegExp(helpers.regexMultiWordsSearch(searchQuery), 'i');
-    }
-
-    return Discussions.find(query).count();
-  },
+  // disListNotEmpty : function() {
+  //   const searchQuery = Session.get('mainDis:searchQuery');
+  //   let query = {};
+  //
+  //   if (searchQuery) {
+  //     query.header = new RegExp(helpers.regexMultiWordsSearch(searchQuery), 'i');
+  //   }
+  //
+  //   return Discussions.find(query).count();
+  // },
 
   allDiscussions : function() {
       // // search
@@ -338,7 +348,7 @@ Template.mainPageTemplate.helpers({
       // console.log('allDis');
       // return Discussions.find({});
 
-      let discussions = Discussions.find();
+      let discussions = Discussions.find({});
       if ( discussions ) {
         return discussions;
       }

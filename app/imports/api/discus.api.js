@@ -23,23 +23,21 @@ if (Meteor.isServer) {
       // check(inputLimit, Number);
       check(searchQuery, Match.OneOf( String, null, undefined ));
 
-      let query      = {},
+      let query = {},
       projection = { limit: 10, sort: { latestComment: 1 } };
 
       if ( searchQuery ) {
         let regex = new RegExp( searchQuery, 'i' );
 
         query = {
-          $or: [
-            { header: regex },
-            { username: regex },
-          ]
+            header: regex
         };
 
         projection.limit = 100;
       }
-
-      return Discussions.find( query, projection );
+      let joe = Discussions.find( query, projection );
+      console.log('joe: ', joe.fetch().length);
+      return joe;
 
       // let query = {};
       //
