@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
+import { ReactiveVar } from 'meteor/reactive-var';
 import { Discussions } from '../../api/discus.api.js';
 import { DiscussionUserMeta } from '../../api/discus.api.js';
 import { Session } from '../../api/session.api.js';
@@ -11,6 +12,8 @@ const PAGE_INC = 20;
 Session.setDefault('mainDis:pageLimit', PAGE_INC);
 Session.setDefault('mainDis:searchQuery', '');
 // https://themeteorchef.com/snippets/simple-search/
+//doing this and check out the api file and fix seardh  $OR or look at indexin the collection and fix or remove
+
 // http://meteorpedia.com/read/Infinite_Scrolling
 
 // Deps.autorun(function () {
@@ -27,14 +30,26 @@ Session.setDefault('mainDis:searchQuery', '');
 Template.mainPageTemplate.onCreated(function(){
   let template = Template.instance();
 
+  template.searchQuery = new ReactiveVar();
+  template.searching   = new ReactiveVar( false );
+
   template.autorun( () => {
-    console.log('autorun');
-    template.subscribe( 'discussions.collection', Session.get('mainDis:pageLimit'), Session.get('mainDis:searchQuery'), () => {
+    template.subscribe( 'discussions.collection', template.searchQuery.get(), () => {
       setTimeout( () => {
-        // Session.set('mainDis:searchQuery', false);
+        template.searching.set( false );
       }, 300 );
     });
   });
+
+  // template.autorun( () => {
+  //   console.log('autorun');
+  //   template.subscribe( 'discussions.collection', Session.get('mainDis:pageLimit'), Session.get('mainDis:searchQuery'), () => {
+  //     setTimeout( () => {
+  //       // Session.set('mainDis:searchQuery', false);
+  //     }, 300 );
+  //   });
+  // });
+
 });
 
 Template.mainPageTemplate.onRendered(function () {
@@ -224,39 +239,68 @@ Template.mainPageTemplate.events({
             _this.removeClass('search-activated');
             $('.global-main-search').val('');
             $('.global-main-search').focus();
-            Session.set('mainDis:searchQuery', '');
+            // Session.set('mainDis:searchQuery', '');
+            template.searchQuery.set( '' );
+
         }
     },
-    'keyup .global-main-search' (event){
-        //console.log('typing in search: ' + $(event.target).val());
-        const _searchButton = $(event.target).siblings('.global-main-search-button');
-        const searchQuery = Session.getNonReactive('mainDis:searchQuery');
+    'keyup .global-main-search' (event, template){
+    //     //console.log('typing in search: ' + $(event.target).val());
+    //     const _searchButton = $(event.target).siblings('.global-main-search-button');
+    //     // const searchQuery = Session.getNonReactive('mainDis:searchQuery');
+    //
+    //     if (!!searchQuery) {
+    //       // cancel list
+    //
+    //     }
+    //
+    //     // activate search
+    //     if(!_searchButton.hasClass('search-activated')){
+    //         _searchButton.addClass('search-activated');
+    //     }
+    //     // cancel search
+    //     if(event.which == 27 || $(event.target).val() == ''){
+    //         _searchButton.removeClass('search-activated');
+    //         $(event.target).val('');
+    //
+    //         // Session.set('mainDis:searchQuery', '');
+    //         template.searchQuery.set( '' );
+    //         // Session.set('globalSearchValue', '');
+    //         $('.global-main-search').focus();
+    //     }else{
+    //         // set global search value
+    //         // Session.set('mainDis:searchQuery', $(event.target).val());
+    //         template.searchQuery.set( $(event.target).val() );
+    //         template.searching.set( true );
+    //     }
+    // }
+    let value = event.target.value.trim();
 
-        if (!!searchQuery) {
-          // cancel list
+    console.log('wtf');
+    template.searchQuery.set( value );
+    template.searching.set( true );
 
-        }
-
-        // activate search
-        if(!_searchButton.hasClass('search-activated')){
-            _searchButton.addClass('search-activated');
-        }
-        // cancel search
-        if(event.which == 27 || $(event.target).val() == ''){
-            _searchButton.removeClass('search-activated');
-            $(event.target).val('');
-
-            Session.set('mainDis:searchQuery', '');
-            // Session.set('globalSearchValue', '');
-            $('.global-main-search').focus();
-        }else{
-            // set global search value
-            Session.set('mainDis:searchQuery', $(event.target).val());
-        }
+    if ( value !== '' && event.keyCode === 13 ) {
+      template.searchQuery.set( value );
+      console.log('value: ', value);
+      template.searching.set( true );
     }
+
+    if ( value === '' ) {
+      template.searchQuery.set( value );
+    }
+  }
 });
 
 Template.mainPageTemplate.helpers({
+
+  searching() {
+    return Template.instance().searching.get();
+  },
+
+  query() {
+    return Template.instance().searchQuery.get();
+  },
 
   disListNotEmpty : function() {
     const searchQuery = Session.get('mainDis:searchQuery');
@@ -291,8 +335,13 @@ Template.mainPageTemplate.helpers({
       //     sort: {latestComment: -1}
       //   });
       // }
-      console.log('allDis');
-      return Discussions.find({});
+      // console.log('allDis');
+      // return Discussions.find({});
+
+      let discussions = Discussions.find();
+      if ( discussions ) {
+        return discussions;
+      }
   },
 
   paginate : function() {

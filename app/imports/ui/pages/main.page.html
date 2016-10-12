@@ -29,6 +29,11 @@
     <!-- {{#if disListNotEmpty}} -->
       <ul class="discussion-list">
         <!-- {{paginate}} -->
+
+        {{#if searching}}
+          <!-- {{> loading}} -->
+          Loading(Searching)..
+        {{else}}
           {{#each allDiscussions}}
               <li class="discussion" id="{{this._id}}" data-id="{{this._id}}">
                 <div class="top">
@@ -53,7 +58,12 @@
                   </div>
                 </div>
               </li>
+          {{else}}
+            <li class="discussion">
+              Nothing found by search query...
+            </li>
           {{/each}}
+        {{/if}}
       </ul>
       <!-- {{else}}
       <div>nothing to show</div>

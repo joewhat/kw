@@ -13,32 +13,55 @@ Meteor.startup(() => {
 
 
 if (Meteor.isServer) {
+  // index Discussions
+  Discussions._ensureIndex( { header: 1, createdAt: 1, latestComment: 1 , username: 1} );
+
   Meteor.publish('discussions.collection',
-    function (inputLimit = 15, searchQuery) {
-      console.log('inputLimit: ', inputLimit);
+    function (searchQuery) {
+      // console.log('inputLimit: ', inputLimit);
       console.log('searchQuery: ', searchQuery);
-      check(inputLimit, Number);
+      // check(inputLimit, Number);
       check(searchQuery, Match.OneOf( String, null, undefined ));
 
-      let query = {};
+      let query      = {},
+      projection = { limit: 10, sort: { latestComment: 1 } };
 
-      // check user is loggedin
-      if(!this.userId) return null;
+      if ( searchQuery ) {
+        let regex = new RegExp( searchQuery, 'i' );
 
-      if (searchQuery) {
-        let regex = new RegExp(searchQuery, 'i');
-        // query.header = new RegExp(helpers.regexMultiWordsSearch(searchQuery), 'i');
         query = {
-          header : regex
-        }
+          $or: [
+            { header: regex },
+            { username: regex },
+          ]
+        };
+
+        projection.limit = 100;
       }
 
+      return Discussions.find( query, projection );
 
-      console.log('query', query);
-      console.log('find', Discussions.find(query, {limit: inputLimit}).count());
-
-      return Discussions.find(query, {limit: inputLimit});
+      // let query = {};
+      //
+      // // check user is loggedin
+      // if(!this.userId) return null;
+      //
+      // if (searchQuery) {
+      //   let regex = new RegExp(searchQuery, 'i');
+      //   // query.header = new RegExp(helpers.regexMultiWordsSearch(searchQuery), 'i');
+      //   query = {
+      //     header : regex
+      //   }
+      // }
+      //
+      //
+      // console.log('query', query);
+      // console.log('find', Discussions.find(query, {limit: inputLimit}).count());
+      //
+      // return Discussions.find(query, {limit: inputLimit});
       // return Discussions.find(query);
+
+
   });
 
   Meteor.publish('comments.collection', function () {
