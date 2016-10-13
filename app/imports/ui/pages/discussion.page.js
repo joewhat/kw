@@ -1,17 +1,26 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
+import { ReactiveVar } from 'meteor/reactive-var';
 import { Discussions } from '../../api/discus.api.js';
 import { Comments } from '../../api/discus.api.js';
 import { DiscussionUserMeta } from '../../api/discus.api.js';
 import './discussion.page.html';
 import helpers from '../../api/helpers.api.js';
 
-Meteor.subscribe('discussions.collection', function() {});
+// Meteor.subscribe('discussions.collection', function() {});
 Meteor.subscribe('comments.collection', function() {});
 Meteor.subscribe('discussionUserMeta.collection', function() {});
 
 
 Template.discussionPageTemplate.onCreated(function () {
+  let template = Template.instance();
+
+  template.autorun( () => {
+    template.subscribe( 'discussions.collection', template.searchQuery.get(), () => {
+    });
+  });
+
+
 
     const _thisData = {
         username : Meteor.user().username,
@@ -65,8 +74,6 @@ Template.discussionPageTemplate.onDestroyed(function () {
         Session.set('activeDiscussionId', '');
     }
 });
-
-
 
 Template.discussionPageTemplate.onRendered(function () {
     let addedUpdateCount = 0;
@@ -130,7 +137,6 @@ Template.discussionPageTemplate.onRendered(function () {
 
 
 });
-
 
 Template.discussionPageTemplate.events({
     // 'scroll .discussion-page-content'(event){

@@ -31,8 +31,7 @@
         <!-- {{paginate}} -->
 
         {{#if searching}}
-          <!-- {{> loading}} -->
-          Loading(Searching)..
+            Loading(Searching)..
         {{else}}
           {{#each allDiscussions}}
               <li class="discussion" id="{{this._id}}" data-id="{{this._id}}">
@@ -59,9 +58,7 @@
                 </div>
               </li>
           {{else}}
-            <li class="discussion">
               Nothing found by search query...
-            </li>
           {{/each}}
         {{/if}}
       </ul>

@@ -8,6 +8,7 @@ import './main.page.html';
 import helpers from '../../api/helpers.api.js';
 
 Meteor.subscribe('discussionUserMeta.collection', function() {});
+
 const PAGE_INC = 20;
 Session.setDefault('mainDis:pageLimit', PAGE_INC);
 Session.setDefault('mainDis:searchQuery', '');
@@ -17,16 +18,6 @@ Session.setDefault('mainDis:searchQuery', '');
 // http://meteorpedia.com/read/Infinite_Scrolling
 //https://github.com/peerlibrary/meteor-subscription-data
 
-// Deps.autorun(function () {
-//   Meteor.subscribe('discussions.collection',
-//     Session.get('mainDis:pageLimit'),
-//     Session.get('mainDis:searchQuery'),
-//    function(){
-//
-//      console.log('autorun: ', Discussions.find({}).count());
-//    });
-//
-// });
 
 Template.mainPageTemplate.onCreated(function(){
   let template = Template.instance();
@@ -34,33 +25,18 @@ Template.mainPageTemplate.onCreated(function(){
   template.searchQuery = new ReactiveVar();
   template.searching   = new ReactiveVar( false );
 
-  console.log('onCreated');
-
   template.autorun( () => {
-    let fu = template.subscribe( 'discussions.collection', template.searchQuery.get(), () => {
+    template.subscribe( 'discussions.collection', template.searchQuery.get(), () => {
 
-      if (this.subscriptionsReady()) {
-        console.log('wow');
+      if (template.subscriptionsReady()) {
+        // console.log('subscriptionsReady');
       }
 
       setTimeout( () => {
         template.searching.set( false );
       }, 300 );
-      console.log('onCreated - timeout1: ', Discussions.find({}).fetch().length);
     });
-
-
   });
-
-  // template.autorun( () => {
-  //   console.log('autorun');
-  //   template.subscribe( 'discussions.collection', Session.get('mainDis:pageLimit'), Session.get('mainDis:searchQuery'), () => {
-  //     setTimeout( () => {
-  //       // Session.set('mainDis:searchQuery', false);
-  //     }, 300 );
-  //   });
-  // });
-
 });
 
 Template.mainPageTemplate.onRendered(function () {
@@ -190,39 +166,39 @@ Template.mainPageTemplate.events({
     //     Session.set('modalLoad', 'newDisTemplate');
     // },
 
-    'scroll .discussion-list'(event) {
-      const $content = $(event.target);
-      const topOffset = 100;
-      const bottomOffset = 50;
-      const wrapperHeight = $content.height();
-      const contentHeight = $content[0].scrollHeight;
-      let calculation = $content.scrollTop() + wrapperHeight;
-
-      if (calculation > (contentHeight - bottomOffset)) {
-        // At the bottom
-        console.log('is at the bottom! cal: ', calculation, ' cHight: ', contentHeight);
-
-        Meteor.call('dicsussion-total-count', function( error, response ) {
-          if ( error ) {
-            // Handle our error.
-            console.log('wtf: ' + error);
-            } else {
-              console.log('response: ', response);
-              if (response > Session.get('mainDis:pageLimit')) {
-                Session.set('mainDis:pageLimit', Session.get('mainDis:pageLimit') + PAGE_INC);
-              }
-            }
-        });
-
-      } else if ($content.scrollTop() < topOffset) {
-        // At the top
-        // console.log('at the top! $wrapper.scrollTop: ', $content.scrollTop(), ' cHight: ', contentHeight);
-      } else {
-        // in the middle
-        // console.log('$wrapper.scrollTop: ', $content.scrollTop(), ' cHight: ', contentHeight);
-      }
-      // console.log('scrolling: ', wrapperHeight, ' ', contentHeight, ' ', calculation);
-    },
+    // 'scroll .discussion-list'(event) {
+    //   const $content = $(event.target);
+    //   const topOffset = 100;
+    //   const bottomOffset = 50;
+    //   const wrapperHeight = $content.height();
+    //   const contentHeight = $content[0].scrollHeight;
+    //   let calculation = $content.scrollTop() + wrapperHeight;
+    //
+    //   if (calculation > (contentHeight - bottomOffset)) {
+    //     // At the bottom
+    //     console.log('is at the bottom! cal: ', calculation, ' cHight: ', contentHeight);
+    //
+    //     Meteor.call('dicsussion-total-count', function( error, response ) {
+    //       if ( error ) {
+    //         // Handle our error.
+    //         console.log('wtf: ' + error);
+    //         } else {
+    //           console.log('response: ', response);
+    //           if (response > Session.get('mainDis:pageLimit')) {
+    //             Session.set('mainDis:pageLimit', Session.get('mainDis:pageLimit') + PAGE_INC);
+    //           }
+    //         }
+    //     });
+    //
+    //   } else if ($content.scrollTop() < topOffset) {
+    //     // At the top
+    //     // console.log('at the top! $wrapper.scrollTop: ', $content.scrollTop(), ' cHight: ', contentHeight);
+    //   } else {
+    //     // in the middle
+    //     // console.log('$wrapper.scrollTop: ', $content.scrollTop(), ' cHight: ', contentHeight);
+    //   }
+    //   // console.log('scrolling: ', wrapperHeight, ' ', contentHeight, ' ', calculation);
+    // },
 
     // enter a discussion
     'click .discussion'(event) {
@@ -285,18 +261,25 @@ Template.mainPageTemplate.events({
     //         template.searching.set( true );
     //     }
     // }
-    let value = event.target.value.trim();
 
-    template.searchQuery.set( value );
-    template.searching.set( true );
+    // disSub.setData('searchQuery', value);
+
 
     // if ( value !== '' && event.keyCode === 13 ) {
     //   template.searchQuery.set( value );
     //   console.log('value: ', value);
     //   template.searching.set( true );
     // }
-
-    if ( value === '' ) {
+    const _searchButton = $(event.target).siblings('.global-main-search-button');
+    let value = event.target.value.trim();
+    template.searchQuery.set( value );
+    template.searching.set( true );
+    if (event.which == 27) {
+      _searchButton.removeClass('search-activated');
+      $(event.target).val('');
+      template.searchQuery.set( '' );
+    }
+    if ( value === '') {
       template.searchQuery.set( value );
     }
   }
@@ -324,16 +307,15 @@ Template.mainPageTemplate.helpers({
   // },
 
   allDiscussions : function() {
-      // // search
-      // const searchVal = Session.get('globalSearchValue');
-      // if(!searchVal){
-      //     // default return (sort after createdAt)
-      //     return Discussions.find({}, {sort: {latestComment: -1}});
-      // }else{
-      //     // search result
-      //     const regex = new RegExp(helpers.regexMultiWordsSearch(searchVal), 'i');
-      //     return Discussions.find({header: regex}, {sort: {header: +1} });
-      // }
+      // search
+      const searchVal = Template.instance().searchQuery.get();
+      if(!searchVal){
+          // default return (sort after latestComment)
+          return Discussions.find({}, {sort: {latestComment: -1}});
+      }else{
+          // search result
+          return Discussions.find({}, {sort: {header: +1} });
+      }
 
       // const searchQuery = Session.getNonReactive('mainDis:searchQuery');
 
@@ -348,10 +330,10 @@ Template.mainPageTemplate.helpers({
       // console.log('allDis');
       // return Discussions.find({});
 
-      let discussions = Discussions.find({});
-      if ( discussions ) {
-        return discussions;
-      }
+      // let discussions = Discussions.find({});
+      // if ( discussions ) {
+      //   return discussions;
+      // }
   },
 
   paginate : function() {
