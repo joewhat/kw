@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
+import { Discussions } from '../imports/api/discus.api.js';
 import { DiscussionUserMeta } from '../imports/api/discus.api.js';
 import '../imports/startup/accounts.config.js';
 import '../imports/api/users.api.js';
@@ -28,6 +29,34 @@ Meteor.startup(() => {
         }
     });
     console.log('Created Admin User - Remeber to change pwd');
+  }
+
+  // generate demo discussions
+  const createShit = false;
+  const sizeOfshit = 500;
+  if (createShit) {
+
+    for (var i = 0; i < sizeOfshit; i++) {
+
+      const header = 'data.header ' + i;
+      const disExist = Discussions.findOne(
+        { header: header }, { fields: { header:1 } });
+        if (!disExist) {
+          console.log('create demo dis: ', header);
+
+          Discussions.insert({
+              createdAt: new Date(),
+              owner: '1234',
+              username: 'test',
+              header: header,
+              description: 'data.description',
+              views: 0,
+              comments: 0,
+              latestComment: new Date(),
+              usersInDis: []
+            });
+        }
+    }
   }
 });
 

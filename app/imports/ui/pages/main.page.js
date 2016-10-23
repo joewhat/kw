@@ -9,9 +9,11 @@ import helpers from '../../api/helpers.api.js';
 
 Meteor.subscribe('discussionUserMeta.collection', function() {});
 
-const PAGE_INC = 20;
+const PAGE_INC = 30;
 Session.setDefault('mainDis:pageLimit', PAGE_INC);
 Session.setDefault('mainDis:searchQuery', '');
+Session.setDefault('mainDis:loadingNewContent', false);
+Session.setDefault('mainDis:loadContentLimit', PAGE_INC);
 // https://themeteorchef.com/snippets/simple-search/
 //doing this and check out the api file and fix seardh  $OR or look at indexin the collection and fix or remove
 
@@ -26,10 +28,15 @@ Template.mainPageTemplate.onCreated(function(){
   template.searching   = new ReactiveVar( false );
 
   template.autorun( () => {
-    template.subscribe( 'discussions.collection', template.searchQuery.get(), () => {
+    template.subscribe(
+      'discussions.collection',
+      template.searchQuery.get(),
+      Session.get('mainDis:loadContentLimit'),
+       () => {
 
       if (template.subscriptionsReady()) {
-        // console.log('subscriptionsReady');
+        console.log('subscriptionsReady');
+        Session.set('mainDis:loadingNewContent', false);
       }
 
       setTimeout( () => {
@@ -166,39 +173,44 @@ Template.mainPageTemplate.events({
     //     Session.set('modalLoad', 'newDisTemplate');
     // },
 
-    // 'scroll .discussion-list'(event) {
-    //   const $content = $(event.target);
-    //   const topOffset = 100;
-    //   const bottomOffset = 50;
-    //   const wrapperHeight = $content.height();
-    //   const contentHeight = $content[0].scrollHeight;
-    //   let calculation = $content.scrollTop() + wrapperHeight;
-    //
-    //   if (calculation > (contentHeight - bottomOffset)) {
-    //     // At the bottom
-    //     console.log('is at the bottom! cal: ', calculation, ' cHight: ', contentHeight);
-    //
-    //     Meteor.call('dicsussion-total-count', function( error, response ) {
-    //       if ( error ) {
-    //         // Handle our error.
-    //         console.log('wtf: ' + error);
-    //         } else {
-    //           console.log('response: ', response);
-    //           if (response > Session.get('mainDis:pageLimit')) {
-    //             Session.set('mainDis:pageLimit', Session.get('mainDis:pageLimit') + PAGE_INC);
-    //           }
-    //         }
-    //     });
-    //
-    //   } else if ($content.scrollTop() < topOffset) {
-    //     // At the top
-    //     // console.log('at the top! $wrapper.scrollTop: ', $content.scrollTop(), ' cHight: ', contentHeight);
-    //   } else {
-    //     // in the middle
-    //     // console.log('$wrapper.scrollTop: ', $content.scrollTop(), ' cHight: ', contentHeight);
-    //   }
-    //   // console.log('scrolling: ', wrapperHeight, ' ', contentHeight, ' ', calculation);
-    // },
+    'scroll .discussion-list'(event) {
+      const $content = $(event.target);
+      const topOffset = 100;
+      const bottomOffset = 50;
+      const wrapperHeight = $content.height();
+      const contentHeight = $content[0].scrollHeight;
+      let calculation = $content.scrollTop() + wrapperHeight;
+
+      if (calculation > (contentHeight - bottomOffset)) {
+        // At the bottom
+
+        if (!Session.get('mainDis:loadingNewContent')) {
+            Session.set('mainDis:loadingNewContent', true);
+            Session.set('mainDis:loadContentLimit', Session.get('mainDis:loadContentLimit') + PAGE_INC);
+            console.log('is at the bottom! cal: ', calculation, ' cHight: ', contentHeight);
+        }
+
+        // Meteor.call('dicsussion-total-count', function( error, response ) {
+        //   if ( error ) {
+        //     // Handle our error.
+        //     console.log('wtf: ' + error);
+        //     } else {
+        //       console.log('response: ', response);
+        //       if (response > Session.get('mainDis:pageLimit')) {
+        //         Session.set('mainDis:pageLimit', Session.get('mainDis:pageLimit') + PAGE_INC);
+        //       }
+        //     }
+        // });
+
+      } else if ($content.scrollTop() < topOffset) {
+        // At the top
+        // console.log('at the top! $wrapper.scrollTop: ', $content.scrollTop(), ' cHight: ', contentHeight);
+      } else {
+        // in the middle
+        // console.log('$wrapper.scrollTop: ', $content.scrollTop(), ' cHight: ', contentHeight);
+      }
+      // console.log('scrolling: ', wrapperHeight, ' ', contentHeight, ' ', calculation);
+    },
 
     // enter a discussion
     'click .discussion'(event) {

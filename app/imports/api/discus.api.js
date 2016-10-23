@@ -17,18 +17,30 @@ if (Meteor.isServer) {
   Discussions._ensureIndex( { header: 1, createdAt: 1, latestComment: 1 , username: 1} );
   const MAX_DIS = 1000;
 
-  Meteor.publish('discussions.collection', function (searchQuery = '', limit = 5) {
+  Meteor.publish('discussions.collection', function (searchQuery = '', limit = 30) {
     check(searchQuery, Match.OneOf( String, null, undefined ));
+    check(limit, Number);
+
     let query = {};
+    let queryOptions = {};
 
     if ( searchQuery ) {
       let regex = new RegExp(helpers.regexMultiWordsSearch(searchQuery), 'i' );
       query = {
           header: regex
       };
+      queryOptions = {
+        sort: {createdAt: 1},
+        limit: Math.min(limit, MAX_DIS)
+      };
+    } else {
+      queryOptions = {
+        sort: {latestComment: -1},
+        limit: Math.min(limit, MAX_DIS)
+      };
     }
-    // , {sort: {latestComment: -1}}
-    return Discussions.find(query, {limit: Math.min(limit, MAX_DIS)});
+
+    return Discussions.find(query, queryOptions);
 });
 
   // Meteor.publish('discussions.collection',
@@ -211,10 +223,10 @@ if (Meteor.isServer) {
               username: String,
               discussionId: String
             });
-            Discussions.update(
-                { _id : data.discussionId },
-               { $push: { usersInDis: {username: data.username} } }
-            );
+            // Discussions.update(
+            //     { _id : data.discussionId },
+            //    { $push: { usersInDis: {username: data.username} } }
+            // );
 
             // update discussion views
             Discussions.update(
@@ -229,12 +241,12 @@ if (Meteor.isServer) {
               discussionId: String
             });
 
-            Discussions.update(
-                { _id : data.discussionId },
-                { $pull: { usersInDis: { username: data.username } } },
-                false,
-                true
-            );
+            // Discussions.update(
+            //     { _id : data.discussionId },
+            //     { $pull: { usersInDis: { username: data.username } } },
+            //     false,
+            //     true
+            // );
         },
         'comments-insert'(data) {
             check( data, {
