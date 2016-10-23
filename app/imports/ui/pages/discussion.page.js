@@ -16,7 +16,7 @@ Template.discussionPageTemplate.onCreated(function () {
   let template = Template.instance();
 
   template.autorun( () => {
-    template.subscribe( 'discussions.collection', template.searchQuery.get(), () => {
+    template.subscribe( 'discussions.collection', () => {
     });
   });
 

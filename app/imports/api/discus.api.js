@@ -12,10 +12,12 @@ Meteor.startup(() => {
 });
 
 if (Meteor.isServer) {
+
   // index Discussions
   Discussions._ensureIndex( { header: 1, createdAt: 1, latestComment: 1 , username: 1} );
+  const MAX_DIS = 1000;
 
-  Meteor.publish('discussions.collection', function (searchQuery) {
+  Meteor.publish('discussions.collection', function (searchQuery = '', limit = 5) {
     check(searchQuery, Match.OneOf( String, null, undefined ));
     let query = {};
 
@@ -26,7 +28,7 @@ if (Meteor.isServer) {
       };
     }
     // , {sort: {latestComment: -1}}
-    return Discussions.find(query);
+    return Discussions.find(query, {limit: Math.min(limit, MAX_DIS)});
 });
 
   // Meteor.publish('discussions.collection',
