@@ -14,12 +14,7 @@ Session.setDefault('mainDis:pageLimit', PAGE_INC);
 Session.setDefault('mainDis:searchQuery', '');
 Session.setDefault('mainDis:loadingNewContent', false);
 Session.setDefault('mainDis:loadContentLimit', PAGE_INC);
-// https://themeteorchef.com/snippets/simple-search/
-//doing this and check out the api file and fix seardh  $OR or look at indexin the collection and fix or remove
-
-// http://meteorpedia.com/read/Infinite_Scrolling
-//https://github.com/peerlibrary/meteor-subscription-data
-
+Session.setDefault('mainDis:backspaceCheck', 0);
 
 Template.mainPageTemplate.onCreated(function(){
   let template = Template.instance();
@@ -88,46 +83,7 @@ Template.mainPageTemplate.onRendered(function () {
             //   });
             // });
 
-            // pagination scroll
-            // const $wrapper = $('.main-page-wrapper');
-            // const $content = $('.discussion-list');
-            // const topOffset = 100;
-            // const bottomOffset = 50;
-            // console.log('this.autorun', $content);
-            //
-            // $content.on('scroll', function(e) {
-            //   const wrapperHeight = $content.height();
-            //   const contentHeight = $content[0].scrollHeight;
-            //   let numberOfPages = Session.getNonReactive('mainDis:numberOfPages');
-            //   const page = Session.getNonReactive('mainDis:pageNum');
-            //   let calculation = $content.scrollTop() + wrapperHeight;
-            //
-            //   numberOfPages = numberOfPages > 1 && page < numberOfPages;
-            //
-            //   if (calculation > (contentHeight - bottomOffset)) {
-            //     // At the bottom
-            //     console.log('is at the bottom! cal: ', calculation, ' cHight: ', contentHeight);
-            //
-            //     Meteor.call('dicsussion-total-count', function( error, response ) {
-            //       if ( error ) {
-            //         // Handle our error.
-            //         console.log('wtf: ' + error);
-            //         } else {
-            //           console.log('response: ', response);
-            //           if (response > Session.get('mainDis:pageLimit')) {
-            //             Session.set('mainDis:pageLimit', Session.get('mainDis:pageLimit') + PAGE_INC);
-            //           }
-            //         }
-            //     });
-            //
-            //   } else if ($content.scrollTop() < topOffset) {
-            //     // At the top
-            //     console.log('at the top! $wrapper.scrollTop: ', $content.scrollTop(), ' cHight: ', contentHeight);
-            //   } else {
-            //     // in the middle
-            //     console.log('$wrapper.scrollTop: ', $content.scrollTop(), ' cHight: ', contentHeight);
-            //   }
-            // });
+            
         });
     });
 });
@@ -231,68 +187,42 @@ Template.mainPageTemplate.events({
         BlazeLayout.render('mainLayout', {layer1: 'discussionPageTemplate'});
     },
 
-    // search main page
-    'click .global-main-search-button'(event) {
-        const _this = $(event.target).closest('.global-main-search-button');
-        if(_this.hasClass('search-activated')){
-            _this.removeClass('search-activated');
-            $('.global-main-search').val('');
-            $('.global-main-search').focus();
-            // Session.set('mainDis:searchQuery', '');
-            template.searchQuery.set( '' );
+  // search main page
+  'click .global-main-search-button'(event) {
+    const _this = $(event.target).closest('.global-main-search-button');
+    if(_this.hasClass('search-activated')){
+        _this.removeClass('search-activated');
+        $('.global-main-search').val('');
+        $('.global-main-search').focus();
+        // Session.set('mainDis:searchQuery', '');
+        template.searchQuery.set( '' );
+    }
+  },
 
-        }
-    },
-    'keyup .global-main-search' (event, template){
-    //     //console.log('typing in search: ' + $(event.target).val());
-    //     const _searchButton = $(event.target).siblings('.global-main-search-button');
-    //     // const searchQuery = Session.getNonReactive('mainDis:searchQuery');
-    //
-    //     if (!!searchQuery) {
-    //       // cancel list
-    //
-    //     }
-    //
-    //     // activate search
-    //     if(!_searchButton.hasClass('search-activated')){
-    //         _searchButton.addClass('search-activated');
-    //     }
-    //     // cancel search
-    //     if(event.which == 27 || $(event.target).val() == ''){
-    //         _searchButton.removeClass('search-activated');
-    //         $(event.target).val('');
-    //
-    //         // Session.set('mainDis:searchQuery', '');
-    //         template.searchQuery.set( '' );
-    //         // Session.set('globalSearchValue', '');
-    //         $('.global-main-search').focus();
-    //     }else{
-    //         // set global search value
-    //         // Session.set('mainDis:searchQuery', $(event.target).val());
-    //         template.searchQuery.set( $(event.target).val() );
-    //         template.searching.set( true );
-    //     }
-    // }
-
-    // disSub.setData('searchQuery', value);
-
-
-    // if ( value !== '' && event.keyCode === 13 ) {
-    //   template.searchQuery.set( value );
-    //   console.log('value: ', value);
-    //   template.searching.set( true );
-    // }
+  'keyup .global-main-search' (event, template){
+    const keyCode = event.which;
     const _searchButton = $(event.target).siblings('.global-main-search-button');
     let value = event.target.value.trim();
-    template.searchQuery.set( value );
-    template.searching.set( true );
-    if (event.which == 27) {
+
+    if ( event.which == 27) {
       _searchButton.removeClass('search-activated');
       $(event.target).val('');
       template.searchQuery.set( '' );
+      Session.set('mainDis:loadContentLimit', PAGE_INC);
     }
-    if ( value === '') {
+
+    if (value === '') {
+      if (Session.get('mainDis:backspaceCheck') == 0) {
+        console.log('backspace: ', value);
+        template.searchQuery.set( value );
+        Session.set('mainDis:loadContentLimit', PAGE_INC);
+      }
+      Session.set('mainDis:backspaceCheck', Session.get('mainDis:backspaceCheck') + 1);
+    } else {
+
       template.searchQuery.set( value );
+      template.searching.set( true );
+      Session.set('mainDis:backspaceCheck', 0);
     }
   }
 });
@@ -346,47 +276,6 @@ Template.mainPageTemplate.helpers({
       // if ( discussions ) {
       //   return discussions;
       // }
-  },
-
-  paginate : function() {
-    const pageLimit = 20;
-    const searchQuery = Session.get('mainDis:searchQuery');
-    let query = {};
-
-    console.log('searchQuery:', searchQuery);
-    if (searchQuery) {
-      // query.header = new RegExp(helpers.regexMultiWordsSearch(searchQuery), 'i');
-      query.header = new RegExp(searchQuery, 'i');
-    }
-    console.log('query: ', query);
-
-    const count = Discussions.find(query).count();
-    const numberOfPages = Math.ceil(count / pageLimit);
-    const pageNum = Session.get('mainDis:pageNum');
-
-    if (numberOfPages > 1) {
-      Session.setNonReactive('mainDis:numberOfPages', numberOfPages);
-    } else {
-      Session.setNonReactive('mainDis:numberOfPages', 1);
-    }
-
-    const pageList = Discussions.find(query, {
-      // sort: {latestComment: -1},
-      skip: (pageNum - 1) * pageLimit,
-      limit: pageLimit
-    }).fetch();
-
-    pageList.forEach((item) => {
-      if (rIds.indexOf(item._id) == -1) {
-        rIds.push(item._id);
-        rList.push(item);
-      }
-    });
-
-    Session.set('mainDis:disList.ids', rIds);
-    Session.set('mainDis:disList.list', rList);
-    console.log('wtf');
-
   },
 
   convertedDate : function() {
