@@ -7,10 +7,9 @@ import { Session } from '../../api/session.api.js';
 import './main.page.html';
 import helpers from '../../api/helpers.api.js';
 
-Meteor.subscribe('discussionUserMeta.collection', function() {});
+// Meteor.subscribe('discussionUserMeta.collection', function() {});
 
 const PAGE_INC = 30;
-Session.setDefault('mainDis:pageLimit', PAGE_INC);
 Session.setDefault('mainDis:searchQuery', '');
 Session.setDefault('mainDis:loadingNewContent', false);
 Session.setDefault('mainDis:loadContentLimit', PAGE_INC);
@@ -83,7 +82,7 @@ Template.mainPageTemplate.onRendered(function () {
             //   });
             // });
 
-            
+
         });
     });
 });
@@ -145,19 +144,6 @@ Template.mainPageTemplate.events({
             Session.set('mainDis:loadContentLimit', Session.get('mainDis:loadContentLimit') + PAGE_INC);
             console.log('is at the bottom! cal: ', calculation, ' cHight: ', contentHeight);
         }
-
-        // Meteor.call('dicsussion-total-count', function( error, response ) {
-        //   if ( error ) {
-        //     // Handle our error.
-        //     console.log('wtf: ' + error);
-        //     } else {
-        //       console.log('response: ', response);
-        //       if (response > Session.get('mainDis:pageLimit')) {
-        //         Session.set('mainDis:pageLimit', Session.get('mainDis:pageLimit') + PAGE_INC);
-        //       }
-        //     }
-        // });
-
       } else if ($content.scrollTop() < topOffset) {
         // At the top
         // console.log('at the top! $wrapper.scrollTop: ', $content.scrollTop(), ' cHight: ', contentHeight);

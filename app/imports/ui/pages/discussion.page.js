@@ -8,15 +8,45 @@ import './discussion.page.html';
 import helpers from '../../api/helpers.api.js';
 
 // Meteor.subscribe('discussions.collection', function() {});
-Meteor.subscribe('comments.collection', function() {});
+// Meteor.subscribe('comments.collection', function() {});
 Meteor.subscribe('discussionUserMeta.collection', function() {});
 
+
+const PAGE_INC = 20;
+Session.setDefault('discussion:loadContentLimit', PAGE_INC);
+// Session.setDefault('discussion:loadingNewContent', false);
+Session.setDefault('discussion:itsOkay', false);
 
 Template.discussionPageTemplate.onCreated(function () {
   let template = Template.instance();
 
+  template.loadContentLimit = new ReactiveVar();
+  template.loadingNewContent = new ReactiveVar();
+  template.commentsCount = new ReactiveVar();
+
+  template.loadContentLimit.set(PAGE_INC);
+  template.loadingNewContent.set(false);
+
   template.autorun( () => {
     template.subscribe( 'discussions.collection', () => {
+    });
+
+    template.commentsCount.set(Comments.find({discussionId : Session.get('activeDiscussionId')}).count());
+    template.subscribe(
+      'comments.collection',
+      Session.get('activeDiscussionId'),
+      template.loadContentLimit.get(),
+       () => {
+
+        if (template.subscriptionsReady()) {
+          console.log('subscriptionsReady:comments');
+
+          if (template.loadingNewContent.get()) {
+            template.loadingNewContent.set(false);
+          } else {
+            scrollDisListToBottom();
+          }
+        }
     });
   });
 
@@ -27,13 +57,14 @@ Template.discussionPageTemplate.onCreated(function () {
         discussionId : Session.get('activeDiscussionId')
     };
     console.log('add-user-to-discussion: ', _thisData);
-    // Meteor.call('add-user-to-discussion', _thisData, function( error, response ) {
-    //   if ( error ) {
-    //     // Handle our error.
-    //     console.log('wtf: ' + error);
-    //   } else {
-    //   }
-    // });
+
+    Meteor.call('add-user-to-discussion', _thisData, function( error, response ) {
+      if ( error ) {
+        // Handle our error.
+        console.log('wtf: ' + error);
+      } else {
+      }
+    });
 
     Meteor.call('clear-unread-comment-for-discussionId', _thisData, function( error, response ) {
       if ( error ) {
@@ -76,6 +107,7 @@ Template.discussionPageTemplate.onDestroyed(function () {
 });
 
 Template.discussionPageTemplate.onRendered(function () {
+    let template = Template.instance();
     let addedUpdateCount = 0;
     const commentCount = Comments.find({discussionId : Session.get('activeDiscussionId')}).count();
     Session.set('discussionScrollPosition', 'bottom');
@@ -90,7 +122,7 @@ Template.discussionPageTemplate.onRendered(function () {
                     // scroll to bottom after new msg
                     Tracker.afterFlush(function () {
                         if (Session.get('discussionScrollPosition') == 'bottom') {
-                          scrollDisListToBottom(true);
+                          // scrollDisListToBottom(true);
                         }
                     });
                 }
@@ -103,14 +135,17 @@ Template.discussionPageTemplate.onRendered(function () {
             }
         });
 
-        // scroll to bottom on rendered
-        scrollDisListToBottom();
+
 
       Meteor.defer(function() {
           const $wrapper = $('.discussion-page-content');
           const $content = $wrapper.find('.discussion-msg-list');
           const topOffset = 100;
           const bottomOffset = 50;
+
+          // scroll to bottom on rendered
+          // scrollDisListToBottom();
+          console.log('wow scrollDisListToBottom');
 
           $wrapper.on('scroll', function(e) {
             const wrapperHeight = $wrapper.height();
@@ -122,8 +157,17 @@ Template.discussionPageTemplate.onRendered(function () {
               console.log('is at the bottom! cal: ', calculation, ' cHight: ', contentHeight);
               Session.set('discussionScrollPosition', 'bottom');
             } else if ($wrapper.scrollTop() < topOffset) {
+
               // At the top
               Session.set('discussionScrollPosition', 'top');
+
+              // load new content
+              if (!template.loadingNewContent.get() && template.commentsCount.get() >= template.loadContentLimit.get()) {
+                  // Session.set('discussion:loadingNewContent', true);
+                  template.loadingNewContent.set(true);
+                  template.loadContentLimit.set(template.loadContentLimit.get() + PAGE_INC);
+                  // Session.set('discussion:loadContentLimit', Session.get('discussion:loadContentLimit') + PAGE_INC);
+              }
               console.log('at the top! $wrapper.scrollTop: ', $wrapper.scrollTop(), ' cHight: ', contentHeight);
             } else {
               // in the middle
@@ -187,6 +231,7 @@ Template.discussionPageTemplate.events({
           $('.the-comment').val('');
           $('.the-comment').focus();
           scrollDisListToBottom(true);
+          // Session.set('discussion:loadContentLimit', Session.get('discussion:loadContentLimit') + 1);
 
         } else {
 console.log('not cool');
@@ -206,11 +251,14 @@ Template.discussionPageTemplate.helpers({
         return helpers.convertDate(disMeta.createdAt);
     },
     allComments : function(){
-        return Comments.find({discussionId : Session.get('activeDiscussionId')}, {sort: {createdAt: +1}});
+        // return Comments.find({discussionId : Session.get('activeDiscussionId')}, {sort: {createdAt: +1}});
+        return Comments.find({}, {sort: {createdAt: +1}});
     }
 });
 
 const scrollDisListToBottom = function(animate = false) {
+  console.log('SCROLLLLLL TO BOTTOOOOOM !!!!!!!');
+  Session.set('discussion:itsOkay', true);
   if (animate && !Session.get('discussionScrollIsAnimating')) {
     Session.set('discussionScrollIsAnimating', true);
     $('.discussion-page-content').animate(

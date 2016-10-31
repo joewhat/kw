@@ -43,57 +43,32 @@ if (Meteor.isServer) {
     return Discussions.find(query, queryOptions);
 });
 
-  // Meteor.publish('discussions.collection',
-  //   function (searchQuery) {
-  //     // console.log('inputLimit: ', inputLimit);
-  //     console.log('searchQuery: ', searchQuery);
-  //     // check(inputLimit, Number);
-  //     check(searchQuery, Match.OneOf( String, null, undefined ));
-  //
-  //     let query = {},
-  //     projection = { limit: 10, sort: { latestComment: 1 } };
-  //
-  //     if ( searchQuery ) {
-  //       let regex = new RegExp( searchQuery, 'i' );
-  //
-  //       query = {
-  //           header: regex
-  //       };
-  //
-  //       projection.limit = 100;
-  //     }
-  //     let joe = Discussions.find( query, projection );
-  //     console.log('joe: ', joe.fetch().length);
-  //     return joe;
-  //
-  //     // let query = {};
-  //     //
-  //     // // check user is loggedin
-  //     // if(!this.userId) return null;
-  //     //
-  //     // if (searchQuery) {
-  //     //   let regex = new RegExp(searchQuery, 'i');
-  //     //   // query.header = new RegExp(helpers.regexMultiWordsSearch(searchQuery), 'i');
-  //     //   query = {
-  //     //     header : regex
-  //     //   }
-  //     // }
-  //     //
-  //     //
-  //     // console.log('query', query);
-  //     // console.log('find', Discussions.find(query, {limit: inputLimit}).count());
-  //     //
-  //     // return Discussions.find(query, {limit: inputLimit});
-  //     // return Discussions.find(query);
-  //
-  //
-  // });
 
-  Meteor.publish('comments.collection', function () {
-    // check user is loggedin
-    if(!this.userId) return null;
-    return Comments.find({});
-  });
+Meteor.publish('comments.collection', function (id, limit = 5) {
+  check(id, String);
+  check(limit, Number);
+  console.log('comment litmit: ', limit);
+  // check user is loggedin
+  if(!this.userId) return null;
+
+  let query = {};
+  let queryOptions = {};
+
+
+  query = {
+    discussionId: id
+  }
+
+  let commentLength = Comments.find(query).count();
+  // console.log('commentLength: ', commentLength);
+
+  queryOptions = {
+    sort: {createdAt: -1},
+    limit: Math.min(limit, MAX_DIS)
+  };
+
+  return Comments.find(query, queryOptions);
+});
 
   Meteor.publish('discussionUserMeta.collection', function () {
     // check user is loggedin
