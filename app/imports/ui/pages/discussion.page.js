@@ -22,6 +22,7 @@ Template.discussionPageTemplate.onCreated(function () {
 
   template.loadContentLimit = new ReactiveVar();
   template.loadingNewContent = new ReactiveVar();
+  template.hSubready = new ReactiveVar();
   template.commentsCount = new ReactiveVar();
 
   template.loadContentLimit.set(PAGE_INC);
@@ -42,7 +43,21 @@ Template.discussionPageTemplate.onCreated(function () {
           console.log('subscriptionsReady:comments');
 
           if (template.loadingNewContent.get()) {
+            // Remember this shit
+            template.hSubready.set($('.discussion-page-content')[0].scrollHeight);
+            // console.log('subready - inner: ', template.hSubready.get());
+            const hDiff = template.hSubready.get() - template.hLoadMore.get();
+            // console.log('h diff: ', hDiff);
+
+            $('.discussion-page-content').scrollTop(hDiff);
             template.loadingNewContent.set(false);
+
+            // $('.discussion-page-content').animate(
+            //   { scrollTop:
+            //     hDiff
+            //   }, 400, function() {
+            //     // animation done
+            //   });
           } else {
             scrollDisListToBottom();
           }
@@ -108,6 +123,7 @@ Template.discussionPageTemplate.onDestroyed(function () {
 
 Template.discussionPageTemplate.onRendered(function () {
     let template = Template.instance();
+    template.hLoadMore = new ReactiveVar();
     let addedUpdateCount = 0;
     const commentCount = Comments.find({discussionId : Session.get('activeDiscussionId')}).count();
     Session.set('discussionScrollPosition', 'bottom');
@@ -154,7 +170,7 @@ Template.discussionPageTemplate.onRendered(function () {
 
             if (calculation > (contentHeight - bottomOffset)) {
               // At the bottom
-              console.log('is at the bottom! cal: ', calculation, ' cHight: ', contentHeight);
+              // console.log('is at the bottom! cal: ', calculation, ' cHight: ', contentHeight);
               Session.set('discussionScrollPosition', 'bottom');
             } else if ($wrapper.scrollTop() < topOffset) {
 
@@ -167,12 +183,14 @@ Template.discussionPageTemplate.onRendered(function () {
                   template.loadingNewContent.set(true);
                   template.loadContentLimit.set(template.loadContentLimit.get() + PAGE_INC);
                   // Session.set('discussion:loadContentLimit', Session.get('discussion:loadContentLimit') + PAGE_INC);
+                  // console.log('at the top! $wrapper.scrollTop: ', $wrapper.scrollTop(), ' cHight: ', contentHeight);
+                  template.hLoadMore.set($('.discussion-page-content')[0].scrollHeight);
+                  // console.log('load more - inner: ', template.hLoadMore.get());
               }
-              console.log('at the top! $wrapper.scrollTop: ', $wrapper.scrollTop(), ' cHight: ', contentHeight);
             } else {
               // in the middle
               Session.set('discussionScrollPosition', 'middle');
-              console.log('$wrapper.scrollTop: ', $wrapper.scrollTop(), ' cHight: ', contentHeight);
+              // console.log('$wrapper.scrollTop: ', $wrapper.scrollTop(), ' cHight: ', contentHeight);
             }
           });
           $('.the-comment').focus();
