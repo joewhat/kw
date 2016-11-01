@@ -215,8 +215,13 @@ Template.discussionPageTemplate.events({
         const data = $('.add-comment-form').serializeJSON();
         data.discussionId = Session.get('activeDiscussionId');
 
+        console.log('data: ', data.comment);
+
         // validate input
         if (data.comment.search(/[^\n\s]/) != -1) {
+          data.comment = data.comment.replace(/\n/g, '<br />');
+          console.log('data: ', data.comment.replace(/\n/g, '<br />'));
+
           Meteor.call('comments-insert', data, function( error, response ) {
             if ( error ) {
               // Handle our error.

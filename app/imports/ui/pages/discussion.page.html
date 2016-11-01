@@ -20,7 +20,8 @@
                     <div class="info">
                         <div class="owner">{{this.username}}</div><div class="time">{{this.createdAt}}</div>
                     </div>
-                    <div class="msg"><pre>{{this.comment}}</pre></div>
+                    <!-- <div class="msg"><pre>{{this.comment}}</pre></div> -->
+                    <div class="msg">{{{this.comment}}}</div>
                 </li>
             {{/each}}
         </ul>
@@ -31,6 +32,6 @@
             <input type="submit" name="submit" id="" class="add-comment-button" value="Add comment">
         </form>
     </div>
-    
+
   </div>
 </template>
