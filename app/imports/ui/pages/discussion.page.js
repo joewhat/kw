@@ -42,7 +42,6 @@ Template.discussionPageTemplate.onCreated(function () {
        () => {
 
         if (template.subscriptionsReady()) {
-          console.log('subscriptionsReady:comments');
 
           if (template.loadingNewContent.get()) {
             // Remember this shit
@@ -73,7 +72,7 @@ Template.discussionPageTemplate.onCreated(function () {
         username : Meteor.user().username,
         discussionId : Session.get('activeDiscussionId')
     };
-    console.log('add-user-to-discussion: ', _thisData);
+    // console.log('add-user-to-discussion: ', _thisData);
 
     Meteor.call('add-user-to-discussion', _thisData, function( error, response ) {
       if ( error ) {
@@ -108,14 +107,14 @@ Template.discussionPageTemplate.onDestroyed(function () {
             discussionId : DiscussionUserMeta.find({username:Meteor.user().username}).fetch()[0].activeDiscussionId
         }
 
-        console.log('remove-user:', DiscussionUserMeta.find({username:Meteor.user().username}).fetch()[0].activeDiscussionId);
+        // console.log('remove-user:', DiscussionUserMeta.find({username:Meteor.user().username}).fetch()[0].activeDiscussionId);
 
         Meteor.call('remove-user-from-discussion', _thisData, function( error, response ) {
           if ( error ) {
             // Handle our error.
             console.log('wtf: ' + error);
           } else {
-              console.log('remove user from dis');
+              // console.log('remove user from dis');
           }
         });
         // reset active session id
@@ -163,7 +162,6 @@ Template.discussionPageTemplate.onRendered(function () {
 
           // scroll to bottom on rendered
           // scrollDisListToBottom();
-          console.log('wow scrollDisListToBottom');
 
           $wrapper.on('scroll', function(e) {
             const wrapperHeight = $wrapper.height();
@@ -217,12 +215,11 @@ Template.discussionPageTemplate.events({
         const data = $('.add-comment-form').serializeJSON();
         data.discussionId = Session.get('activeDiscussionId');
 
-        console.log('data: ', data.comment);
-
         // validate input
         if (data.comment.search(/[^\n\s]/) != -1) {
           data.comment = data.comment.replace(/\n/g, '<br/>');
-          data.comment = Autolinker.link(data.comment, { stripPrefix: false, replaceFn : function( match ) {
+          data.comment = Autolinker.link(data.comment, { stripPrefix: false,
+            replaceFn : function( match ) {
               if (match.getType() == 'url') {
                 // if img
                 if (/\.(gif|png|jpe?g)$/i.test(match.getUrl())) {
@@ -230,11 +227,9 @@ Template.discussionPageTemplate.events({
                 } else {
                   return true;
                 }
-
               }
             }
           });
-          console.log('data: ', data.comment.replace(/\n/g, '<br/>'));
 
           Meteor.call('comments-insert', data, function( error, response ) {
             if ( error ) {
@@ -294,7 +289,6 @@ Template.discussionPageTemplate.helpers({
 });
 
 const scrollDisListToBottom = function(animate = false) {
-  console.log('SCROLLLLLL TO BOTTOOOOOM !!!!!!!');
   Session.set('discussion:itsOkay', true);
   if (animate && !Session.get('discussionScrollIsAnimating')) {
     Session.set('discussionScrollIsAnimating', true);
