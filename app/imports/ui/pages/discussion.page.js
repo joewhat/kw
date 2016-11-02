@@ -42,7 +42,6 @@ Template.discussionPageTemplate.onCreated(function () {
        () => {
 
         if (template.subscriptionsReady()) {
-          console.log('template: ', template.view.isRendered);
           template.subRdy.set(true);
 
           if (template.loadingNewContent.get()) {
