@@ -164,15 +164,17 @@ Template.discussionPageTemplate.onRendered(function () {
         //   scrollDisListToBottom();
         //
         // }
+
           const $wrapper = $('.discussion-page-content');
           const $content = $wrapper.find('.discussion-msg-list');
           const topOffset = 100;
           const bottomOffset = 50;
-
+          console.log('wtf:', $wrapper);
           // scroll to bottom on rendered
           // scrollDisListToBottom();
 
           $wrapper.on('scroll', function(e) {
+            console.log('scrolling');
             const wrapperHeight = $wrapper.height();
             const contentHeight = $content.height();
             let calculation = $wrapper.scrollTop() + wrapperHeight;
@@ -194,7 +196,7 @@ Template.discussionPageTemplate.onRendered(function () {
                   // Session.set('discussion:loadContentLimit', Session.get('discussion:loadContentLimit') + PAGE_INC);
                   // console.log('at the top! $wrapper.scrollTop: ', $wrapper.scrollTop(), ' cHight: ', contentHeight);
                   template.hLoadMore.set($('.discussion-page-content')[0].scrollHeight);
-                  // console.log('load more - inner: ', template.hLoadMore.get());
+                  console.log('load more - inner: ', template.hLoadMore.get());
               }
             } else {
               // in the middle
