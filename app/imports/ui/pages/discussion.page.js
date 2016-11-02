@@ -7,6 +7,8 @@ import { DiscussionUserMeta } from '../../api/discus.api.js';
 import './discussion.page.html';
 import helpers from '../../api/helpers.api.js';
 
+const Autolinker = require( 'autolinker' );
+
 // Meteor.subscribe('discussions.collection', function() {});
 // Meteor.subscribe('comments.collection', function() {});
 Meteor.subscribe('discussionUserMeta.collection', function() {});
@@ -219,8 +221,9 @@ Template.discussionPageTemplate.events({
 
         // validate input
         if (data.comment.search(/[^\n\s]/) != -1) {
-          data.comment = data.comment.replace(/\n/g, '<br />');
-          console.log('data: ', data.comment.replace(/\n/g, '<br />'));
+          data.comment = data.comment.replace(/\n/g, '<br/>');
+          data.comment = Autolinker.link(data.comment, { stripPrefix: false });
+          console.log('data: ', data.comment.replace(/\n/g, '<br/>'));
 
           Meteor.call('comments-insert', data, function( error, response ) {
             if ( error ) {
