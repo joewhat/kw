@@ -223,25 +223,15 @@ Template.discussionPageTemplate.events({
         if (data.comment.search(/[^\n\s]/) != -1) {
           data.comment = data.comment.replace(/\n/g, '<br/>');
           data.comment = Autolinker.link(data.comment, { stripPrefix: false, replaceFn : function( match ) {
+              if (match.getType() == 'url') {
+                // if img
+                if (/\.(gif|png|jpe?g)$/i.test(match.getUrl())) {
+                  return '<img src="' + match.getUrl() + '"/>';
+                } else {
+                  return true;
+                }
 
-            console.log('autolink match: ', match.getType());
-            if (match.getType() == 'url') {
-              console.log('url that matched: ', match.getUrl());
-              // if img
-              if (/\.(gif|png|jpe?g)$/i.test(match.getUrl())) {
-                console.log('this is img url');
-                return '<img src="' + match.getUrl() + '"/>';
-
-              } else {
-                console.log('this is NOOOT img url');
-                return true;
               }
-            // /\.(gif|png|jpe?g)$/i.test(url)
-
-            }
-            // switch( match.getType() ) {
-            //   case 'url' :
-            // }
             }
           });
           console.log('data: ', data.comment.replace(/\n/g, '<br/>'));
