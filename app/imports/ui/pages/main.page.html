@@ -27,8 +27,10 @@
   </div> -->
   <div class="main-page-content">
     <!-- {{#if disListNotEmpty}} -->
+    {{#if subRdy}}
       <ul class="discussion-list">
         <!-- {{paginate}} -->
+
 
         {{#if searching}}
             Loading(Searching)..
@@ -61,7 +63,9 @@
               <!-- Nothing found by search query... -->
           {{/each}}
         {{/if}}
+
       </ul>
+      {{/if}}
       <!-- {{else}}
       <div>nothing to show</div>
       {{/if}} -->

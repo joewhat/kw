@@ -20,6 +20,7 @@ Template.mainPageTemplate.onCreated(function(){
 
   template.searchQuery = new ReactiveVar();
   template.searching   = new ReactiveVar( false );
+  template.subRdy = new ReactiveVar( false );
 
   template.autorun( () => {
     template.subscribe(
@@ -29,7 +30,7 @@ Template.mainPageTemplate.onCreated(function(){
        () => {
 
       if (template.subscriptionsReady()) {
-        console.log('subscriptionsReady');
+        template.subRdy.set(true);
         Session.set('mainDis:loadingNewContent', false);
       }
 
@@ -142,7 +143,7 @@ Template.mainPageTemplate.events({
         if (!Session.get('mainDis:loadingNewContent')) {
             Session.set('mainDis:loadingNewContent', true);
             Session.set('mainDis:loadContentLimit', Session.get('mainDis:loadContentLimit') + PAGE_INC);
-            console.log('is at the bottom! cal: ', calculation, ' cHight: ', contentHeight);
+            // console.log('is at the bottom! cal: ', calculation, ' cHight: ', contentHeight);
         }
       } else if ($content.scrollTop() < topOffset) {
         // At the top
@@ -169,7 +170,7 @@ Template.mainPageTemplate.events({
 
           }
         });
-        console.log('set activeDiscussionId');
+        // console.log('set activeDiscussionId');
         BlazeLayout.render('mainLayout', {layer1: 'discussionPageTemplate'});
     },
 
@@ -221,6 +222,10 @@ Template.mainPageTemplate.helpers({
 
   query() {
     return Template.instance().searchQuery.get();
+  },
+
+  subRdy() {
+    return Template.instance().subRdy.get();
   },
 
   // disListNotEmpty : function() {
