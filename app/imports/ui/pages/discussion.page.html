@@ -3,9 +3,12 @@
 
     <div class="global-page-header discussion-page-header">
       <!-- <div class="toolbar-button back-to-discussion-button"><div class="toolbar-button-label">back</div></div> -->
+      {{#if subRdy}}
       <h1>{{disMeta.header}}</h1>
+      {{/if}}
     </div>
 
+    {{#if subRdy}}
     <div class="discussion-page-content">
         <ul class="discussion-msg-list">
             <li class="description comment">
@@ -33,5 +36,6 @@
         </form>
     </div>
 
+    {{/if}}
   </div>
 </template>

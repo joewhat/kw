@@ -22,13 +22,13 @@ Session.setDefault('discussion:itsOkay', false);
 Template.discussionPageTemplate.onCreated(function () {
   let template = Template.instance();
 
-  template.loadContentLimit = new ReactiveVar();
-  template.loadingNewContent = new ReactiveVar();
+  template.loadContentLimit = new ReactiveVar(PAGE_INC);
+  template.loadingNewContent = new ReactiveVar(false);
   template.hSubready = new ReactiveVar();
   template.commentsCount = new ReactiveVar();
+  template.subRdy = new ReactiveVar(false);
 
-  template.loadContentLimit.set(PAGE_INC);
-  template.loadingNewContent.set(false);
+
 
   template.autorun( () => {
     template.subscribe( 'discussions.collection', () => {
@@ -42,6 +42,8 @@ Template.discussionPageTemplate.onCreated(function () {
        () => {
 
         if (template.subscriptionsReady()) {
+          console.log('template: ', template.view.isRendered);
+          template.subRdy.set(true);
 
           if (template.loadingNewContent.get()) {
             // Remember this shit
@@ -60,7 +62,10 @@ Template.discussionPageTemplate.onCreated(function () {
             //     // animation done
             //   });
           } else {
-            scrollDisListToBottom();
+
+            Meteor.defer(function() {
+              scrollDisListToBottom();
+            });
           }
         }
     });
@@ -138,9 +143,9 @@ Template.discussionPageTemplate.onRendered(function () {
                     // console.log('what thefuck: ' + addedUpdateCount + ' ' + commentCount);
                     // scroll to bottom after new msg
                     Tracker.afterFlush(function () {
-                        if (Session.get('discussionScrollPosition') == 'bottom') {
-                          // scrollDisListToBottom(true);
-                        }
+                        // if (Session.get('discussionScrollPosition') == 'bottom') {
+                        //   scrollDisListToBottom(true);
+                        // }
                     });
                 }
             },
@@ -155,6 +160,11 @@ Template.discussionPageTemplate.onRendered(function () {
 
 
       Meteor.defer(function() {
+        // if (template.subRdy) {
+        //   console.log('tring defer scroll');
+        //   scrollDisListToBottom();
+        //
+        // }
           const $wrapper = $('.discussion-page-content');
           const $content = $wrapper.find('.discussion-msg-list');
           const topOffset = 100;
@@ -266,7 +276,7 @@ Template.discussionPageTemplate.events({
           // Session.set('discussion:loadContentLimit', Session.get('discussion:loadContentLimit') + 1);
 
         } else {
-console.log('not cool');
+          console.log('not cool');
         }
 
 
@@ -285,6 +295,9 @@ Template.discussionPageTemplate.helpers({
     allComments : function(){
         // return Comments.find({discussionId : Session.get('activeDiscussionId')}, {sort: {createdAt: +1}});
         return Comments.find({}, {sort: {createdAt: +1}});
+    },
+    subRdy() {
+      return Template.instance().subRdy.get();
     }
 });
 
