@@ -34,3 +34,4 @@ eluck:accounts-lockout
 peerlibrary:reactive-publish
 peerlibrary:subscription-data
 ostrio:files
+mrt:jquery-imagesloaded

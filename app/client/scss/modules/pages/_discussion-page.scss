@@ -64,10 +64,17 @@
     }
 }
 
+.upload-file-wrapper {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+}
+
 .add-comment-form {
     height: 130px;
     width: 100%;
     background-color: $black;
+    background-color: red;
     border-top: 2px solid $grey-bg;
 
     .add-comment-button {

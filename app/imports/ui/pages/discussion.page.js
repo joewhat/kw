@@ -9,6 +9,7 @@ import './discussion.page.html';
 import helpers from '../../api/helpers.api.js';
 
 const Autolinker = require( 'autolinker' );
+const pathLib = require('path');
 
 // Meteor.subscribe('discussions.collection', function() {});
 // Meteor.subscribe('comments.collection', function() {});
@@ -66,7 +67,12 @@ Template.discussionPageTemplate.onCreated(function () {
           } else {
 
             Meteor.defer(function() {
-              scrollDisListToBottom();
+              $('.discussion-msg-list').imagesLoaded( function() {
+                  // images have loaded
+                  console.log('images has loaded');
+                  scrollDisListToBottom();
+              });
+              console.log('scroll to bottom');
             });
           }
         }
@@ -146,7 +152,7 @@ Template.discussionPageTemplate.onRendered(function () {
                     // scroll to bottom after new msg
                     Tracker.afterFlush(function () {
                         // if (Session.get('discussionScrollPosition') == 'bottom') {
-                        //   scrollDisListToBottom(true);
+                          // scrollDisListToBottom(true);
                         // }
                     });
                 }
@@ -219,6 +225,10 @@ Template.discussionPageTemplate.events({
     //     console.log('scolling');
     // },
 
+    'load img'(event, template) {
+      console.log(template.$('img').prop('width'));
+    },
+
     'click .back-to-discussion-button'(event) {
         Session.set('discussionIsRendered', false);
         BlazeLayout.render('mainLayout', {layer1: 'mainPageTemplate'});
@@ -276,7 +286,7 @@ Template.discussionPageTemplate.events({
 
           $('.the-comment').val('');
           $('.the-comment').focus();
-          scrollDisListToBottom(true);
+          // scrollDisListToBottom(true);
           // Session.set('discussion:loadContentLimit', Session.get('discussion:loadContentLimit') + 1);
 
         } else {
@@ -306,7 +316,21 @@ Template.discussionPageTemplate.events({
             if (error) {
               console.log('Error during upload: ' + error.reason);
             } else {
-              console.log('File "' + fileObj.name + '" successfully uploaded', fileObj);
+              const path = pathLib.join(
+                fileObj._downloadRoute,
+                'Images',
+                fileObj._id,
+                'original',
+                fileObj._id + fileObj.extensionWithDot
+              );
+              // console.log('path: ', path);
+              // console.log('File "' + fileObj.name + '" successfully uploaded', fileObj);
+              $cArea = $('.the-comment');
+              if ($cArea.val().length) {
+                $cArea.val($cArea.val() + '\n<img src="' + path + '"/>');
+              } else {
+                $cArea.val($cArea.val() + '<img src="' + path + '"/>');
+              }
             }
             template.currentUpload.set(false);
           });
