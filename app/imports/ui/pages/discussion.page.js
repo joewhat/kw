@@ -4,6 +4,7 @@ import { ReactiveVar } from 'meteor/reactive-var';
 import { Discussions } from '../../api/discus.api.js';
 import { Comments } from '../../api/discus.api.js';
 import { DiscussionUserMeta } from '../../api/discus.api.js';
+import { Images } from '../../api/upload.api.js';
 import './discussion.page.html';
 import helpers from '../../api/helpers.api.js';
 
@@ -12,6 +13,7 @@ const Autolinker = require( 'autolinker' );
 // Meteor.subscribe('discussions.collection', function() {});
 // Meteor.subscribe('comments.collection', function() {});
 Meteor.subscribe('discussionUserMeta.collection', function() {});
+Meteor.subscribe('files.images.all');
 
 
 const PAGE_INC = 20;
@@ -27,6 +29,7 @@ Template.discussionPageTemplate.onCreated(function () {
   template.hSubready = new ReactiveVar();
   template.commentsCount = new ReactiveVar();
   template.subRdy = new ReactiveVar(false);
+  template.currentUpload = new ReactiveVar(false);
 
 
 
@@ -282,6 +285,36 @@ Template.discussionPageTemplate.events({
 
 
     },
+
+    'change #fileInput': function (e, template) {
+      if (e.currentTarget.files && e.currentTarget.files[0]) {
+        // We upload only one file, in case
+        // there was multiple files selected
+        var file = e.currentTarget.files[0];
+        if (file) {
+          var uploadInstance = Images.insert({
+            file: file,
+            streams: 'dynamic',
+            chunkSize: 'dynamic'
+          }, false);
+
+          uploadInstance.on('start', function() {
+            template.currentUpload.set(this);
+          });
+
+          uploadInstance.on('end', function(error, fileObj) {
+            if (error) {
+              console.log('Error during upload: ' + error.reason);
+            } else {
+              console.log('File "' + fileObj.name + '" successfully uploaded', fileObj);
+            }
+            template.currentUpload.set(false);
+          });
+
+          uploadInstance.start();
+        }
+      }
+    }
 });
 
 
@@ -290,15 +323,27 @@ Template.discussionPageTemplate.helpers({
     disMeta : function(){
         return Discussions.findOne({_id : Session.get('activeDiscussionId')});
     },
+
     convertedDate : function(){
         return helpers.convertDate(disMeta.createdAt);
     },
+
     allComments : function(){
         // return Comments.find({discussionId : Session.get('activeDiscussionId')}, {sort: {createdAt: +1}});
         return Comments.find({}, {sort: {createdAt: +1}});
     },
+
     subRdy() {
       return Template.instance().subRdy.get();
+    },
+
+    currentUpload: function () {
+      return Template.instance().currentUpload.get();
+    },
+
+    uploadedFiles: function () {
+      console.log('uploadedFiles: ', Images.find());
+      return Images.find();
     }
 });
 

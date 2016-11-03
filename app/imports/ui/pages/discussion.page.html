@@ -30,6 +30,32 @@
         </ul>
     </div>
     <div class="add-comment">
+      <div class="upload-file-wrapper">
+        {{#with currentUpload}}
+        Uploading <b>{{file.name}}</b>:
+        <span id="progress">{{progress.get}}%</span>
+        {{else}}
+        <input id="fileInput" type="file" />
+        <p><small>Upload file in <code>jpeg</code> or <code>png</code> format, with size less or equal to 10MB</small></p>
+        {{/with}}
+      </div>
+      <!-- <div class="uploaded-files-wrapper">
+        {{#if uploadedFiles.count}}
+          <ul>
+            {{#each file in uploadedFiles.each}}
+              <li>
+
+                <img src="{{file.link}}"/>
+              </li>
+            {{/each}}
+          </ul>
+        {{else}}
+          <div>No files uploaded, yet</div>
+        {{/if}}
+      </div> -->
+      <img src="cdn/storage/Images/LDif4kydatf2AmHH3/original/LDif4kydatf2AmHH3.png"/>
+      <!-- <img src="/webapp/uploads/86ZReHmyFC9ar45dS.png"/> -->
+
         <form action="" class="add-comment-form" data-id="{{disMeta._id}}">
             <textarea name="comment" class="the-comment" placeholder="Comment" autofocus></textarea>
             <input type="submit" name="submit" id="" class="add-comment-button" value="Add comment">

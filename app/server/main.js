@@ -5,6 +5,7 @@ import { DiscussionUserMeta } from '../imports/api/discus.api.js';
 import '../imports/startup/accounts.config.js';
 import '../imports/api/users.api.js';
 import '../imports/api/discus.api.js';
+import '../imports/api/upload.api.js';
 
 
 Meteor.startup(() => {

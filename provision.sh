@@ -34,6 +34,9 @@ echo $command >> /home/vagrant/.bashrc
 cd /vagrant/app
 npm install
 
+# create upload folder
+mkdir -p /webapp/uploads
+
 # fix some mongo shit
 # echo "export LC_ALL=C" >> /home/vagrant/.bashrc
 echo "cd /vagrant/app" >> /home/vagrant/.bashrc

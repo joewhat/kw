@@ -33,3 +33,4 @@ shell-server@0.2.1
 eluck:accounts-lockout
 peerlibrary:reactive-publish
 peerlibrary:subscription-data
+ostrio:files
