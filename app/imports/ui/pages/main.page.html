@@ -33,8 +33,11 @@
 
 
         {{#if searching}}
-            Loading(Searching)..
+        <div class="loading-dude">
+          Loading(Searching)..
+        </div>
         {{else}}
+        {{#if allDiscussions.count}}
           {{#each allDiscussions}}
               <li class="discussion" id="{{this._id}}" data-id="{{this._id}}">
                 <div class="top">
@@ -63,6 +66,9 @@
           <!-- {{else}} -->
               <!-- Nothing found by search query... -->
           {{/each}}
+          {{else}}
+            Nothing to show...
+          {{/if}}
         {{/if}}
 
       </ul>

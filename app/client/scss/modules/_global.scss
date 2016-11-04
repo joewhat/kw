@@ -197,6 +197,21 @@ input[type=submit]:hover {
 }
 
 
+.loading-dude {
+  display: inline-block;
+  color: $black;
+  background-color: $white;
+  position: absolute;
+  top: 43px;
+  left: 260px;
+  // width: 100%;
+  // height: calc(100vh - 198px);
+  // z-index: 1000;
+  img {
+    // width: 100%;
+  }
+}
+
 
 .button {
   display: block;
@@ -287,6 +302,9 @@ input[type=submit]:hover {
   float: right;
 }
 
+.login-button {
+  border: 0px !important;
+}
 
 
 #login-dropdown-list {
@@ -299,6 +317,11 @@ input[type=submit]:hover {
   border: 1px solid $black;
   width: 178px;
   // padding: 20px;
+  input {
+    border: 0px;
+    background-color: $black;
+    color: $white;
+  }
 
   .login-close-text {
     position: absolute;
@@ -323,7 +346,7 @@ input[type=submit]:hover {
   }
 
   #login-buttons-open-change-password:hover {
-    background-color: $blue;
+    // background-color: $blue;
   }
 
   $change-password-submit-width: calc(100% - 40px);
@@ -370,7 +393,7 @@ input[type=submit]:hover {
   }
 
   #login-buttons-logout:hover {
-    background-color: $red;
+    // background-color: $red;
   }
 
   a {

@@ -7,6 +7,7 @@
       <h1>{{disMeta.header}}</h1>
       {{/if}}
     </div>
+    <div class="loading-dude">loading..</div>
 
     {{#if subRdy}}
     <div class="discussion-page-content">
@@ -32,10 +33,11 @@
     <div class="add-comment">
       <div class="upload-file-wrapper">
         {{#with currentUpload}}
-        Uploading <b>{{file.name}}</b>:
+        <!-- Uploading <b>{{file.name}}</b>: -->
         <span id="progress">{{progress.get}}%</span>
         {{else}}
-        <input id="fileInput" type="file" />
+        <input name="file" id="fileInput" class="file-input" type="file" />
+        <label class="file-input-label" for="file">Upload img</label>
         <!-- <p><small>Upload file in <code>jpeg</code> or <code>png</code> format, with size less or equal to 3MB</small></p> -->
         {{/with}}
       </div>

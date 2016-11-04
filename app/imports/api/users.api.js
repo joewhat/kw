@@ -66,10 +66,11 @@ if (Meteor.isServer) {
 if (Meteor.isClient) {
   Meteor.autorun(function () {
     if (Meteor.userId()) {
-      //console.log('this user logged in');
+      // console.log('this user logged in');
+      BlazeLayout.render('mainLayout', {layer1: 'mainPageTemplate'});
     } else {
       FlowRouter.go('/');
-      //console.log('this user logged out');
+      // console.log('this user logged out');
     }
   });
 }
