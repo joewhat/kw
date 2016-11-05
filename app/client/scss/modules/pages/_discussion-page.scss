@@ -4,6 +4,10 @@
   // width: calc(100% - 300px);
   // max-width: $global-content-max-width;
   // margin-left: $global-content-left-margin;
+  // background-color: red;
+  @media screen and ( max-width: $mobile-breakpoint ) {
+    height: 100vh;
+  }
 
   .loading-dude {
     display: inline-block;
@@ -50,7 +54,9 @@
     // visibility: hidden;
     opacity: 0;
 
-
+    @media screen and ( max-width: $mobile-breakpoint ) {
+      height: calc(100vh - 117px);
+    }
 
     .comment {
 
@@ -86,6 +92,13 @@
             max-width: calc(100%);
           }
         }
+
+        @media screen and ( max-width: $mobile-breakpoint ) {
+          .msg {
+            width: calc(100% - 20px);
+            margin-left: 0px;
+          }
+        }
     }
 }
 
@@ -97,6 +110,11 @@
   color: $white;
   width: 130px;
   height: 31px;
+
+  @media screen and ( max-width: $mobile-breakpoint ) {
+    z-index: 2000;
+    bottom: 0px;
+  }
 
   #progress {
     position: absolute;
@@ -145,12 +163,18 @@
   cursor: pointer;
 }
 .add-comment {
-
+  @media screen and ( max-width: $mobile-breakpoint ) {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+  }
 
 }
 
 .add-comment-form {
-  display: inline-block;
+    display: inline-block;
+    position: relative;
     height: 130px;
     width: 100%;
     background-color: $black;
@@ -178,5 +202,19 @@
     }
     input {
         // float: left;
+    }
+
+    @media screen and ( max-width: $mobile-breakpoint ) {
+      height: 72px;
+      textarea {
+        width: calc(100% - 20px);
+        margin-left: 0px;
+        height: 20px;
+      }
+      input {
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+      }
     }
 }
