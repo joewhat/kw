@@ -3,7 +3,7 @@
   margin-top: -3px;
   height: calc(100vh - 60px);
   @media screen and ( max-width: $mobile-breakpoint ) {
-    height: 100vh;
+    height: calc(100vh - 200px);
   }
 }
 

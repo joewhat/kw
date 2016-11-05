@@ -28,6 +28,7 @@
             {{#each allComments}}
                 <li class="description comment" id="{{this._id}}">
                     <div class="info">
+                        <div class="user-icon"></div>
                         <div class="owner">{{this.username}}</div>
                         <div class="time">{{convertedDate}}</div>
                     </div>
@@ -44,7 +45,9 @@
         <span id="progress">{{progress.get}}%</span>
         {{else}}
         <input name="file" id="fileInput" class="file-input" type="file" />
-        <label class="file-input-label" for="file">Upload img</label>
+        <label class="file-input-label" for="file">
+          <i class="fa fa-picture-o" aria-hidden="true"></i>
+        </label>
         <!-- <p><small>Upload file in <code>jpeg</code> or <code>png</code> format, with size less or equal to 3MB</small></p> -->
         {{/with}}
       </div>
@@ -67,7 +70,11 @@
 
         <form action="" class="add-comment-form" data-id="{{disMeta._id}}">
             <textarea name="comment" class="the-comment" placeholder="Comment" autofocus></textarea>
-            <input type="submit" name="submit" id="" class="add-comment-button" value="Add comment">
+            <button type="submit" name="submit" class="add-comment-button">
+              <span class="submit-desktop">Add comment</span>
+              <i class="fa fa-arrow-up submit-mobile"  aria-hidden="true"></i>
+            </button>
+            <!-- <input type="submit" name="submit" id="" class="add-comment-button" value="Add comment"> -->
         </form>
     </div>
 

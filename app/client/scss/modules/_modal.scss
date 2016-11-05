@@ -23,6 +23,12 @@
             // height: 356px;
         }
 
+        @media screen and ( max-width: $mobile-breakpoint ) {
+          width: 100%;
+          margin-top: 0px;
+          height: 100vh;
+        }
+
 
     }
 
@@ -64,10 +70,8 @@
       }
 
       .img-wrapper {
-
           width: $icon-size-reg;
           height: $icon-size-reg;
-
         img {
             width: 100%;
             height: 100%;

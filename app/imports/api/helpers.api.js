@@ -24,7 +24,7 @@ if (Meteor.isClient) {
             month = month.length > 1 ? month : '0' + month;
             let day = date.getDate().toString();
             day = day.length > 1 ? day : '0' + day;
-            return year  + '.' + month + '.' + day + ' - ' + hours + ':' + minutes + ':' + secs;
+            return year  + '.' + month + '.' + day + '-' + hours + ':' + minutes + ':' + secs;
         }
     }
 } else if (Meteor.isServer) {

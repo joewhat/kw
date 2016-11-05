@@ -12,8 +12,7 @@ Template.burgerMenuTemplate.events({
     },
 
     'click .burger-menu-exit'(event) {
-        $this = $(event.target);
-        $this.hide();
+        $('.burger-menu-exit').hide();
         $('.burger-menu-icon').show();
         $('.burger-menu-content').hide();
     },

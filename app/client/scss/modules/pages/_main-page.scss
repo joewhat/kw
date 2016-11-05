@@ -3,6 +3,10 @@
   display: inline-block;
 
   .main-page-header {
+    h1 {
+      margin-top: 3px;
+      // background-color: yellow;
+    }
 
     @media screen and ( max-width: $mobile-breakpoint ) {
       .search-wrapper {
@@ -14,6 +18,7 @@
 
 .main-page-content {
   width: 100%;
+  -webkit-overflow-scrolling: touch;
 
     .discussion-list {
       display: inline-block;

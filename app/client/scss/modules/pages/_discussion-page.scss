@@ -6,7 +6,8 @@
   // margin-left: $global-content-left-margin;
   // background-color: red;
   @media screen and ( max-width: $mobile-breakpoint ) {
-    height: 100vh;
+    height: calc(100vh - 65px);
+    overflow: hidden;
   }
 
   .loading-dude {
@@ -23,18 +24,25 @@
       // width: 100%;
     }
   }
+
+  .discussion-page-header {
+    display: inline-block;
+    // position: relative;
+    // height: 30px;
+    // width: calc(100% - 10px);
+    //
+    // background-color: blue;
+    // margin-top: 3px;
+    // padding: 10px 0px 0px 10px;
+    h1 {
+      margin-top: 3px;
+      // background-color: yellow;
+    }
+    // background-color: red;
+  }
 }
 
-.discussion-page-header {
-  // display: inline-block;
-  // position: relative;
-  // height: 30px;
-  // width: calc(100% - 10px);
-  //
-  // background-color: blue;
-  // margin-top: 3px;
-  // padding: 10px 0px 0px 10px;
-}
+
 
 
 
@@ -53,9 +61,10 @@
     margin-bottom: -3px;
     // visibility: hidden;
     opacity: 0;
+    -webkit-overflow-scrolling: touch;
 
     @media screen and ( max-width: $mobile-breakpoint ) {
-      height: calc(100vh - 117px);
+      height: calc(100vh - 150px);
     }
 
     .comment {
@@ -63,11 +72,12 @@
         // background-color: $black;
         color: $grey;
         .info {
+            position: relative;
             display: inline-block;
-            width: calc(100% - 60px);
+            width: calc(100% - 70px);
             background-color: $black;
             font-weight: 700;
-            padding: 10px 10px 10px 50px;
+            padding: 12px 10px 8px 60px;
             height: 20px;
 
             div {
@@ -76,6 +86,27 @@
 
             .owner {
              margin-right: 20px;
+             text-transform: capitalize;
+            }
+            .user-icon {
+              position: absolute;
+              top: 0px;
+              left: 0px;
+              width: 40px;
+              height: 40px;
+              border-right: 1px solid $grey;
+              img {
+                background-color: $white;
+
+                margin-top: 4px;
+                margin-left: 3px;
+              }
+            }
+            @media screen and ( max-width: $mobile-breakpoint ) {
+
+              .time {
+                display: none;
+              }
             }
         }
         .msg {
@@ -98,22 +129,30 @@
             width: calc(100% - 20px);
             margin-left: 0px;
           }
+          iframe {
+            width: 100%;
+          }
         }
     }
 }
 
 .upload-file-wrapper {
+  display: inline-block;
   position: absolute;
   bottom: 1px;
-  right: 140px;
+  right: 145px;
   background-color: $black;
   color: $white;
-  width: 130px;
   height: 31px;
+  z-index: 2000;
 
   @media screen and ( max-width: $mobile-breakpoint ) {
     z-index: 2000;
-    bottom: 0px;
+    bottom: 1px;
+    right: 42px;
+    height: 40px;
+    width: 40px;
+    // display: none;
   }
 
   #progress {
@@ -136,12 +175,12 @@
 
   .file-input-label {
     z-index: 1000;
-    padding: 7px 20px 4px 20px;
+    padding: 5px 10px 4px 10px;
     height: calc(100% - 11px);
   }
 
   .file-input + label {
-    font-size: 15px;
+    font-size: 20px;
     font-weight: 700;
     color: $black;
     background-color: $grey;
@@ -153,6 +192,7 @@
   .file-input + label:hover {
       background-color: $white;
       color: $black;
+      cursor: pointer;
   }
   .file-input + label {
 	  cursor: pointer; /* "hand" cursor */
@@ -186,10 +226,19 @@
       float: right;
       background-color: $grey;
       color: $black;
+      font-weight: 700;
+      padding: 7px 20px 4px 20px;
+
+      -moz-user-select: none; /* Firefox */
+      -ms-user-select: none; /* Internet Explorer */
+      -khtml-user-select: none; /* KHTML browsers (e.g. Konqueror) */
+      -webkit-user-select: none; /* Chrome, Safari, and Opera */
+      -webkit-touch-callout: none; /* Disable Android and iOS callouts*/
     }
 
     .add-comment-button:hover {
       background-color: $white;
+      cursor: pointer;
     }
 
     textarea {
@@ -204,17 +253,45 @@
         // float: left;
     }
 
+    .submit-mobile {
+      display: none;
+    }
+
     @media screen and ( max-width: $mobile-breakpoint ) {
-      height: 72px;
+      height: 40px;
+
       textarea {
         width: calc(100% - 20px);
         margin-left: 0px;
-        height: 20px;
+        height: 40px;
+        padding-right: 30px !important;
+        box-sizing: border-box;
       }
+
       input {
         position: absolute;
         bottom: 0px;
         right: 0px;
+      }
+
+      .submit-desktop {
+        display: none;
+      }
+
+      .submit-mobile {
+        display: inline-block;
+      }
+
+      .add-comment-button {
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        width: 40px;
+        height: 40px;
+      }
+
+      .add-comment-button:hover {
+        background-color: $grey;
       }
     }
 }
