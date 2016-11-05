@@ -371,7 +371,7 @@ Template.discussionPageTemplate.helpers({
     },
 
     convertedDate : function(){
-        return helpers.convertDate(disMeta.createdAt);
+        return helpers.convertDate(this.createdAt);
     },
 
     allComments : function(){

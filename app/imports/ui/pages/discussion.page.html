@@ -15,7 +15,8 @@
         <ul class="discussion-msg-list">
             <li class="description comment">
                 <div class="info">
-                    <div class="owner">{{disMeta.username}}</div><div class="time">{{disMeta.createdAt}}</div>
+                    <div class="owner">{{disMeta.username}}</div>
+                    <div class="time">{{disMeta.createdAt}}</div>
                 </div>
                 <div class="msg">{{disMeta.description}}</div>
             </li>
@@ -23,7 +24,8 @@
             {{#each allComments}}
                 <li class="description comment" id="{{this._id}}">
                     <div class="info">
-                        <div class="owner">{{this.username}}</div><div class="time">{{this.createdAt}}</div>
+                        <div class="owner">{{this.username}}</div>
+                        <div class="time">{{convertedDate}}</div>
                     </div>
                     <!-- <div class="msg"><pre>{{this.comment}}</pre></div> -->
                     <div class="msg">{{{this.comment}}}</div>
