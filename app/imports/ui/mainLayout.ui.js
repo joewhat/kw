@@ -5,6 +5,7 @@ import './mainLayout.html';
 
 // Components
 import './components/globalNavigation.component.html';
+import './components/burger.component.html';
 
 // Pages
 import './pages/login.page.html';
@@ -24,6 +25,7 @@ import './pages/modal/addUsers.page.js';
 import './pages/modal/editUser.page.js';
 import './pages/modal/newDis.page.js';
 import './components/globalNavigation.component.js'
+import './components/burger.component.js'
 
 // Settings
 Session.setDefault('modalLoad', '');

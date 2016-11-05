@@ -1,0 +1,23 @@
+<template name="burgerMenuTemplate">
+  <div class="burger-menu">
+    <img class="burger-menu-icon" src="/burger_menu.png" alt="">
+    <img class="burger-menu-exit" src="/burger_exit.png" alt="">
+
+    <div class="burger-menu-content">
+      <div class="global-navigation-button burger-menu-item tab-button main-tab"
+      data-templateToLoad="mainPageTemplate" data-routerPath="/">
+      Discussions</div>
+
+      <div class="burger-menu-item tab-button new-discussion-button">
+      New Discussion</div>
+
+      {{#if currentUser}}
+        {{#if isInRole 'admin' 'users'}}
+            <div class="global-navigation-button burger-menu-item tab-button users-tab"
+            data-templateToLoad="usersTemplate" data-routerPath="/users">
+            Users</div>
+        {{/if}}
+      {{/if}}
+    </div>
+  </div>
+</template>
