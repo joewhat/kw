@@ -159,6 +159,14 @@ input[type=submit]:hover {
       }
     }
   }
+
+  @media screen and ( max-width: $mobile-breakpoint ) {
+    width: 100%;
+    margin-left: 0px;
+    min-width: 320px;
+
+    
+  }
 }
 
 .main-content-wrapper {

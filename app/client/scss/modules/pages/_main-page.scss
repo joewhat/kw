@@ -4,8 +4,11 @@
 
   .main-page-header {
 
-
-
+    @media screen and ( max-width: $mobile-breakpoint ) {
+      .search-wrapper {
+        display: none;
+      }
+    }
   }
 }
 
@@ -68,5 +71,9 @@
             background-color: $grey;
             color: $black;
         }
+    }
+
+    @media screen and ( max-width: $mobile-breakpoint ) {
+
     }
 }
