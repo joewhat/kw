@@ -367,7 +367,7 @@ Template.discussionPageTemplate.events({
 
 Template.discussionPageTemplate.helpers({
     disMeta : function(){
-        return Discussions.findOne({_id : Session.get('activeDiscussionId')});
+        return Discussions.find({_id : Session.get('activeDiscussionId')});
     },
 
     convertedDate : function(){

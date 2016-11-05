@@ -4,7 +4,9 @@
     <div class="global-page-header discussion-page-header">
       <!-- <div class="toolbar-button back-to-discussion-button"><div class="toolbar-button-label">back</div></div> -->
       {{#if subRdy}}
-      <h1>{{disMeta.header}}</h1>
+        {{#each disMeta}}
+          <h1>{{this.header}}</h1>
+        {{/each}}
       {{/if}}
       {{> burgerMenuTemplate}}
     </div>
@@ -13,13 +15,15 @@
     {{#if subRdy}}
     <div class="discussion-page-content">
         <ul class="discussion-msg-list">
+            {{#each disMeta}}
             <li class="description comment">
                 <div class="info">
-                    <div class="owner">{{disMeta.username}}</div>
-                    <div class="time">{{disMeta.createdAt}}</div>
+                    <div class="owner">{{this.username}}</div>
+                    <div class="time">{{convertedDate}}</div>
                 </div>
-                <div class="msg">{{disMeta.description}}</div>
+                <div class="msg">{{this.description}}</div>
             </li>
+            {{/each}}
 
             {{#each allComments}}
                 <li class="description comment" id="{{this._id}}">
