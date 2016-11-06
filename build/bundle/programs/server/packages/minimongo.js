@@ -4214,5 +4214,3 @@ if (typeof Package === 'undefined') Package = {};
 });
 
 })();
-
-//# sourceMappingURL=minimongo.js.map

@@ -36,7 +36,7 @@ var require = meteorInstall({"node_modules":{"meteor":{"ostrio:files":{"files.co
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                                                                                                                       //
 __coffeescriptShare = typeof __coffeescriptShare === 'object' ? __coffeescriptShare : {}; var share = __coffeescriptShare;
-module.export({FilesCollection:function(){return FilesCollection}});var FileCursor, FilesCollection, FilesCursor, NOOP, Throttle, bound, events, fileType, _fixJSONParse, _fixJSONStringify, formatFleURL, fs, nodePath, request, writeStream;
+module.export({FilesCollection:function(){return FilesCollection}});var FileCursor, FilesCursor, NOOP, Throttle, bound, events, fileType, _fixJSONParse, _fixJSONStringify, formatFleURL, fs, nodePath, request, writeStream;
                                                                                                                       //
 NOOP = function NOOP() {};                                                                                            //
                                                                                                                       //
@@ -1099,7 +1099,7 @@ module.runModuleSetters(FilesCollection = function () {                         
             });                                                                                                       //
             request.on('end', function () {                                                                           //
               return bound(function () {                                                                              //
-                var _continueUpload, error, error1, opts, ref, ref1, ref2, ref3, ref4, result, user;                  //
+                var _continueUpload, error, opts, ref, ref1, ref2, ref3, ref4, result, user;                          //
                 try {                                                                                                 //
                   if (request.headers['x-mtok'] && ((ref = Meteor.server.sessions) != null ? ref[request.headers['x-mtok']] : void 0)) {
                     user = {                                                                                          //
@@ -1302,7 +1302,7 @@ module.runModuleSetters(FilesCollection = function () {                         
         }                                                                                                             //
       };                                                                                                              //
       _methods[self._methodNames._Write] = function (opts) {                                                          //
-        var _continueUpload, e, error1, ref, result;                                                                  //
+        var _continueUpload, e, ref, result;                                                                          //
         check(opts, {                                                                                                 //
           eof: Match.Optional(Boolean),                                                                               //
           fileId: String,                                                                                             //
@@ -1488,7 +1488,7 @@ module.runModuleSetters(FilesCollection = function () {                         
    */                                                                                                                 //
                                                                                                                       //
   FilesCollection.prototype._handleUpload = Meteor.isServer ? function (result, opts, cb) {                           //
-    var e, error1, self;                                                                                              //
+    var e, self;                                                                                                      //
     self = this;                                                                                                      //
     try {                                                                                                             //
       if (opts.eof) {                                                                                                 //
@@ -1516,7 +1516,7 @@ module.runModuleSetters(FilesCollection = function () {                         
    */                                                                                                                 //
                                                                                                                       //
   FilesCollection.prototype._getMimeType = function (fileData) {                                                      //
-    var br, buf, error, error1, ext, fd, mime, ref;                                                                   //
+    var br, buf, error, ext, fd, mime, ref;                                                                           //
     check(fileData, Object);                                                                                          //
     if (fileData != null ? fileData.type : void 0) {                                                                  //
       mime = fileData.type;                                                                                           //
@@ -2080,7 +2080,7 @@ module.runModuleSetters(FilesCollection = function () {                         
     UploadInstance.prototype.__proto__ = EventEmitter.prototype;                                                      //
                                                                                                                       //
     function UploadInstance(config1, collection) {                                                                    //
-      var _file, base, base1, base2, base3, base4, base5, error1, self, wwError;                                      //
+      var _file, base, base1, base2, base3, base4, base5, self, wwError;                                              //
       this.config = config1;                                                                                          //
       this.collection = collection;                                                                                   //
       EventEmitter.call(this);                                                                                        //
@@ -3277,7 +3277,7 @@ Meteor.Files = FilesCollection;                                                 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                                                                                                                       //
 var _typeof;module.import('babel-runtime/helpers/typeof',{"default":function(v){_typeof=v}});                         //
-/*!                                                                                                                   //
+/*!                                                                                                                   // 1
  * EventEmitter v4.2.11 - git.io/ee                                                                                   //
  * Unlicense - http://unlicense.org/                                                                                  //
  * Oliver Caldwell - http://oli.me.uk/                                                                                //
@@ -3285,7 +3285,7 @@ var _typeof;module.import('babel-runtime/helpers/typeof',{"default":function(v){
  */                                                                                                                   //
                                                                                                                       //
 ;(function () {module.export({EventEmitter:function(){return EventEmitter}});                                         // 8
-  /**                                                                                                                 //
+  /**                                                                                                                 // 9
    * Class for managing events.                                                                                       //
    * Can be extended to provide event functionality in other classes.                                                 //
    *                                                                                                                  //
@@ -3293,12 +3293,12 @@ var _typeof;module.import('babel-runtime/helpers/typeof',{"default":function(v){
    */                                                                                                                 //
   function EventEmitter() {}                                                                                          // 15
                                                                                                                       //
-  // Shortcuts to improve speed and size                                                                              //
+  // Shortcuts to improve speed and size                                                                              // 17
   var proto = EventEmitter.prototype;                                                                                 // 18
   var exports = this;                                                                                                 // 19
   var originalGlobalValue = exports.EventEmitter;                                                                     // 20
                                                                                                                       //
-  /**                                                                                                                 //
+  /**                                                                                                                 // 22
    * Finds the index of the listener for the event in its storage array.                                              //
    *                                                                                                                  //
    * @param {Function[]} listeners Array of listeners to search through.                                              //
@@ -3317,7 +3317,7 @@ var _typeof;module.import('babel-runtime/helpers/typeof',{"default":function(v){
     return -1;                                                                                                        // 38
   }                                                                                                                   // 39
                                                                                                                       //
-  /**                                                                                                                 //
+  /**                                                                                                                 // 41
    * Alias a method while keeping the context correct, to allow for overwriting of target method.                     //
    *                                                                                                                  //
    * @param {String} name The name of the target method.                                                              //
@@ -3325,12 +3325,16 @@ var _typeof;module.import('babel-runtime/helpers/typeof',{"default":function(v){
    * @api private                                                                                                     //
    */                                                                                                                 //
   function alias(name) {                                                                                              // 48
-    return function aliasClosure() {                                                                                  // 49
-      return this[name].apply(this, arguments);                                                                       // 50
-    };                                                                                                                // 51
+    return function () {                                                                                              // 49
+      function aliasClosure() {                                                                                       // 49
+        return this[name].apply(this, arguments);                                                                     // 50
+      }                                                                                                               // 51
+                                                                                                                      //
+      return aliasClosure;                                                                                            // 49
+    }();                                                                                                              // 49
   }                                                                                                                   // 52
                                                                                                                       //
-  /**                                                                                                                 //
+  /**                                                                                                                 // 54
    * Returns the listener array for the specified event.                                                              //
    * Will initialise the event object and listener arrays if required.                                                //
    * Will return an object if you use a regex search. The object contains keys for each matched event. So /ba[rz]/ might return an object containing bar and baz. But only if you have either defined them with defineEvent or added some listeners to them.
@@ -3339,63 +3343,75 @@ var _typeof;module.import('babel-runtime/helpers/typeof',{"default":function(v){
    * @param {String|RegExp} evt Name of the event to return the listeners from.                                       //
    * @return {Function[]|Object} All listener functions for the event.                                                //
    */                                                                                                                 //
-  proto.getListeners = function getListeners(evt) {                                                                   // 63
-    var events = this._getEvents();                                                                                   // 64
-    var response = void 0;                                                                                            // 65
-    var key = void 0;                                                                                                 // 66
+  proto.getListeners = function () {                                                                                  // 63
+    function getListeners(evt) {                                                                                      // 63
+      var events = this._getEvents();                                                                                 // 64
+      var response = void 0;                                                                                          // 65
+      var key = void 0;                                                                                               // 66
                                                                                                                       //
-    // Return a concatenated array of all matching events if                                                          //
-    // the selector is a regular expression.                                                                          //
-    if (evt instanceof RegExp) {                                                                                      // 70
-      response = {};                                                                                                  // 71
-      for (key in events) {                                                                                           // 72
-        if (events.hasOwnProperty(key) && evt.test(key)) {                                                            // 73
-          response[key] = events[key];                                                                                // 74
-        }                                                                                                             // 75
-      }                                                                                                               // 76
-    } else {                                                                                                          // 77
-      response = events[evt] || (events[evt] = []);                                                                   // 79
-    }                                                                                                                 // 80
+      // Return a concatenated array of all matching events if                                                        // 68
+      // the selector is a regular expression.                                                                        // 69
+      if (evt instanceof RegExp) {                                                                                    // 70
+        response = {};                                                                                                // 71
+        for (key in meteorBabelHelpers.sanitizeForInObject(events)) {                                                 // 72
+          if (events.hasOwnProperty(key) && evt.test(key)) {                                                          // 73
+            response[key] = events[key];                                                                              // 74
+          }                                                                                                           // 75
+        }                                                                                                             // 76
+      } else {                                                                                                        // 77
+        response = events[evt] || (events[evt] = []);                                                                 // 79
+      }                                                                                                               // 80
                                                                                                                       //
-    return response;                                                                                                  // 82
-  };                                                                                                                  // 83
+      return response;                                                                                                // 82
+    }                                                                                                                 // 83
                                                                                                                       //
-  /**                                                                                                                 //
+    return getListeners;                                                                                              // 63
+  }();                                                                                                                // 63
+                                                                                                                      //
+  /**                                                                                                                 // 85
    * Takes a list of listener objects and flattens it into a list of listener functions.                              //
    *                                                                                                                  //
    * @param {Object[]} listeners Raw listener objects.                                                                //
    * @return {Function[]} Just the listener functions.                                                                //
    */                                                                                                                 //
-  proto.flattenListeners = function flattenListeners(listeners) {                                                     // 91
-    var flatListeners = [];                                                                                           // 92
-    var i = void 0;                                                                                                   // 93
+  proto.flattenListeners = function () {                                                                              // 91
+    function flattenListeners(listeners) {                                                                            // 91
+      var flatListeners = [];                                                                                         // 92
+      var i = void 0;                                                                                                 // 93
                                                                                                                       //
-    for (i = 0; i < listeners.length; i += 1) {                                                                       // 95
-      flatListeners.push(listeners[i].listener);                                                                      // 96
-    }                                                                                                                 // 97
+      for (i = 0; i < listeners.length; i += 1) {                                                                     // 95
+        flatListeners.push(listeners[i].listener);                                                                    // 96
+      }                                                                                                               // 97
                                                                                                                       //
-    return flatListeners;                                                                                             // 99
-  };                                                                                                                  // 100
+      return flatListeners;                                                                                           // 99
+    }                                                                                                                 // 100
                                                                                                                       //
-  /**                                                                                                                 //
+    return flattenListeners;                                                                                          // 91
+  }();                                                                                                                // 91
+                                                                                                                      //
+  /**                                                                                                                 // 102
    * Fetches the requested listeners via getListeners but will always return the results inside an object. This is mainly for internal use but others may find it useful.
    *                                                                                                                  //
    * @param {String|RegExp} evt Name of the event to return the listeners from.                                       //
    * @return {Object} All listener functions for an event in an object.                                               //
    */                                                                                                                 //
-  proto.getListenersAsObject = function getListenersAsObject(evt) {                                                   // 108
-    var listeners = this.getListeners(evt);                                                                           // 109
-    var response = void 0;                                                                                            // 110
+  proto.getListenersAsObject = function () {                                                                          // 108
+    function getListenersAsObject(evt) {                                                                              // 108
+      var listeners = this.getListeners(evt);                                                                         // 109
+      var response = void 0;                                                                                          // 110
                                                                                                                       //
-    if (listeners instanceof Array) {                                                                                 // 112
-      response = {};                                                                                                  // 113
-      response[evt] = listeners;                                                                                      // 114
-    }                                                                                                                 // 115
+      if (listeners instanceof Array) {                                                                               // 112
+        response = {};                                                                                                // 113
+        response[evt] = listeners;                                                                                    // 114
+      }                                                                                                               // 115
                                                                                                                       //
-    return response || listeners;                                                                                     // 117
-  };                                                                                                                  // 118
+      return response || listeners;                                                                                   // 117
+    }                                                                                                                 // 118
                                                                                                                       //
-  /**                                                                                                                 //
+    return getListenersAsObject;                                                                                      // 108
+  }();                                                                                                                // 108
+                                                                                                                      //
+  /**                                                                                                                 // 120
    * Adds a listener function to the specified event.                                                                 //
    * The listener will not be added if it is a duplicate.                                                             //
    * If the listener returns true then it will be removed after it is called.                                         //
@@ -3405,29 +3421,33 @@ var _typeof;module.import('babel-runtime/helpers/typeof',{"default":function(v){
    * @param {Function} listener Method to be called when the event is emitted. If the function returns true then it will be removed after calling.
    * @return {Object} Current instance of EventEmitter for chaining.                                                  //
    */                                                                                                                 //
-  proto.addListener = function addListener(evt, listener) {                                                           // 130
-    var listeners = this.getListenersAsObject(evt);                                                                   // 131
-    var listenerIsWrapped = (typeof listener === 'undefined' ? 'undefined' : _typeof(listener)) === 'object';         // 132
-    var key = void 0;                                                                                                 // 133
+  proto.addListener = function () {                                                                                   // 130
+    function addListener(evt, listener) {                                                                             // 130
+      var listeners = this.getListenersAsObject(evt);                                                                 // 131
+      var listenerIsWrapped = (typeof listener === 'undefined' ? 'undefined' : _typeof(listener)) === 'object';       // 132
+      var key = void 0;                                                                                               // 133
                                                                                                                       //
-    for (key in listeners) {                                                                                          // 135
-      if (listeners.hasOwnProperty(key) && indexOfListener(listeners[key], listener) === -1) {                        // 136
-        listeners[key].push(listenerIsWrapped ? listener : {                                                          // 137
-          listener: listener,                                                                                         // 138
-          once: false                                                                                                 // 139
-        });                                                                                                           // 137
-      }                                                                                                               // 141
-    }                                                                                                                 // 142
+      for (key in meteorBabelHelpers.sanitizeForInObject(listeners)) {                                                // 135
+        if (listeners.hasOwnProperty(key) && indexOfListener(listeners[key], listener) === -1) {                      // 136
+          listeners[key].push(listenerIsWrapped ? listener : {                                                        // 137
+            listener: listener,                                                                                       // 138
+            once: false                                                                                               // 139
+          });                                                                                                         // 137
+        }                                                                                                             // 141
+      }                                                                                                               // 142
                                                                                                                       //
-    return this;                                                                                                      // 144
-  };                                                                                                                  // 145
+      return this;                                                                                                    // 144
+    }                                                                                                                 // 145
                                                                                                                       //
-  /**                                                                                                                 //
+    return addListener;                                                                                               // 130
+  }();                                                                                                                // 130
+                                                                                                                      //
+  /**                                                                                                                 // 147
    * Alias of addListener                                                                                             //
    */                                                                                                                 //
   proto.on = alias('addListener');                                                                                    // 150
                                                                                                                       //
-  /**                                                                                                                 //
+  /**                                                                                                                 // 152
    * Semi-alias of addListener. It will add a listener that will be                                                   //
    * automatically removed after its first execution.                                                                 //
    *                                                                                                                  //
@@ -3435,44 +3455,56 @@ var _typeof;module.import('babel-runtime/helpers/typeof',{"default":function(v){
    * @param {Function} listener Method to be called when the event is emitted. If the function returns true then it will be removed after calling.
    * @return {Object} Current instance of EventEmitter for chaining.                                                  //
    */                                                                                                                 //
-  proto.addOnceListener = function addOnceListener(evt, listener) {                                                   // 160
-    return this.addListener(evt, {                                                                                    // 161
-      listener: listener,                                                                                             // 162
-      once: true                                                                                                      // 163
-    });                                                                                                               // 161
-  };                                                                                                                  // 165
+  proto.addOnceListener = function () {                                                                               // 160
+    function addOnceListener(evt, listener) {                                                                         // 160
+      return this.addListener(evt, {                                                                                  // 161
+        listener: listener,                                                                                           // 162
+        once: true                                                                                                    // 163
+      });                                                                                                             // 161
+    }                                                                                                                 // 165
                                                                                                                       //
-  /**                                                                                                                 //
+    return addOnceListener;                                                                                           // 160
+  }();                                                                                                                // 160
+                                                                                                                      //
+  /**                                                                                                                 // 167
    * Alias of addOnceListener.                                                                                        //
    */                                                                                                                 //
   proto.once = alias('addOnceListener');                                                                              // 170
                                                                                                                       //
-  /**                                                                                                                 //
+  /**                                                                                                                 // 172
    * Defines an event name. This is required if you want to use a regex to add a listener to multiple events at once. If you don't do this then how do you expect it to know what event to add to? Should it just add to every possible match for a regex? No. That is scary and bad.
    * You need to tell it what event names should be matched by a regex.                                               //
    *                                                                                                                  //
    * @param {String} evt Name of the event to create.                                                                 //
    * @return {Object} Current instance of EventEmitter for chaining.                                                  //
    */                                                                                                                 //
-  proto.defineEvent = function defineEvent(evt) {                                                                     // 179
-    this.getListeners(evt);                                                                                           // 180
-    return this;                                                                                                      // 181
-  };                                                                                                                  // 182
+  proto.defineEvent = function () {                                                                                   // 179
+    function defineEvent(evt) {                                                                                       // 179
+      this.getListeners(evt);                                                                                         // 180
+      return this;                                                                                                    // 181
+    }                                                                                                                 // 182
                                                                                                                       //
-  /**                                                                                                                 //
+    return defineEvent;                                                                                               // 179
+  }();                                                                                                                // 179
+                                                                                                                      //
+  /**                                                                                                                 // 184
    * Uses defineEvent to define multiple events.                                                                      //
    *                                                                                                                  //
    * @param {String[]} evts An array of event names to define.                                                        //
    * @return {Object} Current instance of EventEmitter for chaining.                                                  //
    */                                                                                                                 //
-  proto.defineEvents = function defineEvents(evts) {                                                                  // 190
-    for (var i = 0; i < evts.length; i += 1) {                                                                        // 191
-      this.defineEvent(evts[i]);                                                                                      // 192
-    }                                                                                                                 // 193
-    return this;                                                                                                      // 194
-  };                                                                                                                  // 195
+  proto.defineEvents = function () {                                                                                  // 190
+    function defineEvents(evts) {                                                                                     // 190
+      for (var i = 0; i < evts.length; i += 1) {                                                                      // 191
+        this.defineEvent(evts[i]);                                                                                    // 192
+      }                                                                                                               // 193
+      return this;                                                                                                    // 194
+    }                                                                                                                 // 195
                                                                                                                       //
-  /**                                                                                                                 //
+    return defineEvents;                                                                                              // 190
+  }();                                                                                                                // 190
+                                                                                                                      //
+  /**                                                                                                                 // 197
    * Removes a listener function from the specified event.                                                            //
    * When passed a regular expression as the event name, it will remove the listener from all events that match it.   //
    *                                                                                                                  //
@@ -3480,30 +3512,34 @@ var _typeof;module.import('babel-runtime/helpers/typeof',{"default":function(v){
    * @param {Function} listener Method to remove from the event.                                                      //
    * @return {Object} Current instance of EventEmitter for chaining.                                                  //
    */                                                                                                                 //
-  proto.removeListener = function removeListener(evt, listener) {                                                     // 205
-    var listeners = this.getListenersAsObject(evt);                                                                   // 206
-    var index = void 0;                                                                                               // 207
-    var key = void 0;                                                                                                 // 208
+  proto.removeListener = function () {                                                                                // 205
+    function removeListener(evt, listener) {                                                                          // 205
+      var listeners = this.getListenersAsObject(evt);                                                                 // 206
+      var index = void 0;                                                                                             // 207
+      var key = void 0;                                                                                               // 208
                                                                                                                       //
-    for (key in listeners) {                                                                                          // 210
-      if (listeners.hasOwnProperty(key)) {                                                                            // 211
-        index = indexOfListener(listeners[key], listener);                                                            // 212
+      for (key in meteorBabelHelpers.sanitizeForInObject(listeners)) {                                                // 210
+        if (listeners.hasOwnProperty(key)) {                                                                          // 211
+          index = indexOfListener(listeners[key], listener);                                                          // 212
                                                                                                                       //
-        if (index !== -1) {                                                                                           // 214
-          listeners[key].splice(index, 1);                                                                            // 215
-        }                                                                                                             // 216
-      }                                                                                                               // 217
-    }                                                                                                                 // 218
+          if (index !== -1) {                                                                                         // 214
+            listeners[key].splice(index, 1);                                                                          // 215
+          }                                                                                                           // 216
+        }                                                                                                             // 217
+      }                                                                                                               // 218
                                                                                                                       //
-    return this;                                                                                                      // 220
-  };                                                                                                                  // 221
+      return this;                                                                                                    // 220
+    }                                                                                                                 // 221
                                                                                                                       //
-  /**                                                                                                                 //
+    return removeListener;                                                                                            // 205
+  }();                                                                                                                // 205
+                                                                                                                      //
+  /**                                                                                                                 // 223
    * Alias of removeListener                                                                                          //
    */                                                                                                                 //
   proto.off = alias('removeListener');                                                                                // 226
                                                                                                                       //
-  /**                                                                                                                 //
+  /**                                                                                                                 // 228
    * Adds listeners in bulk using the manipulateListeners method.                                                     //
    * If you pass an object as the second argument you can add to multiple events at once. The object should contain key value pairs of events and listeners or listener arrays. You can also pass it an event name and an array of listeners to be added.
    * You can also pass it a regular expression to add the array of listeners to all events that match it.             //
@@ -3513,12 +3549,16 @@ var _typeof;module.import('babel-runtime/helpers/typeof',{"default":function(v){
    * @param {Function[]} [listeners] An optional array of listener functions to add.                                  //
    * @return {Object} Current instance of EventEmitter for chaining.                                                  //
    */                                                                                                                 //
-  proto.addListeners = function addListeners(evt, listeners) {                                                        // 238
-    // Pass through to manipulateListeners                                                                            //
-    return this.manipulateListeners(false, evt, listeners);                                                           // 240
-  };                                                                                                                  // 241
+  proto.addListeners = function () {                                                                                  // 238
+    function addListeners(evt, listeners) {                                                                           // 238
+      // Pass through to manipulateListeners                                                                          // 239
+      return this.manipulateListeners(false, evt, listeners);                                                         // 240
+    }                                                                                                                 // 241
                                                                                                                       //
-  /**                                                                                                                 //
+    return addListeners;                                                                                              // 238
+  }();                                                                                                                // 238
+                                                                                                                      //
+  /**                                                                                                                 // 243
    * Removes listeners in bulk using the manipulateListeners method.                                                  //
    * If you pass an object as the second argument you can remove from multiple events at once. The object should contain key value pairs of events and listeners or listener arrays.
    * You can also pass it an event name and an array of listeners to be removed.                                      //
@@ -3528,12 +3568,16 @@ var _typeof;module.import('babel-runtime/helpers/typeof',{"default":function(v){
    * @param {Function[]} [listeners] An optional array of listener functions to remove.                               //
    * @return {Object} Current instance of EventEmitter for chaining.                                                  //
    */                                                                                                                 //
-  proto.removeListeners = function removeListeners(evt, listeners) {                                                  // 253
-    // Pass through to manipulateListeners                                                                            //
-    return this.manipulateListeners(true, evt, listeners);                                                            // 255
-  };                                                                                                                  // 256
+  proto.removeListeners = function () {                                                                               // 253
+    function removeListeners(evt, listeners) {                                                                        // 253
+      // Pass through to manipulateListeners                                                                          // 254
+      return this.manipulateListeners(true, evt, listeners);                                                          // 255
+    }                                                                                                                 // 256
                                                                                                                       //
-  /**                                                                                                                 //
+    return removeListeners;                                                                                           // 253
+  }();                                                                                                                // 253
+                                                                                                                      //
+  /**                                                                                                                 // 258
    * Edits listeners in bulk. The addListeners and removeListeners methods both use this to do their job. You should really use those instead, this is a little lower level.
    * The first argument will determine if the listeners are removed (true) or added (false).                          //
    * If you pass an object as the second argument you can add/remove from multiple events at once. The object should contain key value pairs of events and listeners or listener arrays.
@@ -3545,39 +3589,43 @@ var _typeof;module.import('babel-runtime/helpers/typeof',{"default":function(v){
    * @param {Function[]} [listeners] An optional array of listener functions to add/remove.                           //
    * @return {Object} Current instance of EventEmitter for chaining.                                                  //
    */                                                                                                                 //
-  proto.manipulateListeners = function manipulateListeners(remove, evt, listeners) {                                  // 270
-    var i = void 0;                                                                                                   // 271
-    var value = void 0;                                                                                               // 272
-    var single = remove ? this.removeListener : this.addListener;                                                     // 273
-    var multiple = remove ? this.removeListeners : this.addListeners;                                                 // 274
+  proto.manipulateListeners = function () {                                                                           // 270
+    function manipulateListeners(remove, evt, listeners) {                                                            // 270
+      var i = void 0;                                                                                                 // 271
+      var value = void 0;                                                                                             // 272
+      var single = remove ? this.removeListener : this.addListener;                                                   // 273
+      var multiple = remove ? this.removeListeners : this.addListeners;                                               // 274
                                                                                                                       //
-    // If evt is an object then pass each of its properties to this method                                            //
-    if ((typeof evt === 'undefined' ? 'undefined' : _typeof(evt)) === 'object' && !(evt instanceof RegExp)) {         // 277
-      for (i in evt) {                                                                                                // 278
-        if (evt.hasOwnProperty(i) && (value = evt[i])) {                                                              // 279
-          // Pass the single listener straight through to the singular method                                         //
-          if (typeof value === 'function') {                                                                          // 281
-            single.call(this, i, value);                                                                              // 282
-          } else {                                                                                                    // 283
-            // Otherwise pass back to the multiple function                                                           //
-            multiple.call(this, i, value);                                                                            // 286
-          }                                                                                                           // 287
-        }                                                                                                             // 288
-      }                                                                                                               // 289
-    } else {                                                                                                          // 290
-      // So evt must be a string                                                                                      //
-      // And listeners must be an array of listeners                                                                  //
-      // Loop over it and pass each one to the multiple method                                                        //
-      i = listeners.length;                                                                                           // 295
-      while (i--) {                                                                                                   // 296
-        single.call(this, evt, listeners[i]);                                                                         // 297
-      }                                                                                                               // 298
-    }                                                                                                                 // 299
+      // If evt is an object then pass each of its properties to this method                                          // 276
+      if ((typeof evt === 'undefined' ? 'undefined' : _typeof(evt)) === 'object' && !(evt instanceof RegExp)) {       // 277
+        for (i in meteorBabelHelpers.sanitizeForInObject(evt)) {                                                      // 278
+          if (evt.hasOwnProperty(i) && (value = evt[i])) {                                                            // 279
+            // Pass the single listener straight through to the singular method                                       // 280
+            if (typeof value === 'function') {                                                                        // 281
+              single.call(this, i, value);                                                                            // 282
+            } else {                                                                                                  // 283
+              // Otherwise pass back to the multiple function                                                         // 285
+              multiple.call(this, i, value);                                                                          // 286
+            }                                                                                                         // 287
+          }                                                                                                           // 288
+        }                                                                                                             // 289
+      } else {                                                                                                        // 290
+        // So evt must be a string                                                                                    // 292
+        // And listeners must be an array of listeners                                                                // 293
+        // Loop over it and pass each one to the multiple method                                                      // 294
+        i = listeners.length;                                                                                         // 295
+        while (i--) {                                                                                                 // 296
+          single.call(this, evt, listeners[i]);                                                                       // 297
+        }                                                                                                             // 298
+      }                                                                                                               // 299
                                                                                                                       //
-    return this;                                                                                                      // 301
-  };                                                                                                                  // 302
+      return this;                                                                                                    // 301
+    }                                                                                                                 // 302
                                                                                                                       //
-  /**                                                                                                                 //
+    return manipulateListeners;                                                                                       // 270
+  }();                                                                                                                // 270
+                                                                                                                      //
+  /**                                                                                                                 // 304
    * Removes all listeners from a specified event.                                                                    //
    * If you do not specify an event then all listeners will be removed.                                               //
    * That means every event will be emptied.                                                                          //
@@ -3586,38 +3634,42 @@ var _typeof;module.import('babel-runtime/helpers/typeof',{"default":function(v){
    * @param {String|RegExp} [evt] Optional name of the event to remove all listeners for. Will remove from every event if not passed.
    * @return {Object} Current instance of EventEmitter for chaining.                                                  //
    */                                                                                                                 //
-  proto.removeEvent = function removeEvent(evt) {                                                                     // 313
-    var type = typeof evt === 'undefined' ? 'undefined' : _typeof(evt);                                               // 314
-    var events = this._getEvents();                                                                                   // 315
-    var key = void 0;                                                                                                 // 316
+  proto.removeEvent = function () {                                                                                   // 313
+    function removeEvent(evt) {                                                                                       // 313
+      var type = typeof evt === 'undefined' ? 'undefined' : _typeof(evt);                                             // 314
+      var events = this._getEvents();                                                                                 // 315
+      var key = void 0;                                                                                               // 316
                                                                                                                       //
-    // Remove different things depending on the state of evt                                                          //
-    if (type === 'string') {                                                                                          // 319
-      // Remove all listeners for the specified event                                                                 //
-      delete events[evt];                                                                                             // 321
-    } else if (evt instanceof RegExp) {                                                                               // 322
-      // Remove all events matching the regex.                                                                        //
-      for (key in events) {                                                                                           // 325
-        if (events.hasOwnProperty(key) && evt.test(key)) {                                                            // 326
-          delete events[key];                                                                                         // 327
-        }                                                                                                             // 328
-      }                                                                                                               // 329
-    } else {                                                                                                          // 330
-      // Remove all listeners in all events                                                                           //
-      delete this._events;                                                                                            // 333
-    }                                                                                                                 // 334
+      // Remove different things depending on the state of evt                                                        // 318
+      if (type === 'string') {                                                                                        // 319
+        // Remove all listeners for the specified event                                                               // 320
+        delete events[evt];                                                                                           // 321
+      } else if (evt instanceof RegExp) {                                                                             // 322
+        // Remove all events matching the regex.                                                                      // 324
+        for (key in meteorBabelHelpers.sanitizeForInObject(events)) {                                                 // 325
+          if (events.hasOwnProperty(key) && evt.test(key)) {                                                          // 326
+            delete events[key];                                                                                       // 327
+          }                                                                                                           // 328
+        }                                                                                                             // 329
+      } else {                                                                                                        // 330
+        // Remove all listeners in all events                                                                         // 332
+        delete this._events;                                                                                          // 333
+      }                                                                                                               // 334
                                                                                                                       //
-    return this;                                                                                                      // 336
-  };                                                                                                                  // 337
+      return this;                                                                                                    // 336
+    }                                                                                                                 // 337
                                                                                                                       //
-  /**                                                                                                                 //
+    return removeEvent;                                                                                               // 313
+  }();                                                                                                                // 313
+                                                                                                                      //
+  /**                                                                                                                 // 339
    * Alias of removeEvent.                                                                                            //
    *                                                                                                                  //
    * Added to mirror the node API.                                                                                    //
    */                                                                                                                 //
   proto.removeAllListeners = alias('removeEvent');                                                                    // 344
                                                                                                                       //
-  /**                                                                                                                 //
+  /**                                                                                                                 // 346
    * Emits an event of your choice.                                                                                   //
    * When emitted, every listener attached to that event will be executed.                                            //
    * If you pass the optional argument array then those arguments will be passed to every listener upon execution.    //
@@ -3629,46 +3681,50 @@ var _typeof;module.import('babel-runtime/helpers/typeof',{"default":function(v){
    * @param {Array} [args] Optional array of arguments to be passed to each listener.                                 //
    * @return {Object} Current instance of EventEmitter for chaining.                                                  //
    */                                                                                                                 //
-  proto.emitEvent = function emitEvent(evt, args) {                                                                   // 358
-    var listenersMap = this.getListenersAsObject(evt);                                                                // 359
-    var listeners = void 0;                                                                                           // 360
-    var listener = void 0;                                                                                            // 361
-    var i = void 0;                                                                                                   // 362
-    var key = void 0;                                                                                                 // 363
-    var response = void 0;                                                                                            // 364
+  proto.emitEvent = function () {                                                                                     // 358
+    function emitEvent(evt, args) {                                                                                   // 358
+      var listenersMap = this.getListenersAsObject(evt);                                                              // 359
+      var listeners = void 0;                                                                                         // 360
+      var listener = void 0;                                                                                          // 361
+      var i = void 0;                                                                                                 // 362
+      var key = void 0;                                                                                               // 363
+      var response = void 0;                                                                                          // 364
                                                                                                                       //
-    for (key in listenersMap) {                                                                                       // 366
-      if (listenersMap.hasOwnProperty(key)) {                                                                         // 367
-        listeners = listenersMap[key].slice(0);                                                                       // 368
-        i = listeners.length;                                                                                         // 369
+      for (key in meteorBabelHelpers.sanitizeForInObject(listenersMap)) {                                             // 366
+        if (listenersMap.hasOwnProperty(key)) {                                                                       // 367
+          listeners = listenersMap[key].slice(0);                                                                     // 368
+          i = listeners.length;                                                                                       // 369
                                                                                                                       //
-        while (i--) {                                                                                                 // 371
-          // If the listener returns true then it shall be removed from the event                                     //
-          // The function is executed either with a basic call or an apply if there is an args array                  //
-          listener = listeners[i];                                                                                    // 374
+          while (i--) {                                                                                               // 371
+            // If the listener returns true then it shall be removed from the event                                   // 372
+            // The function is executed either with a basic call or an apply if there is an args array                // 373
+            listener = listeners[i];                                                                                  // 374
                                                                                                                       //
-          if (listener.once === true) {                                                                               // 376
-            this.removeListener(evt, listener.listener);                                                              // 377
-          }                                                                                                           // 378
+            if (listener.once === true) {                                                                             // 376
+              this.removeListener(evt, listener.listener);                                                            // 377
+            }                                                                                                         // 378
                                                                                                                       //
-          response = listener.listener.apply(this, args || []);                                                       // 380
+            response = listener.listener.apply(this, args || []);                                                     // 380
                                                                                                                       //
-          if (response === this._getOnceReturnValue()) {                                                              // 382
-            this.removeListener(evt, listener.listener);                                                              // 383
-          }                                                                                                           // 384
-        }                                                                                                             // 385
-      }                                                                                                               // 386
-    }                                                                                                                 // 387
+            if (response === this._getOnceReturnValue()) {                                                            // 382
+              this.removeListener(evt, listener.listener);                                                            // 383
+            }                                                                                                         // 384
+          }                                                                                                           // 385
+        }                                                                                                             // 386
+      }                                                                                                               // 387
                                                                                                                       //
-    return this;                                                                                                      // 389
-  };                                                                                                                  // 390
+      return this;                                                                                                    // 389
+    }                                                                                                                 // 390
                                                                                                                       //
-  /**                                                                                                                 //
+    return emitEvent;                                                                                                 // 358
+  }();                                                                                                                // 358
+                                                                                                                      //
+  /**                                                                                                                 // 392
    * Alias of emitEvent                                                                                               //
    */                                                                                                                 //
   proto.trigger = alias('emitEvent');                                                                                 // 395
                                                                                                                       //
-  /**                                                                                                                 //
+  /**                                                                                                                 // 397
    * Subtly different from emitEvent in that it will pass its arguments on to the listeners, as opposed to taking a single array of arguments to pass on.
    * As with emitEvent, you can pass a regex in place of the event name to emit to all events that match it.          //
    *                                                                                                                  //
@@ -3676,12 +3732,16 @@ var _typeof;module.import('babel-runtime/helpers/typeof',{"default":function(v){
    * @param {...*} Optional additional arguments to be passed to each listener.                                       //
    * @return {Object} Current instance of EventEmitter for chaining.                                                  //
    */                                                                                                                 //
-  proto.emit = function emit(evt) {                                                                                   // 405
-    var args = Array.prototype.slice.call(arguments, 1);                                                              // 406
-    return this.emitEvent(evt, args);                                                                                 // 407
-  };                                                                                                                  // 408
+  proto.emit = function () {                                                                                          // 405
+    function emit(evt) {                                                                                              // 405
+      var args = Array.prototype.slice.call(arguments, 1);                                                            // 406
+      return this.emitEvent(evt, args);                                                                               // 407
+    }                                                                                                                 // 408
                                                                                                                       //
-  /**                                                                                                                 //
+    return emit;                                                                                                      // 405
+  }();                                                                                                                // 405
+                                                                                                                      //
+  /**                                                                                                                 // 410
    * Sets the current value to check against when executing listeners. If a                                           //
    * listeners return value matches the one set here then it will be removed                                          //
    * after execution. This value defaults to true.                                                                    //
@@ -3689,12 +3749,16 @@ var _typeof;module.import('babel-runtime/helpers/typeof',{"default":function(v){
    * @param {*} value The new value to check for when executing listeners.                                            //
    * @return {Object} Current instance of EventEmitter for chaining.                                                  //
    */                                                                                                                 //
-  proto.setOnceReturnValue = function setOnceReturnValue(value) {                                                     // 418
-    this._onceReturnValue = value;                                                                                    // 419
-    return this;                                                                                                      // 420
-  };                                                                                                                  // 421
+  proto.setOnceReturnValue = function () {                                                                            // 418
+    function setOnceReturnValue(value) {                                                                              // 418
+      this._onceReturnValue = value;                                                                                  // 419
+      return this;                                                                                                    // 420
+    }                                                                                                                 // 421
                                                                                                                       //
-  /**                                                                                                                 //
+    return setOnceReturnValue;                                                                                        // 418
+  }();                                                                                                                // 418
+                                                                                                                      //
+  /**                                                                                                                 // 423
    * Fetches the current value to check against when executing listeners. If                                          //
    * the listeners return value matches this one then it should be removed                                            //
    * automatically. It will return true by default.                                                                   //
@@ -3702,35 +3766,47 @@ var _typeof;module.import('babel-runtime/helpers/typeof',{"default":function(v){
    * @return {*|Boolean} The current value to check for or the default, true.                                         //
    * @api private                                                                                                     //
    */                                                                                                                 //
-  proto._getOnceReturnValue = function _getOnceReturnValue() {                                                        // 431
-    if (this.hasOwnProperty('_onceReturnValue')) {                                                                    // 432
-      return this._onceReturnValue;                                                                                   // 433
-    } else {                                                                                                          // 434
-      return true;                                                                                                    // 436
-    }                                                                                                                 // 437
-  };                                                                                                                  // 438
+  proto._getOnceReturnValue = function () {                                                                           // 431
+    function _getOnceReturnValue() {                                                                                  // 431
+      if (this.hasOwnProperty('_onceReturnValue')) {                                                                  // 432
+        return this._onceReturnValue;                                                                                 // 433
+      } else {                                                                                                        // 434
+        return true;                                                                                                  // 436
+      }                                                                                                               // 437
+    }                                                                                                                 // 438
                                                                                                                       //
-  /**                                                                                                                 //
+    return _getOnceReturnValue;                                                                                       // 431
+  }();                                                                                                                // 431
+                                                                                                                      //
+  /**                                                                                                                 // 440
    * Fetches the events object and creates one if required.                                                           //
    *                                                                                                                  //
    * @return {Object} The events storage object.                                                                      //
    * @api private                                                                                                     //
    */                                                                                                                 //
-  proto._getEvents = function _getEvents() {                                                                          // 446
-    return this._events || (this._events = {});                                                                       // 447
-  };                                                                                                                  // 448
+  proto._getEvents = function () {                                                                                    // 446
+    function _getEvents() {                                                                                           // 446
+      return this._events || (this._events = {});                                                                     // 447
+    }                                                                                                                 // 448
                                                                                                                       //
-  /**                                                                                                                 //
+    return _getEvents;                                                                                                // 446
+  }();                                                                                                                // 446
+                                                                                                                      //
+  /**                                                                                                                 // 450
    * Reverts the global {@link EventEmitter} to its previous value and returns a reference to this version.           //
    *                                                                                                                  //
    * @return {Function} Non conflicting EventEmitter class.                                                           //
    */                                                                                                                 //
-  EventEmitter.noConflict = function noConflict() {                                                                   // 455
-    exports.EventEmitter = originalGlobalValue;                                                                       // 456
-    return EventEmitter;                                                                                              // 457
-  };                                                                                                                  // 458
+  EventEmitter.noConflict = function () {                                                                             // 455
+    function noConflict() {                                                                                           // 455
+      exports.EventEmitter = originalGlobalValue;                                                                     // 456
+      return EventEmitter;                                                                                            // 457
+    }                                                                                                                 // 458
                                                                                                                       //
-  // Expose the class                                                                                                 //
+    return noConflict;                                                                                                // 455
+  }();                                                                                                                // 455
+                                                                                                                      //
+  // Expose the class                                                                                                 // 460
                                                                                                                       // 461
 }).call(this);                                                                                                        // 462
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

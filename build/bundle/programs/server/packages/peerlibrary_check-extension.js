@@ -113,5 +113,3 @@ if (typeof Package === 'undefined') Package = {};
 Package['peerlibrary:check-extension'] = {};
 
 })();
-
-//# sourceMappingURL=peerlibrary_check-extension.js.map

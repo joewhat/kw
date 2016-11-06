@@ -346,5 +346,3 @@ if (typeof Package === 'undefined') Package = {};
 });
 
 })();
-
-//# sourceMappingURL=kadira_flow-router.js.map

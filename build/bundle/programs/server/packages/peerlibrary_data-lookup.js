@@ -99,5 +99,3 @@ if (typeof Package === 'undefined') Package = {};
 });
 
 })();
-
-//# sourceMappingURL=peerlibrary_data-lookup.js.map

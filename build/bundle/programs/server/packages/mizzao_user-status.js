@@ -29,23 +29,22 @@ var __coffeescriptShare, UserStatus, StatusInternals;
                                                                                                               //
 __coffeescriptShare = typeof __coffeescriptShare === 'object' ? __coffeescriptShare : {}; var share = __coffeescriptShare;
                                                                                                               //
-/*                                                                                                            // 1
+/*                                                                                                            //
   Apparently, the new api.export takes care of issues here. No need to attach to global namespace.            //
   See http://shiggyenterprises.wordpress.com/2013/09/09/meteor-packages-in-coffeescript-0-6-5/                //
                                                                                                               //
   We may want to make UserSessions a server collection to take advantage of indices.                          //
   Will implement if someone has enough online users to warrant it.                                            //
  */                                                                                                           //
-var UserConnections, activeSession, addSession, idleSession, loginSession, onStartup, removeSession, statusEvents, tryLogoutSession;                             
+var UserConnections, activeSession, addSession, idleSession, loginSession, onStartup, removeSession, statusEvents, tryLogoutSession;
                                                                                                               //
-UserConnections = new Mongo.Collection("user_status_sessions", {                                              // 8
+UserConnections = new Mongo.Collection("user_status_sessions", {                                              //
   connection: null                                                                                            //
 });                                                                                                           //
                                                                                                               //
-statusEvents = new (Npm.require('events').EventEmitter)();                                                    // 10
+statusEvents = new (Npm.require('events').EventEmitter)();                                                    //
                                                                                                               //
-                                                                                                              //
-/*                                                                                                            // 12
+/*                                                                                                            //
   Multiplex login/logout events to status.online                                                              //
                                                                                                               //
   'online' field is "true" if user is online, and "false" otherwise                                           //
@@ -56,8 +55,8 @@ statusEvents = new (Npm.require('events').EventEmitter)();                      
   - null if user is offline                                                                                   //
  */                                                                                                           //
                                                                                                               //
-statusEvents.on("connectionLogin", function(advice) {                                                         // 22
-  var conns, update;                                                                                          // 23
+statusEvents.on("connectionLogin", function (advice) {                                                        //
+  var conns, update;                                                                                          //
   update = {                                                                                                  //
     $set: {                                                                                                   //
       'status.online': true,                                                                                  //
@@ -71,7 +70,7 @@ statusEvents.on("connectionLogin", function(advice) {                           
   conns = UserConnections.find({                                                                              //
     userId: advice.userId                                                                                     //
   }).fetch();                                                                                                 //
-  if (!_.every(conns, function(c) {                                                                           //
+  if (!_.every(conns, function (c) {                                                                          //
     return c.idle;                                                                                            //
   })) {                                                                                                       //
     update.$set['status.idle'] = false;                                                                       //
@@ -80,10 +79,10 @@ statusEvents.on("connectionLogin", function(advice) {                           
     };                                                                                                        //
   }                                                                                                           //
   Meteor.users.update(advice.userId, update);                                                                 //
-});                                                                                                           // 22
+});                                                                                                           //
                                                                                                               //
-statusEvents.on("connectionLogout", function(advice) {                                                        // 45
-  var conns;                                                                                                  // 46
+statusEvents.on("connectionLogout", function (advice) {                                                       //
+  var conns;                                                                                                  //
   conns = UserConnections.find({                                                                              //
     userId: advice.userId                                                                                     //
   }).fetch();                                                                                                 //
@@ -97,11 +96,11 @@ statusEvents.on("connectionLogout", function(advice) {                          
         'status.lastActivity': null                                                                           //
       }                                                                                                       //
     });                                                                                                       //
-  } else if (_.every(conns, function(c) {                                                                     //
+  } else if (_.every(conns, function (c) {                                                                    //
     return c.idle;                                                                                            //
   })) {                                                                                                       //
                                                                                                               //
-    /*                                                                                                        // 56
+    /*                                                                                                        //
       All remaining connections are idle:                                                                     //
       - If the last active connection quit, then we should go idle with the most recent activity              //
                                                                                                               //
@@ -110,7 +109,7 @@ statusEvents.on("connectionLogout", function(advice) {                          
         This may result in a no-op so we can be smart and skip the update.                                    //
      */                                                                                                       //
     if (advice.lastActivity != null) {                                                                        //
-      return;                                                                                                 // 64
+      return;                                                                                                 //
     }                                                                                                         //
     Meteor.users.update(advice.userId, {                                                                      //
       $set: {                                                                                                 //
@@ -119,10 +118,9 @@ statusEvents.on("connectionLogout", function(advice) {                          
       }                                                                                                       //
     });                                                                                                       //
   }                                                                                                           //
-});                                                                                                           // 45
+});                                                                                                           //
                                                                                                               //
-                                                                                                              //
-/*                                                                                                            // 72
+/*                                                                                                            //
   Multiplex idle/active events to status.idle                                                                 //
   TODO: Hopefully this is quick because it's all in memory, but we can use indices if it turns out to be slow
                                                                                                               //
@@ -130,15 +128,15 @@ statusEvents.on("connectionLogout", function(advice) {                          
   It can probably be smoothed out.                                                                            //
  */                                                                                                           //
                                                                                                               //
-statusEvents.on("connectionIdle", function(advice) {                                                          // 79
-  var conns;                                                                                                  // 80
+statusEvents.on("connectionIdle", function (advice) {                                                         //
+  var conns;                                                                                                  //
   conns = UserConnections.find({                                                                              //
     userId: advice.userId                                                                                     //
   }).fetch();                                                                                                 //
-  if (!_.every(conns, function(c) {                                                                           //
+  if (!_.every(conns, function (c) {                                                                          //
     return c.idle;                                                                                            //
   })) {                                                                                                       //
-    return;                                                                                                   // 81
+    return;                                                                                                   //
   }                                                                                                           //
   Meteor.users.update(advice.userId, {                                                                        //
     $set: {                                                                                                   //
@@ -146,9 +144,9 @@ statusEvents.on("connectionIdle", function(advice) {                            
       'status.lastActivity': _.max(_.pluck(conns, "lastActivity"))                                            //
     }                                                                                                         //
   });                                                                                                         //
-});                                                                                                           // 79
+});                                                                                                           //
                                                                                                               //
-statusEvents.on("connectionActive", function(advice) {                                                        // 92
+statusEvents.on("connectionActive", function (advice) {                                                       //
   Meteor.users.update(advice.userId, {                                                                        //
     $set: {                                                                                                   //
       'status.idle': false                                                                                    //
@@ -157,9 +155,9 @@ statusEvents.on("connectionActive", function(advice) {                          
       'status.lastActivity': null                                                                             //
     }                                                                                                         //
   });                                                                                                         //
-});                                                                                                           // 92
+});                                                                                                           //
                                                                                                               //
-onStartup = function(selector) {                                                                              // 101
+onStartup = function onStartup(selector) {                                                                    //
   if (selector == null) {                                                                                     //
     selector = {};                                                                                            //
   }                                                                                                           //
@@ -174,23 +172,22 @@ onStartup = function(selector) {                                                
   }, {                                                                                                        //
     multi: true                                                                                               //
   });                                                                                                         //
-};                                                                                                            // 101
+};                                                                                                            //
                                                                                                               //
-                                                                                                              //
-/*                                                                                                            // 114
+/*                                                                                                            //
   Local session modifification functions - also used in testing                                               //
  */                                                                                                           //
                                                                                                               //
-addSession = function(connection) {                                                                           // 118
+addSession = function addSession(connection) {                                                                //
   UserConnections.upsert(connection.id, {                                                                     //
     $set: {                                                                                                   //
       ipAddr: connection.clientAddress,                                                                       //
       userAgent: connection.httpHeaders['user-agent']                                                         //
     }                                                                                                         //
   });                                                                                                         //
-};                                                                                                            // 118
+};                                                                                                            //
                                                                                                               //
-loginSession = function(connection, date, userId) {                                                           // 126
+loginSession = function loginSession(connection, date, userId) {                                              //
   UserConnections.upsert(connection.id, {                                                                     //
     $set: {                                                                                                   //
       userId: userId,                                                                                         //
@@ -204,17 +201,17 @@ loginSession = function(connection, date, userId) {                             
     userAgent: connection.httpHeaders['user-agent'],                                                          //
     loginTime: date                                                                                           //
   });                                                                                                         //
-};                                                                                                            // 126
+};                                                                                                            //
                                                                                                               //
-tryLogoutSession = function(connection, date) {                                                               // 142
-  var conn;                                                                                                   // 143
+tryLogoutSession = function tryLogoutSession(connection, date) {                                              //
+  var conn;                                                                                                   //
   if ((conn = UserConnections.findOne({                                                                       //
     _id: connection.id,                                                                                       //
     userId: {                                                                                                 //
       $exists: true                                                                                           //
     }                                                                                                         //
   })) == null) {                                                                                              //
-    return false;                                                                                             // 143
+    return false;                                                                                             //
   }                                                                                                           //
   UserConnections.upsert(connection.id, {                                                                     //
     $unset: {                                                                                                 //
@@ -228,14 +225,14 @@ tryLogoutSession = function(connection, date) {                                 
     lastActivity: conn.lastActivity,                                                                          //
     logoutTime: date                                                                                          //
   });                                                                                                         //
-};                                                                                                            // 142
+};                                                                                                            //
                                                                                                               //
-removeSession = function(connection, date) {                                                                  // 161
+removeSession = function removeSession(connection, date) {                                                    //
   tryLogoutSession(connection, date);                                                                         //
   UserConnections.remove(connection.id);                                                                      //
-};                                                                                                            // 161
+};                                                                                                            //
                                                                                                               //
-idleSession = function(connection, date, userId) {                                                            // 166
+idleSession = function idleSession(connection, date, userId) {                                                //
   UserConnections.update(connection.id, {                                                                     //
     $set: {                                                                                                   //
       idle: true,                                                                                             //
@@ -247,9 +244,9 @@ idleSession = function(connection, date, userId) {                              
     connectionId: connection.id,                                                                              //
     lastActivity: date                                                                                        //
   });                                                                                                         //
-};                                                                                                            // 166
+};                                                                                                            //
                                                                                                               //
-activeSession = function(connection, date, userId) {                                                          // 179
+activeSession = function activeSession(connection, date, userId) {                                            //
   UserConnections.update(connection.id, {                                                                     //
     $set: {                                                                                                   //
       idle: false                                                                                             //
@@ -263,57 +260,64 @@ activeSession = function(connection, date, userId) {                            
     connectionId: connection.id,                                                                              //
     lastActivity: date                                                                                        //
   });                                                                                                         //
-};                                                                                                            // 179
+};                                                                                                            //
                                                                                                               //
-                                                                                                              //
-/*                                                                                                            // 190
+/*                                                                                                            //
   Handlers for various client-side events                                                                     //
  */                                                                                                           //
                                                                                                               //
-Meteor.startup(onStartup);                                                                                    // 193
+Meteor.startup(onStartup);                                                                                    //
                                                                                                               //
-Meteor.onConnection(function(connection) {                                                                    // 196
+Meteor.onConnection(function (connection) {                                                                   //
   addSession(connection);                                                                                     //
-  return connection.onClose(function() {                                                                      //
+  return connection.onClose(function () {                                                                     //
     return removeSession(connection, new Date());                                                             //
   });                                                                                                         //
-});                                                                                                           // 196
+});                                                                                                           //
                                                                                                               //
-Accounts.onLogin(function(info) {                                                                             // 203
+Accounts.onLogin(function (info) {                                                                            //
   return loginSession(info.connection, new Date(), info.user._id);                                            //
-});                                                                                                           // 203
+});                                                                                                           //
                                                                                                               //
-Meteor.publish(null, function() {                                                                             // 208
+Meteor.publish(null, function () {                                                                            //
   if (this._session == null) {                                                                                //
-    return [];                                                                                                // 211
+    return [];                                                                                                //
   }                                                                                                           //
   if (this.userId == null) {                                                                                  //
     tryLogoutSession(this._session.connectionHandle, new Date());                                             //
   }                                                                                                           //
-  return [];                                                                                                  // 216
-});                                                                                                           // 208
-                                                                                                              //
-Meteor.methods({                                                                                              // 221
-  "user-status-idle": function(timestamp) {                                                                   //
-    var date;                                                                                                 // 223
-    check(timestamp, Match.OneOf(null, void 0, Date, Number));                                                //
-    date = timestamp != null ? new Date(timestamp) : new Date();                                              //
-    idleSession(this.connection, date, this.userId);                                                          //
-  },                                                                                                          //
-  "user-status-active": function(timestamp) {                                                                 //
-    var date;                                                                                                 // 230
-    check(timestamp, Match.OneOf(null, void 0, Date, Number));                                                //
-    date = timestamp != null ? new Date(timestamp) : new Date();                                              //
-    activeSession(this.connection, date, this.userId);                                                        //
-  }                                                                                                           //
+  return [];                                                                                                  //
 });                                                                                                           //
                                                                                                               //
-UserStatus = {                                                                                                // 240
+Meteor.methods({                                                                                              //
+  "user-status-idle": function () {                                                                           //
+    function userStatusIdle(timestamp) {                                                                      //
+      var date;                                                                                               //
+      check(timestamp, Match.OneOf(null, void 0, Date, Number));                                              //
+      date = timestamp != null ? new Date(timestamp) : new Date();                                            //
+      idleSession(this.connection, date, this.userId);                                                        //
+    }                                                                                                         //
+                                                                                                              //
+    return userStatusIdle;                                                                                    //
+  }(),                                                                                                        //
+  "user-status-active": function () {                                                                         //
+    function userStatusActive(timestamp) {                                                                    //
+      var date;                                                                                               //
+      check(timestamp, Match.OneOf(null, void 0, Date, Number));                                              //
+      date = timestamp != null ? new Date(timestamp) : new Date();                                            //
+      activeSession(this.connection, date, this.userId);                                                      //
+    }                                                                                                         //
+                                                                                                              //
+    return userStatusActive;                                                                                  //
+  }()                                                                                                         //
+});                                                                                                           //
+                                                                                                              //
+UserStatus = {                                                                                                //
   connections: UserConnections,                                                                               //
   events: statusEvents                                                                                        //
 };                                                                                                            //
                                                                                                               //
-StatusInternals = {                                                                                           // 245
+StatusInternals = {                                                                                           //
   onStartup: onStartup,                                                                                       //
   addSession: addSession,                                                                                     //
   removeSession: removeSession,                                                                               //
@@ -322,7 +326,6 @@ StatusInternals = {                                                             
   idleSession: idleSession,                                                                                   //
   activeSession: activeSession                                                                                //
 };                                                                                                            //
-                                                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }).call(this);
@@ -339,5 +342,3 @@ if (typeof Package === 'undefined') Package = {};
 });
 
 })();
-
-//# sourceMappingURL=mizzao_user-status.js.map

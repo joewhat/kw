@@ -3,21 +3,21 @@
 meteor build /vagrant/build --directory --architecture os.linux.x86_64
 
 # npm install inside build
-cd build/bundle/programs/server; npm install
+cd /home/startuser/kwb/build/bundle/programs/server; npm install
 
 # run build on local dev
-PORT=3000 MONGO_URL=mongodb://localhost:27017/documentApp ROOT_URL=http://localhost:3000 node /vagrant/build/bundle/main.js
+PORT=3000 MONGO_URL=mongodb://localhost:27017/kwb ROOT_URL=http://localhost:3000 node /vagrant/build/bundle/main.js
 
 # run build on server
-echo "export MONGO_URL=mongodb://localhost:27017/documentApp" >> ~/.bashrc
+echo "export MONGO_URL=mongodb://localhost:27017/kwb" >> ~/.bashrc
 echo "export PORT=3000" >> ~/.bashrc
-echo "export ROOT_URL=http://10.0.0.60:3000" >> ~/.bashrc
+echo "export ROOT_URL=http://10.0.0.40:3000" >> ~/.bashrc
 
 # run with node
-node /home/startuser/documentappdev/build/bundle/main.js
+node /home/startuser/kwb/build/bundle/main.js
 
 # OR run persistent with pm2 ($ sudo npm install -g pm2)
-$ pm2 start /home/startuser/documentappdev/build/bundle/main.js
+$ pm2 start /home/startuser/kwb/build/bundle/main.js
 
 # pm2 commands
 $ pm2 list
@@ -26,4 +26,4 @@ $ pm2 stop <process name>
 
 
 # Alternative
-PORT=3000 MONGO_URL=mongodb://localhost:27017/documentApp ROOT_URL=http://10.0.0.60:3000 node /home/startuser/documentappdev/build/bundle/main.js
+PORT=3000 MONGO_URL=mongodb://localhost:27017/kwb ROOT_URL=http://10.0.0.40:3000 node /home/startuser/documentappdev/build/bundle/main.js

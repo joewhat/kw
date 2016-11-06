@@ -269,5 +269,3 @@ if (typeof Package === 'undefined') Package = {};
 Package['peerlibrary:subscription-data'] = {};
 
 })();
-
-//# sourceMappingURL=peerlibrary_subscription-data.js.map

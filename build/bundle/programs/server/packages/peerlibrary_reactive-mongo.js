@@ -149,5 +149,3 @@ if (typeof Package === 'undefined') Package = {};
 Package['peerlibrary:reactive-mongo'] = {};
 
 })();
-
-//# sourceMappingURL=peerlibrary_reactive-mongo.js.map

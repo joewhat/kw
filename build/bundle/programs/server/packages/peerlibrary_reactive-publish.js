@@ -393,5 +393,3 @@ if (typeof Package === 'undefined') Package = {};
 Package['peerlibrary:reactive-publish'] = {};
 
 })();
-
-//# sourceMappingURL=peerlibrary_reactive-publish.js.map

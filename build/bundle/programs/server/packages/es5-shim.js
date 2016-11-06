@@ -2163,5 +2163,3 @@ if (typeof Package === 'undefined') Package = {};
 Package['es5-shim'] = exports;
 
 })();
-
-//# sourceMappingURL=es5-shim.js.map

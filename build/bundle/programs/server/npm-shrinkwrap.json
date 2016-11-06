@@ -18,9 +18,9 @@
       "resolved": "https://registry.npmjs.org/fibers/-/fibers-1.0.15.tgz"
     },
     "meteor-promise": {
-      "version": "0.7.2",
-      "from": "meteor-promise@0.7.2",
-      "resolved": "https://registry.npmjs.org/meteor-promise/-/meteor-promise-0.7.2.tgz"
+      "version": "0.8.0",
+      "from": "meteor-promise@0.8.0",
+      "resolved": "https://registry.npmjs.org/meteor-promise/-/meteor-promise-0.8.0.tgz"
     },
     "promise": {
       "version": "7.1.1",

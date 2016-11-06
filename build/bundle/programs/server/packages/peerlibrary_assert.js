@@ -44,5 +44,3 @@ if (typeof Package === 'undefined') Package = {};
 });
 
 })();
-
-//# sourceMappingURL=peerlibrary_assert.js.map
