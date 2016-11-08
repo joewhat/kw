@@ -1,3 +1,33 @@
+UNREAD
+  - evt en klon collection til hver dis som har unread meta på hver dis for
+  hver enkelt bruger
+
+  - bruger i dis ligger i normal dis collection
+
+
+  NY BESKED I DIS
+    kig efter hvilke bruger er i dis,
+    skriv unread i disKlonMeta til alle andre brugere,
+    add til total unread som ligger på bruger collection
+
+  DISPLAY UNREAD på dis main
+    for hver dis kig i disKlonMeta under current user og display unread
+
+    (hvordan kan man merge de to calls så det kan gøre i each
+      evt en helper der bliver kaldt fra blaze med input this._id
+    )
+
+
+
+
+
+
+
+
+
+
+- - - - -
+
 todo:
     -'remove-user-from-discussion' virker ikke ordenligt - den skal på en eller anden måde have discussionId med fra kill window og logout
          - put en last activeDiscussionId ind i discussionUserMeta

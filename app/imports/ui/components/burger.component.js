@@ -22,6 +22,12 @@ Template.burgerMenuTemplate.events({
         $('.burger-menu-content').hide();
         $('.burger-menu-icon').show();
     },
+
+    'click .log-out'(event) {
+      Meteor.logout(function(err) {
+        console.log('user logged out!');
+      });
+    },
 });
 
 

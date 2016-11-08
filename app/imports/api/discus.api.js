@@ -102,6 +102,7 @@ Meteor.publish('comments.collection', function (id, limit = 5) {
             const unreadComments = DiscussionUserMeta.find( { username : data.username, "unreadDiscussionMeta.discussionId" : data.discussionId}, {fields: { "unreadDiscussionMeta.$": 1}}).fetch();
             return unreadComments[0].unreadDiscussionMeta[0].new;
         },
+
         'update-active-discussionId'(data){
             check( data, {
               username: String,
@@ -112,6 +113,7 @@ Meteor.publish('comments.collection', function (id, limit = 5) {
                 {$set:{"activeDiscussionId": data.discussionId}}
             );
         },
+        
         'clear-unread-comment-for-discussionId'(data){
             check( data, {
               username: String,
@@ -123,6 +125,7 @@ Meteor.publish('comments.collection', function (id, limit = 5) {
                 {$set:{"unreadDiscussionMeta.$.unReadCount":0}}
             );
         },
+
         'get-unread-comment-for-discussionId'(data){
             check( data, {
               username: String,
@@ -193,6 +196,7 @@ Meteor.publish('comments.collection', function (id, limit = 5) {
               });
             }
         },
+
         'add-user-to-discussion'(data){
             check( data, {
               username: String,
@@ -210,6 +214,7 @@ Meteor.publish('comments.collection', function (id, limit = 5) {
             );
 
         },
+
         'remove-user-from-discussion'(data){
             check( data, {
               username: String,
@@ -223,6 +228,7 @@ Meteor.publish('comments.collection', function (id, limit = 5) {
             //     true
             // );
         },
+
         'comments-insert'(data) {
             check( data, {
               comment: String,
@@ -274,6 +280,7 @@ Meteor.publish('comments.collection', function (id, limit = 5) {
                 });
             });
         },
+
         'delete-from-discussionUserMeta'(data) {
             check( data, {
               comment: String,
@@ -289,6 +296,7 @@ Meteor.publish('comments.collection', function (id, limit = 5) {
 
             // UserUnread.remove();
         },
+
         'create-user-in-discussionUserMeta'(data) {
             check( data, {
                     username : String

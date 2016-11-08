@@ -7,7 +7,12 @@ body {
   font-size: $font-size-reg;
    -webkit-font-smoothing: antialiased;
    background-color: $grey-bg;
+  // position: fixed;
+  // overflow: auto;
+  // -webkit-overflow-scrolling: touch;
 }
+
+
 
 input {
 font-family: 'Roboto Mono', sans-serif;

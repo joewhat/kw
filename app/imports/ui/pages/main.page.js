@@ -228,6 +228,10 @@ Template.mainPageTemplate.helpers({
     return Template.instance().subRdy.get();
   },
 
+  test(input) {
+    console.log('input: ', input);
+  },
+
   // disListNotEmpty : function() {
   //   const searchQuery = Session.get('mainDis:searchQuery');
   //   let query = {};
