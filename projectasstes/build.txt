@@ -23,6 +23,8 @@ $ node /home/startuser/kwb/build/bundle/main.js
 
 # OR run persistent with pm2 ($ sudo npm install -g pm2)
 $ pm2 start /home/startuser/kwb/build/bundle/main.js
+# run at startup (start the process and run pm2 startup)
+$ pm2 startup
 
 # pm2 commands
 $ pm2 list
