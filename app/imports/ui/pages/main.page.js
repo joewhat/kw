@@ -7,7 +7,7 @@ import { Session } from '../../api/session.api.js';
 import './main.page.html';
 import helpers from '../../api/helpers.api.js';
 
-// Meteor.subscribe('discussionUserMeta.collection', function() {});
+Meteor.subscribe('discussionUserMeta.collection', function() {});
 
 const PAGE_INC = 30;
 Session.setDefault('mainDis:searchQuery', '');
@@ -230,6 +230,22 @@ Template.mainPageTemplate.helpers({
 
   test(input) {
     console.log('input: ', input);
+  },
+
+  unread(id) {
+    let data = {
+      username: Meteor.user().username,
+      discussionId: id
+    }
+    const unreadComments = DiscussionUserMeta.find({
+      username : data.username,
+      "unreadDiscussionMeta.discussionId" : data.discussionId
+      }
+      // ,{fields: { "unreadDiscussionMeta.$": 1}}
+    ).fetch();
+    
+    console.log('unreadComments: ', unreadComments, ' id: ', id);
+    // return unreadComments[0].unreadDiscussionMeta[0].unReadCount;
   },
 
   // disListNotEmpty : function() {

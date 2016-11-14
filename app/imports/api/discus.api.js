@@ -270,7 +270,8 @@ Meteor.methods({
             const userInDiscussion = usersInDis[0].usersInDis.map(function(item) {
                 return item['username'];
             });
-
+            
+            // update unread msg
              Allusernames.forEach(function(value){
                  if(Meteor.user().username != value.username){
                      if (userInDiscussion.indexOf(value.username) == -1) {
