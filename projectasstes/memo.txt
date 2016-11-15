@@ -5,6 +5,7 @@ main.page.js 235
 !!!! hvis jeg nu kun publisher det array med objcts i dis meta som en ny collection
   baseret på username!
   if joewhat publish disMeta.find({username: joewhat}, {publish kun array unreadDiscussionMeta})
+  http://docs.meteor.com/api/pubsub.html#Meteor-publish
 
 
 UNREAD
