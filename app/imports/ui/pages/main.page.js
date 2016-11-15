@@ -228,10 +228,6 @@ Template.mainPageTemplate.helpers({
     return Template.instance().subRdy.get();
   },
 
-  test(input) {
-    console.log('input: ', input);
-  },
-
   unread(id) {
     let data = {
       username: Meteor.user().username,
@@ -243,21 +239,10 @@ Template.mainPageTemplate.helpers({
       }
       // ,{fields: { "unreadDiscussionMeta.$": 1}}
     ).fetch();
-    
+
     console.log('unreadComments: ', unreadComments, ' id: ', id);
     // return unreadComments[0].unreadDiscussionMeta[0].unReadCount;
   },
-
-  // disListNotEmpty : function() {
-  //   const searchQuery = Session.get('mainDis:searchQuery');
-  //   let query = {};
-  //
-  //   if (searchQuery) {
-  //     query.header = new RegExp(helpers.regexMultiWordsSearch(searchQuery), 'i');
-  //   }
-  //
-  //   return Discussions.find(query).count();
-  // },
 
   allDiscussions : function() {
       // search
@@ -269,24 +254,6 @@ Template.mainPageTemplate.helpers({
           // search result
           return Discussions.find({}, {sort: {header: +1} });
       }
-
-      // const searchQuery = Session.getNonReactive('mainDis:searchQuery');
-
-      // console.log('this is wtf');
-      // if (searchQuery.length > 1) {
-      //   return Discussions.find({});
-      // } else {
-      //   return Discussions.find({}, {
-      //     sort: {latestComment: -1}
-      //   });
-      // }
-      // console.log('allDis');
-      // return Discussions.find({});
-
-      // let discussions = Discussions.find({});
-      // if ( discussions ) {
-      //   return discussions;
-      // }
   },
 
   convertedDate : function() {
