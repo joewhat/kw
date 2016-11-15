@@ -43,20 +43,22 @@ Template.mainPageTemplate.onCreated(function(){
 
 Template.mainPageTemplate.onRendered(function () {
     this.autorun(function(){
-        // DiscussionUserMeta.find({username : Meteor.user().username}).observeChanges({
-        //     added: function(id, fields) {
-        //             // console.log('doc added',fields);
-        //             updateUnread();
-        //     },
-        //     changed: function(id, fields) {
-        //         // console.log('doc updated',fields);
-        //         updateUnread();
-        //     },
-        //     removed: function() {
-        //         // console.log('doc removed',fields);
-        //         updateUnread();
-        //     }
-        // });
+      // if (Template.instance().subRdy.get()) {
+      //   DiscussionUserMeta.find({username : Meteor.user().username}).observeChanges({
+      //     added: function(id, fields) {
+      //       console.log('doc added',fields);
+      //       updateUnread();
+      //     },
+      //     changed: function(id, fields) {
+      //       console.log('doc updated',fields);
+      //       updateUnread();
+      //     },
+      //     removed: function() {
+      //       console.log('doc removed',fields);
+      //       // updateUnread();
+      //     }
+      //   });
+      // }
 
         Meteor.defer(function(){
 
@@ -89,6 +91,7 @@ Template.mainPageTemplate.onRendered(function () {
 });
 
 function updateUnread(){
+  console.log('updateUnread');
     const searchVal = Session.get('globalSearchValue');
     if(!searchVal){
         // default return (sort after createdAt)
@@ -233,15 +236,31 @@ Template.mainPageTemplate.helpers({
       username: Meteor.user().username,
       discussionId: id
     }
-    const unreadComments = DiscussionUserMeta.find({
-      username : data.username,
-      "unreadDiscussionMeta.discussionId" : data.discussionId
-      }
-      // ,{fields: { "unreadDiscussionMeta.$": 1}}
-    ).fetch();
 
+    let pipeline = [
+      { $match : {
+        "unreadDiscussionMeta.discussionId": data.discussionId
+      }},
+      { $unwind : "unreadDiscussionMeta" },
+      { $match : {
+        "unreadDiscussionMeta.discussionId": data.discussionId
+      }}
+    ];
+    const unreadComments = DiscussionUserMeta.aggregate(pipeline);
+    // const unreadComments = DiscussionUserMeta.find({
+    //   username : data.username,
+    //   // "unreadDiscussionMeta.discussionId" : data.discussionId
+    //   }
+    //   // ,{fields: { "unreadDiscussionMeta.unReadCount": 1}}
+    // ).fetch();
+
+
+    //
+    //
     console.log('unreadComments: ', unreadComments, ' id: ', id);
-    // return unreadComments[0].unreadDiscussionMeta[0].unReadCount;
+    // let joe = unreadComments[0].unreadDiscussionMeta;
+    // console.log('joe unreadComments: ', joe);
+    // return unreadComments[0].unreadDiscussionMeta[0];
   },
 
   allDiscussions : function() {

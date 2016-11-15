@@ -67,7 +67,8 @@ UserStatus.events.on("connectionLogout", function(fields) {
     const user = Meteor.users.findOne(fields.userId);
     const data = {
         username : user.username,
-        discussionId : DiscussionUserMeta.find({username: user.username }).fetch()[0].activeDiscussionId
+        // discussionId : DiscussionUserMeta.find({username: user.username }).fetch()[0].activeDiscussionId
+        discussionId : Meteor.users.find({username: user.username }).fetch()[0].activeDiscussionId
     }
     Meteor.call('remove-user-from-discussion', data, function( error, response ) {
       if ( error ) {

@@ -108,8 +108,13 @@ Meteor.methods({
           username: String,
           discussionId: String
         });
-        DiscussionUserMeta.update(
-            { username : data.username, "unreadDiscussionMeta.discussionId" : data.discussionId,  },
+        // DiscussionUserMeta.update(
+        //     { username : data.username, "unreadDiscussionMeta.discussionId" : data.discussionId,  },
+        //     {$set:{"activeDiscussionId": data.discussionId}}
+        // );
+
+        Meteor.users.update(
+            { username : data.username },
             {$set:{"activeDiscussionId": data.discussionId}}
         );
     },
@@ -132,7 +137,13 @@ Meteor.methods({
           discussionId: String
         });
 
-        const unreadComments = DiscussionUserMeta.find( { username : data.username, "unreadDiscussionMeta.discussionId" : data.discussionId}, {fields: { "unreadDiscussionMeta.$": 1}}).fetch();
+        const unreadComments = DiscussionUserMeta.find(
+          {
+            username : data.username,
+            "unreadDiscussionMeta.discussionId" : data.discussionId
+          },
+          {fields: { "unreadDiscussionMeta.$": 1}}
+        ).fetch();
         return unreadComments[0].unreadDiscussionMeta[0].unReadCount;
     },
 
@@ -270,7 +281,7 @@ Meteor.methods({
             const userInDiscussion = usersInDis[0].usersInDis.map(function(item) {
                 return item['username'];
             });
-            
+
             // update unread msg
              Allusernames.forEach(function(value){
                  if(Meteor.user().username != value.username){
@@ -308,7 +319,6 @@ Meteor.methods({
         console.log( 'create-user-in-discussionUserMeta: ' + data.username );
         return DiscussionUserMeta.insert({
           username: data.username,
-          activeDiscussionId : '',
           unreadDiscussionMeta : []
         }, function(error, _id){
           // create all discussions in user record

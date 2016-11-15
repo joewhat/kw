@@ -2,6 +2,10 @@ main.page.js 235
   - der er noget shit med at .$ selector ikke kan bruges i mini mongo
   - hvis man ikk kan bruge en metode i en helper med return value : / ?
      så kan jeg evt bruge method = 'get-unread-comment-for-discussionId'
+!!!! hvis jeg nu kun publisher det array med objcts i dis meta som en ny collection
+  baseret på username!
+  if joewhat publish disMeta.find({username: joewhat}, {publish kun array unreadDiscussionMeta})
+
 
 UNREAD
   - evt en klon collection til hver dis som har unread meta på hver dis for
