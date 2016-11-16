@@ -6,6 +6,7 @@ main.page.js 235
   baseret på username!
   if joewhat publish disMeta.find({username: joewhat}, {publish kun array unreadDiscussionMeta})
   http://docs.meteor.com/api/pubsub.html#Meteor-publish
+  sørge for at publish de samme tråde meta som den originale dis collections
 
 
 UNREAD
